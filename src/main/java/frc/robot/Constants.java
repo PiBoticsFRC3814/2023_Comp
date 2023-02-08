@@ -96,6 +96,13 @@ public final class Constants {
     public static double drvDistPerPulseRev = ( 3.9 * 3.14 ) / ( 42 / 6.75 );  // inches
     //                                      (wheel circum / (encppr * swerve Ratio)
 
+
+	/*
+	 * Pnuematic IDs
+	 */
+	public static int CLAW_ID_OPEN = 1;
+	public static int CLAW_ID_CLOSE = 1;
+
 	/*
 	 * Swerve module motor and encoder ids
 	 * { Front Right, Back Right, Back Left, Front Left }
