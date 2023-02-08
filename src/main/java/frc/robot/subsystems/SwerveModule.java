@@ -43,10 +43,12 @@ public class SwerveModule {
 		driveMotor.setSmartCurrentLimit(70, 50);
 		//TODO: Add PID for driveMotor
 
+		/*
 		driveVelocityEncoder = driveMotor.getEncoder();
 		//if (wheelMotorInverted)	WheelEncoder.setInverted(true);
 		driveVelocityEncoder.setPositionConversionFactor( Constants.drvDistPerPulseRev );
 		driveVelocityEncoder.setMeasurementPeriod(20);
+		*/
 
 		// driveVelocityPIDConstants = Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex];
 		// driveVelocityPidController.setP( driveVelocityPIDConstants[0] );

@@ -56,6 +56,7 @@ public class GyroSwerveDrive extends SubsystemBase {
     }
   }
 
+  /*
   public void gyroDriveAngle() {
     // keeps wheels at their current angle when zero forward, side and rotate command
     // if the driver's back button is hit then the wheels are command to 0 angle
@@ -65,6 +66,7 @@ public class GyroSwerveDrive extends SubsystemBase {
       else swerveMod[i].drive( 0.0, angle[i] );
     }
   }
+  */
 
   public double getOppositeAngle( int index ) {
     double opp = angle[index];
