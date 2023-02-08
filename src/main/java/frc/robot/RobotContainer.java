@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GyroReset;
+import frc.robot.commands.HardBrake;
 import frc.robot.commands.drive.GyroSwerveDriveCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GyroSwerveDrive;
@@ -25,26 +26,25 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public final ADIS16470_IMU gyro = new ADIS16470_IMU();
+  public final ADIS16470_IMU m_gyrp = new ADIS16470_IMU();
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive();
-  public final GyroReset gyroReset = new GyroReset( gyro );
 
   private final ExampleCommand m_autoCommand = new ExampleCommand( m_exampleSubsystem );
 
-  Joystick driveStick = new Joystick( Constants.driverStick );
+  XboxController driveController = new XboxController(2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //*
     m_gyroSwerveDrive.setDefaultCommand(
       new GyroSwerveDriveCommand(
-        () -> driveStick.getX(),
-        () -> driveStick.getY(),
-        () -> driveStick.getZ(),
-        gyro,
+        () -> driveController.getRightX(),
+        () -> driveController.getRightY(),
+        () -> driveController.getLeftX(),
+        m_gyrp,
         m_gyroSwerveDrive
       )
     );
@@ -61,8 +61,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    JoystickButton triggerGyroReset = new JoystickButton(driveStick, 3);
+    /*
+    XboxController triggerGyroReset = new JoystickButton(driveStick, 3);
     triggerGyroReset.whenPressed(new GyroReset(gyro));
+    //*/
+    if(driveController.getYButton()) new GyroReset(m_gyrp);
+    if(driveController.getBButton()) new HardBrake(m_gyroSwerveDrive);
   }
 
   /**
