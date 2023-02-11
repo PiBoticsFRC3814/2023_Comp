@@ -55,7 +55,17 @@ public class Limelight extends SubsystemBase {
     pastDistance = robotPose.get()[2];
   }
 
-  
+  public double limelightAngleX(){
+    return xAngleSub.get();
+  }
+
+  public double limelightPosZ(){
+    return robotPose.get()[2];
+  }
+
+  public double limelightAngleAlpha(){
+    return robotPose.get()[4];
+  }
 
   @Override
   public void periodic() {
