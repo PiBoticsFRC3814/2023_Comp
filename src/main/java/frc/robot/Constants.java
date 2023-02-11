@@ -103,6 +103,10 @@ public final class Constants {
 	public static int EXTEND_ID = 1;
 
 	/*
+	 * Arm Constants
+	 */
+	public static double EXTEND_SPEED = 0.2;
+	/*
 	 * Pnuematic IDs
 	 */
 	public static int CLAW_ID_OPEN = 1;

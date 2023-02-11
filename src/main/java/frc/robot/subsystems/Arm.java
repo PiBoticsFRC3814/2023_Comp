@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private static final String TalonSRX = null;
-
   /** Creates a new Arm. */
   private WPI_TalonSRX shoulder;
   private WPI_TalonSRX extend;
@@ -27,12 +25,18 @@ public class Arm extends SubsystemBase {
   DoubleSolenoid armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
 
   PIDController angleController;
+  boolean switch1;
+  boolean switch2;
+  boolean switch3;
+  boolean switch4;
 
   public Arm() {
     shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
 
     angleController = new PIDController(0, 0, 0);
+    extendAtPos = false;
+    shoulderAtPos = false;
   }
 
   public void ArmAngle(double angle) {
@@ -48,9 +52,38 @@ public class Arm extends SubsystemBase {
     
   }
 
-  public void ArmDistance(double distance) {
-    //Arm (Extend)
+  public void ArmDistance(int position) {
+    extend.set(-1.0);
+    extendAtPos = false;
+    while(!extendAtPos) {
+      switch(position) {
+        case 0:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch1){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
 
+        case 1:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch2){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
+        case 2:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch3){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
+        case 3:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch4){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
+      }
+    }
   }
 }
 
