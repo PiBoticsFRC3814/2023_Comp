@@ -126,7 +126,7 @@ public class GyroSwerveDrive extends SubsystemBase {
   }
 
   public void reset_encoder(){
-      swerveMod[2].driveVelocityEncoder.setPosition( 0.0 );
+      swerveMod[2].driveDistanceEncoder.setPosition( 0.0 );
   }
 
   public void WheelToCoast(){
@@ -143,7 +143,7 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public double GetCurrentDistance() {  // reading wheel 0 only
     double dist = 0.0;
-        dist = -swerveMod[2].driveVelocityEncoder.getPosition();
+        dist = -swerveMod[2].driveDistanceEncoder.getPosition();
         return( dist );
   }
 
