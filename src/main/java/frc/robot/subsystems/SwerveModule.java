@@ -37,26 +37,17 @@ public class SwerveModule {
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
 		driveMotor = new CANSparkMax( Constants.SWERVE_DRIVE_MOTOR_IDS[ swerveModIndex ], MotorType.kBrushless );
-		driveMotor.setIdleMode(IdleMode.kCoast);
+		driveMotor.setIdleMode(IdleMode.kBrake);
 		driveMotor.setInverted( Constants.DRIVE_MOTOR_INVERTED[swerveModIndex] );
 		driveMotor.setOpenLoopRampRate( 0.2 );
 		driveMotor.setSmartCurrentLimit(70, 50);
 		//TODO: Add PID for driveMotor
 
-		/*
-		driveVelocityEncoder = driveMotor.getEncoder();
-		//if (wheelMotorInverted)	WheelEncoder.setInverted(true);
-		driveVelocityEncoder.setPositionConversionFactor( Constants.drvDistPerPulseRev );
-		driveVelocityEncoder.setMeasurementPeriod(20);
-		*/
-
-		// driveVelocityPIDConstants = Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex];
-		// driveVelocityPidController.setP( driveVelocityPIDConstants[0] );
-		// driveVelocityPidController.setI( driveVelocityPIDConstants[1] );
-		// driveVelocityPidController.setD( driveVelocityPIDConstants[2] );
-		// driveVelocityPidController.setIZone( driveVelocityPIDConstants[3] );
-		// driveVelocityPidController.setFF( driveVelocityPIDConstants[4] );
-		// driveVelocityPidController.setOutputRange( driveVelocityPIDConstants[5], driveVelocityPIDConstants[6] );
+		//*
+		driveDistanceEncoder = driveMotor.getEncoder();
+		driveDistanceEncoder.setPositionConversionFactor( Constants.drvDistPerPulseRev );
+		driveDistanceEncoder.setMeasurementPeriod(20);
+		//*/
 
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
 		steerMotor.setIdleMode(IdleMode.kCoast);
@@ -104,4 +95,8 @@ public class SwerveModule {
     public void initDefaultCommand() {
 			// NOTE: no default command unless running swerve modules seperately
     }
+
+	public double getPosition() {
+		return getPosition(RelativeEncoder.getAbsolutePosition());
+	}
 }
