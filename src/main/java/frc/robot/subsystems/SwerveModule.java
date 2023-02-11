@@ -95,8 +95,4 @@ public class SwerveModule {
     public void initDefaultCommand() {
 			// NOTE: no default command unless running swerve modules seperately
     }
-
-	public double getPosition() {
-		return getPosition(RelativeEncoder.getAbsolutePosition());
-	}
 }
