@@ -4,33 +4,31 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
-  public Arm() {}
+  private WPI_TalonSRX shoulder;
+  private WPI_TalonSRX extend;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public boolean extendAtPos;
+  public boolean shoulderAtPos;
+
+  public Arm() {
+    shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
+    extend = new WPI_TalonSRX(Constants.EXTEND_ID);
   }
 
-  private void ArmUp() {
-    //Arm (up)
+  public void ArmAngle(double angle) {
+    
   }
 
-  private void ArmDown() {
-    //Arm (Down)
-  }
-
-  private void ArmExtend() {
+  public void ArmDistance(double distance) {
     //Arm (Extend)
   }
-
-  private void ArmRetract() {
-    //Arm (Retract)
-  }  
-
 }
 
 

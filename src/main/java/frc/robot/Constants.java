@@ -96,6 +96,11 @@ public final class Constants {
     public static double drvDistPerPulseRev = ( 3.9 * 3.14 ) / ( 42 / 6.75 );  // inches
     //                                      (wheel circum / (encppr * swerve Ratio)
 
+	/*
+	 * Arm IDs
+	 */
+	public static int SHOULDER_ID = 1;
+	public static int EXTEND_ID = 1;
 
 	/*
 	 * Pnuematic IDs
