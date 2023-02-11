@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -34,6 +35,8 @@ public class Arm extends SubsystemBase {
   public Arm() {
     shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
+
+    extend.setNeutralMode(NeutralMode.Brake);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
 
