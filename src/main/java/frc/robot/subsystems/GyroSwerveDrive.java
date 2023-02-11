@@ -49,6 +49,16 @@ public class GyroSwerveDrive extends SubsystemBase {
     }
   }
 
+  /* 
+   * Brake system
+   */
+  public void brakeAngle() {
+    swerveMod[0].drive(0.25, 0.0);
+    swerveMod[1].drive(-0.25, 0.0);
+    swerveMod[2].drive(0.25, 0.0);
+    swerveMod[3].drive(-0.25, 0.0);
+
+  }
 
   public void autoDrive( double angle, double speed ) {
     for (int i = 0; i < 4; i++) {
