@@ -5,12 +5,15 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Grabber;
 
-public class ArmCommand extends CommandBase {
-  /** Creates a new ArmCommand. */
-  
-  public ArmCommand() {
+public class GrabberToggle extends CommandBase {
+  /** Creates a new GrabberCommand. */
+  Grabber m_grabber;
+  public GrabberToggle(Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_grabber = grabber;
+    addRequirements(grabber);
   }
 
   // Called when the command is initially scheduled.
@@ -19,7 +22,10 @@ public class ArmCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(m_grabber.clawOpen) m_grabber.GrabberClose();
+    else m_grabber.GrabberOpen();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -28,6 +34,6 @@ public class ArmCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

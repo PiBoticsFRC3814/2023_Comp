@@ -117,6 +117,12 @@ public final class Constants {
 	 * Arm Constants
 	 */
 	public static double EXTEND_SPEED = 0.2;
+	public static double[] ARM_ANGLE_PID_CONSTANTS = {
+		0.0,
+		0.0,
+		0.0
+	};
+
 	/*
 	 * Pnuematic IDs
 	 */

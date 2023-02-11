@@ -8,15 +8,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.GyroReset;
-import frc.robot.commands.drive.HardBrake;
-import frc.robot.commands.drive.GyroSwerveDriveCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.GyroSwerveDrive;
-import frc.robot.subsystems.SwerveModule;
+import frc.robot.commands.*;
+import frc.robot.commands.drive.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -33,22 +28,33 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive();
+  public final Arm m_arm = new Arm();
+  public final Grabber m_grabber = new Grabber();
 
   private final ExampleCommand m_autoCommand = new ExampleCommand( m_exampleSubsystem );
 
   XboxController driveController = new XboxController(2);
+  XboxController armController =   new XboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //*
     m_gyroSwerveDrive.setDefaultCommand(
       new GyroSwerveDriveCommand(
-        () -> driveController.getRawAxis(2),
-        () -> driveController.getRawAxis(3),
         () -> driveController.getLeftX(),
-        () -> driveController.getLeftY(),
-        m_gyrp,
-        m_gyroSwerveDrive
+          () -> driveController.getLeftY(),
+            () -> driveController.getRawAxis(2),
+              () -> driveController.getRawAxis(3),
+                m_gyrp,
+                  m_gyroSwerveDrive
+      )
+    );
+
+    m_arm.setDefaultCommand(
+      new DirectArmCommand(
+        m_arm,
+          () -> armController.getLeftY(),
+            () -> armController.getLeftX()
       )
     );
     //*/
@@ -66,6 +72,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driveController, XboxController.Button.kY.value).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveController, XboxController.Button.kB.value).whileTrue(new HardBrake(m_gyroSwerveDrive));
+    new JoystickButton(armController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
   }
 
   /**

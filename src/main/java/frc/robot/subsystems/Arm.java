@@ -22,9 +22,10 @@ public class Arm extends SubsystemBase {
   public boolean extendAtPos;
   public boolean shoulderAtPos;
 
-  DoubleSolenoid armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
+  private DoubleSolenoid armBrake;
 
-  PIDController angleController;
+  private PIDController angleController;
+
   boolean switch1;
   boolean switch2;
   boolean switch3;
@@ -34,9 +35,23 @@ public class Arm extends SubsystemBase {
     shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
 
-    angleController = new PIDController(0, 0, 0);
+    armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
+
+    angleController = new PIDController(
+      Constants.ARM_ANGLE_PID_CONSTANTS[0],
+        Constants.ARM_ANGLE_PID_CONSTANTS[1],
+          Constants.ARM_ANGLE_PID_CONSTANTS[2]
+    );
+
     extendAtPos = false;
     shoulderAtPos = false;
+  }
+
+  public void ArmDirectControl(double armSpeed, double extendSpeed){
+    if(armSpeed > 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
+    else armBrake.set(DoubleSolenoid.Value.kReverse);
+    shoulder.set(armSpeed);
+    extend.set(extendSpeed);
   }
 
   public void ArmAngle(double angle) {
