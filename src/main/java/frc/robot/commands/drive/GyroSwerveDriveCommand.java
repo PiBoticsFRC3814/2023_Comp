@@ -47,8 +47,13 @@ public class GyroSwerveDriveCommand extends CommandBase {
       driveZ = (Math.abs(rawZ) - Constants.JOYSTICK_DEADZONE) * DEADZONE_MAP_DIVISOR;
       if(driveZ <= 0.0) driveZ = 0.0;
       else if(rawZ <= 0.0) driveZ = -driveZ;
-
-      m_gyroSwerveDrive.gyroDrive( driveX, driveY, driveZ, Math.toRadians( m_gyro.getAngle () ) );
+      
+      if(driveX > 0)
+        m_gyroSwerveDrive.gyroDrive( driveX, driveY, driveZ, Math.toRadians( m_gyro.getAngle () ) );
+      else if (driveY > 0)
+        m_gyroSwerveDrive.gyroDrive( driveX, driveY, driveZ, Math.toRadians( m_gyro.getAngle () ) );
+      else if (driveZ > 0)
+        m_gyroSwerveDrive.gyroDrive( driveX, driveY, driveZ, Math.toRadians( m_gyro.getAngle () ) );
 
       SmartDashboard.putNumber( "Gyro ADIS", m_gyro.getAngle() );
     }
