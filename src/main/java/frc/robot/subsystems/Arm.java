@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private static final String TalonSRX = null;
-
   /** Creates a new Arm. */
   private WPI_TalonSRX shoulder;
   private WPI_TalonSRX extend;
