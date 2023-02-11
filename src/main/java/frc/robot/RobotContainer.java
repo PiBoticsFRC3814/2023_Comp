@@ -64,8 +64,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    if(driveController.getYButton()) new GyroReset(m_gyrp);
-    if(driveController.getBButton()) new HardBrake(m_gyroSwerveDrive);
+    new JoystickButton(driveController, XboxController.Button.kY.value).whileTrue(new GyroReset(m_gyrp));
+    new JoystickButton(driveController, XboxController.Button.kB.value).whileTrue(new HardBrake(m_gyroSwerveDrive));
   }
 
   /**

@@ -20,12 +20,12 @@ import com.ctre.phoenix.sensors.CANCoder;
 public class SwerveModule {
 	public CANSparkMax            driveMotor;
 	private SparkMaxPIDController driveVelocityPidController;
-	public RelativeEncoder        driveDistanceEncoder; 
+	private RelativeEncoder        driveVelocityEncoder; 
 
 	public CANSparkMax            steerMotor;
 	public RelativeEncoder        steerVelocityEncoder;
 	private CANCoder              steerAngleEncoder;
-	private SparkMaxPIDController steerVelocityPidController;
+	private SparkMaxPIDController steerVelocityPIDController;
 	private PIDController         steerAnglePIDController;
 
 	private final double[]        steerAnglePIDConstants;
@@ -41,13 +41,6 @@ public class SwerveModule {
 		driveMotor.setInverted( Constants.DRIVE_MOTOR_INVERTED[swerveModIndex] );
 		driveMotor.setOpenLoopRampRate( 0.2 );
 		driveMotor.setSmartCurrentLimit(70, 50);
-		//TODO: Add PID for driveMotor
-
-		//*
-		driveDistanceEncoder = driveMotor.getEncoder();
-		driveDistanceEncoder.setPositionConversionFactor( Constants.drvDistPerPulseRev );
-		driveDistanceEncoder.setMeasurementPeriod(20);
-		//*/
 
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
 		steerMotor.setIdleMode(IdleMode.kCoast);
@@ -85,8 +78,7 @@ public class SwerveModule {
 	// angle and speed should be from -1.0 to 1.0, like a joystick input
 	public void drive( double speed, double angle ) {
 	    // Calculate the turning motor output from the turning PID controller.
-		double position = getSteerAngle();
-		final var turnOutput = steerAnglePIDController.calculate( position, angle );
+		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
 
 		driveMotor.set( speed );

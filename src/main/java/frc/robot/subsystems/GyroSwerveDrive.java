@@ -125,10 +125,6 @@ public class GyroSwerveDrive extends SubsystemBase {
     }
   }
 
-  public void reset_encoder(){
-      swerveMod[2].driveDistanceEncoder.setPosition( 0.0 );
-  }
-
   public void WheelToCoast(){
     for(int i = 0; i < 4; i++){
        swerveMod[i].driveMotor.setIdleMode( IdleMode.kCoast );
@@ -139,12 +135,6 @@ public class GyroSwerveDrive extends SubsystemBase {
     for(int i = 0; i < 4; i++){
        swerveMod[i].driveMotor.setIdleMode( IdleMode.kBrake );
     }
-  }
-
-  public double GetCurrentDistance() {  // reading wheel 0 only
-    double dist = 0.0;
-        dist = -swerveMod[2].driveDistanceEncoder.getPosition();
-        return( dist );
   }
 
   public void driveStraight( double fwd ) {
