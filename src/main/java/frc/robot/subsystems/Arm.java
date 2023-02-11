@@ -4,37 +4,86 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private static final String TalonSRX = null;
-
   /** Creates a new Arm. */
-  public Arm() {}
+  private WPI_TalonSRX shoulder;
+  private WPI_TalonSRX extend;
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public boolean extendAtPos;
+  public boolean shoulderAtPos;
+
+  DoubleSolenoid armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
+
+  PIDController angleController;
+  boolean switch1;
+  boolean switch2;
+  boolean switch3;
+  boolean switch4;
+
+  public Arm() {
+    shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
+    extend = new WPI_TalonSRX(Constants.EXTEND_ID);
+
+    angleController = new PIDController(0, 0, 0);
+    extendAtPos = false;
+    shoulderAtPos = false;
   }
 
-  private void ArmUp() {
-    //Arm (up)
+  public void ArmAngle(double angle) {
+    double encoder = 0.0;
+
+    shoulder.set(angleController.calculate(encoder, angle));
+    shoulderAtPos = !angleController.atSetpoint();
+    
+    if(!shoulderAtPos) 
+      armBrake.set(DoubleSolenoid.Value.kReverse);
+    else
+      armBrake.set(DoubleSolenoid.Value.kForward);
+    
   }
 
-  private void ArmDown() {
-    //Arm (Down)
-  }
+  public void ArmDistance(int position) {
+    extend.set(-1.0);
+    extendAtPos = false;
+    while(!extendAtPos) {
+      switch(position) {
+        case 0:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch1){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
 
-  private void ArmExtend() {
-    //Arm (Extend)
-  }
-
-  private void ArmRetract() {
-    //Arm (Retract)
+        case 1:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch2){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
+        case 2:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch3){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
+        case 3:
+          extend.set(Constants.EXTEND_SPEED);
+          if(switch4){
+            extend.set(0.0);
+            extendAtPos = true;
+          }
+      }
+    }
   }
 }
 

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.GyroReset;
-import frc.robot.commands.HardBrake;
+import frc.robot.commands.drive.HardBrake;
 import frc.robot.commands.drive.GyroSwerveDriveCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GyroSwerveDrive;
@@ -63,10 +63,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /*
-    XboxController triggerGyroReset = new JoystickButton(driveStick, 3);
-    triggerGyroReset.whenPressed(new GyroReset(gyro));
-    //*/
     if(driveController.getYButton()) new GyroReset(m_gyrp);
     if(driveController.getBButton()) new HardBrake(m_gyroSwerveDrive);
   }
