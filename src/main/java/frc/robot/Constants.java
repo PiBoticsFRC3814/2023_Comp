@@ -13,8 +13,6 @@ public final class Constants {
 	public static double JOYSTICK_Z_DEADZONE = 0.2;
 	public static double JOYSTICK_Z2_DEADZONE = 0.2;
 
-	public static double MAX_SPEED_JOYSTICK = 0.7;
-
 	public static boolean FieldCentricDrive = true;
 	
 	public static double RobotTargetHeading = 0.0;
@@ -59,11 +57,13 @@ public final class Constants {
 	//TODO: Add PID loop for drive motors
 	public static double[][] SWERVE_DRIVE_PID_CONSTANTS = { 
 		// kP   kI   kD  kIz  kFF  kMn  kMx
-		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Front Right
-		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Right
-		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Left
-		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }  //Front Left
+		{ 1e-5, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Front Right
+		{ 1e-5, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Right
+		{ 1e-5, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Left
+		{ 1e-5, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }  //Front Left
 	};
+
+	public static double MAX_DRIVETRAIN_SPEED = 5700;
 
 	/*
 	 * Swerve rotation PID Constants
