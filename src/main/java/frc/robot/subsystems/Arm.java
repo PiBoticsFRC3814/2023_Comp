@@ -31,10 +31,6 @@ public class Arm extends SubsystemBase {
   public void ArmDistance(double distance) {
     //Arm (Extend)
   }
-
-  private void ArmRetract() {
-    //Arm (Retract)
-  }
 }
 
 
