@@ -20,7 +20,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 public class SwerveModule {
 	public CANSparkMax            driveMotor;
 	private SparkMaxPIDController driveVelocityPidController;
-	public RelativeEncoder        driveVelocityEncoder; 
+	public RelativeEncoder        driveDistanceEncoder; 
 
 	public CANSparkMax            steerMotor;
 	public RelativeEncoder        steerVelocityEncoder;
