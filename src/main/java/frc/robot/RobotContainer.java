@@ -43,9 +43,10 @@ public class RobotContainer {
     //*
     m_gyroSwerveDrive.setDefaultCommand(
       new GyroSwerveDriveCommand(
-        () -> driveController.getRightX(),
-        () -> driveController.getRightY(),
+        () -> driveController.getRawAxis(2),
+        () -> driveController.getRawAxis(3),
         () -> driveController.getLeftX(),
+        () -> driveController.getLeftY(),
         m_gyrp,
         m_gyroSwerveDrive
       )

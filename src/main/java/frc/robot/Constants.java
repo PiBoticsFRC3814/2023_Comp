@@ -8,8 +8,10 @@ import frc.robot.subsystems.SwerveModule;
 
 public final class Constants {
 	public static double driveDirection = 1.0;
-	public static double JOYSTICK_DEADZONE = 0.2; 
-	public static double TRIGGER_DEADBAND = 0.2;
+	public static double JOYSTICK_X_DEADZONE = 0.2;
+	public static double JOYSTICK_Y_DEADZONE = 0.2;
+	public static double JOYSTICK_Z_DEADZONE = 0.2;
+	public static double JOYSTICK_Z2_DEADZONE = 0.2;
 
 	public static double MAX_SPEED_JOYSTICK = 0.7;
 
@@ -61,6 +63,15 @@ public final class Constants {
 		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Right
 		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Left
 		{ 1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }  //Front Left
+	};
+
+	/*
+	 * Swerve rotation PID Constants
+	 */
+	public static double[] SWERVE_ROTATION_PID_CONSTANTS = {
+		1.0,
+		0.0,
+		0.0
 	};
 
 	/*
