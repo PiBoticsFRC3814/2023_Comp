@@ -72,21 +72,6 @@ public final class Constants {
 		0.0
 	};
 
-	/*
-	 * Steering motor characteristics
-	 * used for trapazoidal motion profiles
-	 * Values shown are theoretical
-	 * TODO: Get empirical data and remove all of this
-	 */
-	//private static double SWERVE_STEER_MOTOR_MAX_SPEED =   5676;           //RPM
-	//private static double SWERVE_STEER_MOTOR_GEARING =     0.4437;
-	//private static double SWERVE_STEER_PULLEY_RADIUS =     3.8 * 0.0508;   //M   Radius in inches and multiplied by conversion constant
-	private static double SWERVE_STEER_MOTOR_TORQUE =      2.6;            //Nm
-	private static double SWERVE_STEER_MOTOR_MASS =        0.5628;         //Kg
-
-	public static double SWERVE_STEER_MAX_VELOCITY = 2.02608; //SWERVE_STEER_MOTOR_MAX_SPEED * SWERVE_STEER_MOTOR_GEARING * SWERVE_STEER_PULLEY_RADIUS * 2.0 * Math.PI;
-	public static double SWERVE_STEER_MAX_ACCEL = SWERVE_STEER_MOTOR_TORQUE / SWERVE_STEER_MOTOR_MASS;
-
 	public static boolean[] STEER_MOTOR_INVERTED = { false, false, false, false };
 	public static boolean[] DRIVE_MOTOR_INVERTED = { false, false, true, false };
 	
