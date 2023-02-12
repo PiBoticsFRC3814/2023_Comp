@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -20,6 +21,7 @@ public class SwerveModule {
 
 	public double                 position;
 	private double                angleOffset;
+	private int index;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -54,13 +56,13 @@ public class SwerveModule {
         steerAnglePIDController.enableContinuousInput( -1.0, 1.0 );
 		steerAnglePIDController.setTolerance( Constants.SWERVE_PID_TOLERANCE );
 
-		angleOffset = Constants.SWERVE_SETPOINT_OFFSET[swerveModIndex];
+		index = swerveModIndex;
 	}
 
 	private static final double INVERSE_180 = 1.0 / 180.0; 
 
 	private double getOffsetSteerEncoderAngle(double angle) {
-		return (Math.abs(angle + angleOffset) % 360.0 - 180.0) * INVERSE_180;
+		return (Math.abs(angle + Constants.SWERVE_SETPOINT_OFFSET[index]) % 360.0 - 180.0) * INVERSE_180;
 	}
 
 	public double getSteerAngle() {
@@ -73,6 +75,7 @@ public class SwerveModule {
 		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
 		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED, CANSparkMax.ControlType.kVelocity);
+		SmartDashboard.putData("Steer PID Controller " + index, steerAnglePIDController);
 	}
 
     public void initDefaultCommand() {
