@@ -22,7 +22,6 @@ public class SwerveModule {
 
 	public double                 position;
 	private double                angleOffset;
-	private double                maxCurrent = 0;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -64,11 +63,6 @@ public class SwerveModule {
 
 	private double getOffsetSteerEncoderAngle(double angle) {
 		return (Math.abs(angle + angleOffset) % 360.0 - 180.0) * INVERSE_180;
-	}
-
-	private double maxCurrent(double nowCurrent){
-		maxCurrent = Math.max(nowCurrent, maxCurrent);
-		return maxCurrent;
 	}
 
 	public double getSteerAngle() {

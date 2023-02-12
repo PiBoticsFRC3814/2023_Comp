@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.Robot;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -18,7 +17,6 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void gyroDrive( double str, double fwd, double rot, double gyroAngle ) {
     
-    fcd = Constants.FieldCentricDrive;
     computeSwerveInputs( str, fwd, rot, gyroAngle );
     setSetpoints( rot ); 
 
@@ -64,25 +62,6 @@ public class GyroSwerveDrive extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       swerveMod[i].drive( angle, speed );
     }
-  }
-
-  /*
-  public void gyroDriveAngle() {
-    // keeps wheels at their current angle when zero forward, side and rotate command
-    // if the driver's back button is hit then the wheels are command to 0 angle
-    for(int i = 0; i < 4; i++) {
-      // when back button is pressed then command wheels to zero 
-      if ( Constants.Driverbackbutton ) Robot.gyroSwerveDrive.driveStraight( 0.0 );
-      else swerveMod[i].drive( 0.0, angle[i] );
-    }
-  }
-  */
-
-  public double getOppositeAngle( int index ) {
-    double opp = angle[index];
-    if( opp < ( Constants.SWERVE_ENC_CIRC / 2 ) ) opp += Constants.SWERVE_ENC_CIRC / 2;
-    else opp -= Constants.SWERVE_ENC_CIRC / 2;
-    return opp;
   }
 
   private double getDeltaAngle( double alpha, double beta){
@@ -140,8 +119,8 @@ public class GyroSwerveDrive extends SubsystemBase {
   public void driveStraight( double fwd ) {
     double a = 0;
     double b = 0;
-    double c = Constants.driveDirection * -fwd;
-    double d = Constants.driveDirection * -fwd;
+    double c = -fwd;
+    double d = -fwd;
     
     speed[1] = Math.sqrt( d * d );
     speed[2] = Math.sqrt( c * c );

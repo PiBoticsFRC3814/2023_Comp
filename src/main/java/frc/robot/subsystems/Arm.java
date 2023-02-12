@@ -4,13 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -22,9 +20,10 @@ public class Arm extends SubsystemBase {
   public boolean extendAtPos;
   public boolean shoulderAtPos;
 
-  DoubleSolenoid armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
+  private DoubleSolenoid armBrake;
 
-  PIDController angleController;
+  private PIDController angleController;
+
   boolean switch1;
   boolean switch2;
   boolean switch3;
@@ -34,9 +33,26 @@ public class Arm extends SubsystemBase {
     shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
 
-    angleController = new PIDController(0, 0, 0);
+    extend.setNeutralMode(NeutralMode.Brake);
+
+    armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
+    armBrake.set(DoubleSolenoid.Value.kReverse);
+
+    angleController = new PIDController(
+      Constants.ARM_ANGLE_PID_CONSTANTS[0],
+        Constants.ARM_ANGLE_PID_CONSTANTS[1],
+          Constants.ARM_ANGLE_PID_CONSTANTS[2]
+    );
+
     extendAtPos = false;
     shoulderAtPos = false;
+  }
+
+  public void ArmDirectControl(double armSpeed, double extendSpeed){
+    if(armSpeed > 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
+    else armBrake.set(DoubleSolenoid.Value.kReverse);
+    shoulder.set(armSpeed);
+    extend.set(extendSpeed);
   }
 
   public void ArmAngle(double angle) {
