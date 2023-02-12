@@ -9,6 +9,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.commands.drive.*;
 import frc.robot.subsystems.*;
@@ -29,7 +31,9 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
 
-  private final AutoPosition m_autoCommand = new AutoPosition(m_gyroSwerveDrive);
+  private final AutoPosition m_followAprilTag = new AutoPosition(m_gyroSwerveDrive);
+
+  SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   XboxController driveController = new XboxController(2);
   XboxController armController =   new XboxController(0);
@@ -59,6 +63,9 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    m_autoChooser.setDefaultOption("Follow Apriltag", m_followAprilTag);
+    SmartDashboard.putData(m_autoChooser);
   }
 
   /**
@@ -80,6 +87,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_autoChooser.getSelected();
   }
 }
