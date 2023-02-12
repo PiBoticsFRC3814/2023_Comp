@@ -17,7 +17,6 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void gyroDrive( double str, double fwd, double rot, double gyroAngle ) {
     
-    fcd = Constants.FieldCentricDrive;
     computeSwerveInputs( str, fwd, rot, gyroAngle );
     setSetpoints( rot ); 
 
@@ -120,8 +119,8 @@ public class GyroSwerveDrive extends SubsystemBase {
   public void driveStraight( double fwd ) {
     double a = 0;
     double b = 0;
-    double c = Constants.driveDirection * -fwd;
-    double d = Constants.driveDirection * -fwd;
+    double c = -fwd;
+    double d = -fwd;
     
     speed[1] = Math.sqrt( d * d );
     speed[2] = Math.sqrt( c * c );
