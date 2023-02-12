@@ -2,37 +2,24 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import java.sql.DriverAction;
 
 import com.ctre.phoenix.sensors.CANCoder;
 
 public class SwerveModule {
 	public CANSparkMax            driveMotor;
-	private SparkMaxPIDController driveVelocityPidController;
-	private RelativeEncoder        driveVelocityEncoder; 
 
 	public CANSparkMax            steerMotor;
-	public RelativeEncoder        steerVelocityEncoder;
 	private CANCoder              steerAngleEncoder;
-	private SparkMaxPIDController steerVelocityPIDController;
 	private PIDController         steerAnglePIDController;
 
 	private final double[]        steerAnglePIDConstants;
-	// private final double[]        driveVelocityPIDConstants;
 	public double                 position;
 	private double                angleOffset;
-	private double                maxCurrent = 0;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -66,11 +53,6 @@ public class SwerveModule {
 		return (Math.abs(angle + angleOffset) % 360.0 - 180.0) * INVERSE_180;
 	}
 
-	private double maxCurrent(double nowCurrent){
-		maxCurrent = Math.max(nowCurrent, maxCurrent);
-		return maxCurrent;
-	}
-
 	public double getSteerAngle() {
 		return getOffsetSteerEncoderAngle(steerAngleEncoder.getAbsolutePosition());
 	}
@@ -78,8 +60,7 @@ public class SwerveModule {
 	// angle and speed should be from -1.0 to 1.0, like a joystick input
 	public void drive( double speed, double angle ) {
 	    // Calculate the turning motor output from the turning PID controller.
-		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
-		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
+		steerMotor.set( MathUtil.clamp( steerAnglePIDController.calculate( getSteerAngle(), angle ), -1.0, 1.0 ) );
 
 		driveMotor.set( speed );
 	}

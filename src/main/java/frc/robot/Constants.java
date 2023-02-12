@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.subsystems.SwerveModule;
-
 public final class Constants {
 	public static double driveDirection = 1.0;
 	public static double JOYSTICK_X_DEADZONE = 0.2;
@@ -80,9 +78,9 @@ public final class Constants {
 	 * Values shown are theoretical
 	 * TODO: Get empirical data and remove all of this
 	 */
-	private static double SWERVE_STEER_MOTOR_MAX_SPEED =   5676;           //RPM
-	private static double SWERVE_STEER_MOTOR_GEARING =     0.4437;
-	private static double SWERVE_STEER_PULLEY_RADIUS =     3.8 * 0.0508;   //M   Radius in inches and multiplied by conversion constant
+	//private static double SWERVE_STEER_MOTOR_MAX_SPEED =   5676;           //RPM
+	//private static double SWERVE_STEER_MOTOR_GEARING =     0.4437;
+	//private static double SWERVE_STEER_PULLEY_RADIUS =     3.8 * 0.0508;   //M   Radius in inches and multiplied by conversion constant
 	private static double SWERVE_STEER_MOTOR_TORQUE =      2.6;            //Nm
 	private static double SWERVE_STEER_MOTOR_MASS =        0.5628;         //Kg
 
@@ -97,15 +95,10 @@ public final class Constants {
 	 * Don't question and just assume
 	 * Want an explanation? Me too...
 	 */
-	public static double SWERVE_ENC_CIRC = 4.927;
 	public static double SWERVE_FRAME_LENGTH = 27.5;
 	public static double SWERVE_FRAME_WIDTH = 27.5;
 	public static double SWERVE_RADIUS = Math.sqrt( Math.pow( SWERVE_FRAME_LENGTH, 2 ) + Math.pow( SWERVE_FRAME_WIDTH, 2 ) );
-	public static double SWERVE_PID_TOLERANCE = SWERVE_ENC_CIRC / 100.0 / 20.0;
-	public static double driveMult = 0.7;
-    //TODO: update to match motors
-    public static double drvDistPerPulseRev = ( 3.9 * 3.14 ) / ( 42 / 6.75 );  // inches
-    //                                      (wheel circum / (encppr * swerve Ratio)
+	public static double SWERVE_PID_TOLERANCE = 2.8e-4;
 
 	/*
 	 * Arm IDs
@@ -117,17 +110,15 @@ public final class Constants {
 	 * Arm Constants
 	 */
 	public static double EXTEND_SPEED = 0.2;
-	public static double[] ARM_ANGLE_PID_CONSTANTS = {
-		0.0,
-		0.0,
-		0.0
-	};
+	public static double[] ARM_ANGLE_PID_CONSTANTS = { 0.0, 0.0, 0.0 };
 
 	/*
 	 * Pnuematic IDs
 	 */
 	public static int CLAW_ID_OPEN = 1;
-	public static int CLAW_ID_CLOSE = 1;
+	public static int CLAW_ID_CLOSE = 2;
+	public static int ARM_ID_OPEN = 3;
+	public static int ARM_ID_CLOSE = 4;
 
 	/*
 	 * Swerve module motor and encoder ids

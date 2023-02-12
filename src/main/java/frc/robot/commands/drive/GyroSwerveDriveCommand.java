@@ -7,8 +7,6 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.GyroSwerveDrive;
 
 public class GyroSwerveDriveCommand extends CommandBase {
@@ -40,7 +38,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    if((dX > 0.0) || (dY > 0.0) || (dZ > 0.0) || (dZ2 > 0.0)){
+    if((dX != 0.0) || (dY != 0.0) || (dZ != 0.0) || (dZ2 != 0.0)){
       double steerControllerResult = 0.0;
       double steerAngle = Math.toDegrees(Math.atan2(dZ, dZ2) + Math.PI);
       if((dZ != 0.0) || (dZ2 != 0.0)){

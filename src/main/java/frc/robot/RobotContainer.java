@@ -25,13 +25,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final ADIS16470_IMU m_gyrp = new ADIS16470_IMU();
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive();
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
 
-  private final ExampleCommand m_autoCommand = new ExampleCommand( m_exampleSubsystem );
+  private final AutoPosition m_autoCommand = new AutoPosition(m_gyroSwerveDrive);
 
   XboxController driveController = new XboxController(2);
   XboxController armController =   new XboxController(0);
