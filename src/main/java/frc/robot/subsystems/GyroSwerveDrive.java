@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax.IdleMode;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GyroSwerveDrive extends SubsystemBase {
@@ -17,20 +16,15 @@ public class GyroSwerveDrive extends SubsystemBase {
           new SwerveModule(3)
   };
 
-  ADIS16470_IMU m_gyro;
-
   public GyroSwerveDrive(){}
 
   public void gyroDrive( double str, double fwd, double rot, double gyroAngle ) {
     double intermediary = fwd * Math.cos( gyroAngle ) + str * Math.sin( gyroAngle );
     str = -fwd * Math.sin( gyroAngle ) + str * Math.cos( gyroAngle );
-
     computeSwerveInputs( str, intermediary, rot);
-
     for(int i = 0; i < 4; i++){
       speed[i] *= Constants.MAX_SPEED_JOYSTICK;
     }
-
     setSetpoints();
   }
 
