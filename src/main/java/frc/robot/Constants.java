@@ -13,8 +13,6 @@ public final class Constants {
 	public static final double JOYSTICK_Y_DEADZONE = 0.2;
 	public static final double JOYSTICK_Z_DEADZONE = 0.2;
 	public static final double JOYSTICK_Z2_DEADZONE = 0.2;
-
-	public static final double MAX_SPEED_JOYSTICK = 0.7;
 	
 	public static final int DRIVE_CONTROLLER_PORT = 2;
 	public static final int STEER_CONTROLLER_PORT = 0;

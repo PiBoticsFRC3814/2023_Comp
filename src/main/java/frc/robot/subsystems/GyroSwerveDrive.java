@@ -22,9 +22,6 @@ public class GyroSwerveDrive extends SubsystemBase {
     double intermediary = fwd * Math.cos( gyroAngle ) + str * Math.sin( gyroAngle );
     str = -fwd * Math.sin( gyroAngle ) + str * Math.cos( gyroAngle );
     computeSwerveInputs( str, intermediary, rot);
-    for(int i = 0; i < 4; i++){
-      speed[i] *= Constants.MAX_SPEED_JOYSTICK;
-    }
     setSetpoints();
   }
 
