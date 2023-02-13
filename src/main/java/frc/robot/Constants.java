@@ -82,6 +82,7 @@ public final class Constants {
 	 */
 	public static final double EXTEND_SPEED = 0.2;
 	public static final double[] ARM_ANGLE_PID_CONSTANTS = { 0.0, 0.0, 0.0 };
+	public static final int ARM_ENCODER_ID = 1;
 
 	/*
 	 * Claw and Arm Pnuematic IDs

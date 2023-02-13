@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,6 +17,7 @@ public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   private WPI_TalonSRX shoulder;
   private WPI_TalonSRX extend;
+  private DutyCycleEncoder shoulderEncoder;
 
   public boolean extendAtPos;
   public boolean shoulderAtPos;
@@ -30,13 +32,13 @@ public class Arm extends SubsystemBase {
   boolean switch4;
 
   public Arm() {
-    shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
-
     extend.setNeutralMode(NeutralMode.Brake);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
     armBrake.set(DoubleSolenoid.Value.kReverse);
+    shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
+    shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_ID);
 
     angleController = new PIDController(
       Constants.ARM_ANGLE_PID_CONSTANTS[0],
@@ -56,9 +58,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void ArmAngle(double angle) {
-    double encoder = 0.0;
-
-    shoulder.set(angleController.calculate(encoder, angle));
+    shoulder.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
     shoulderAtPos = !angleController.atSetpoint();
     
     if(!shoulderAtPos) 
