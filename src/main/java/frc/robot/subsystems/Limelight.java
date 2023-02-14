@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   final double LINEAR_P = 1.0;
+
   final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.0;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
@@ -23,7 +24,7 @@ public class Limelight extends SubsystemBase {
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-  
+
   final double STRAFE_P = 0.04;
   final double STRAFE_I = 0.0;
   final double STRAFE_D = 0.0;
@@ -54,15 +55,15 @@ public class Limelight extends SubsystemBase {
     pastDistance = robotPose.get()[2];
   }
 
-  public double limelightAngleX(){
+  public double limelightAngleX() {
     return xAngleSub.get();
   }
 
-  public double limelightPosZ(){
+  public double limelightPosZ() {
     return robotPose.get()[2];
   }
 
-  public double limelightAngleAlpha(){
+  public double limelightAngleAlpha() {
     return robotPose.get()[4];
   }
 

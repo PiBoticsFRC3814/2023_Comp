@@ -10,6 +10,7 @@ import frc.robot.subsystems.Grabber;
 public class GrabberToggle extends CommandBase {
   /** Creates a new GrabberCommand. */
   Grabber m_grabber;
+
   public GrabberToggle(Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_grabber = grabber;
@@ -23,7 +24,7 @@ public class GrabberToggle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_grabber.clawOpen) m_grabber.GrabberClose();
+    if (m_grabber.clawOpen) m_grabber.GrabberClose();
     else m_grabber.GrabberOpen();
   }
 

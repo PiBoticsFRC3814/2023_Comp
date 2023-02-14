@@ -10,7 +10,7 @@ import frc.robot.subsystems.GyroSwerveDrive;
 public class HardBrake extends CommandBase {
   /** Creates a new HardBrake. */
   GyroSwerveDrive m_drive;
-  
+
   public HardBrake(GyroSwerveDrive tempDrive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = tempDrive;

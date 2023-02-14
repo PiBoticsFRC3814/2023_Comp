@@ -5,90 +5,87 @@
 package frc.robot;
 
 public final class Constants {
-	////////////////////////////////////////
-	//                 OI                 //
-	////////////////////////////////////////
+  ////////////////////////////////////////
+  //                 OI                 //
+  ////////////////////////////////////////
 
-	public static final double JOYSTICK_X_DEADZONE = 0.2;
-	public static final double JOYSTICK_Y_DEADZONE = 0.2;
-	public static final double JOYSTICK_Z_DEADZONE = 0.2;
-	public static final double JOYSTICK_Z2_DEADZONE = 0.2;
-	
-	public static final int DRIVE_CONTROLLER_PORT = 2;
-	public static final int STEER_CONTROLLER_PORT = 0;
+  public static final double JOYSTICK_X_DEADZONE = 0.2;
+  public static final double JOYSTICK_Y_DEADZONE = 0.2;
+  public static final double JOYSTICK_Z_DEADZONE = 0.2;
+  public static final double JOYSTICK_Z2_DEADZONE = 0.2;
 
-	////////////////////////////////////////
-	//               Swerve               //
-	////////////////////////////////////////
+  public static final int DRIVE_CONTROLLER_PORT = 2;
+  public static final int STEER_CONTROLLER_PORT = 0;
 
-	/*
-	 * Swerve module motor and encoder ids
-	 * { Front Right, Back Right, Back Left, Front Left }
-	 */
-	public static final int[] SWERVE_DRIVE_MOTOR_IDS =     { 10, 11, 12, 13 };
-	public static final int[] SWERVE_STEER_MOTOR_IDS =     { 20, 21, 22, 23 };
-	public static final int[] SWERVE_ENCODER_IDS =         { 30, 31, 32, 33 };
+  ////////////////////////////////////////
+  //               Swerve               //
+  ////////////////////////////////////////
 
-	public static final int swerveModuleNumber = 4;
+  /*
+   * Swerve module motor and encoder ids
+   * { Front Right, Back Right, Back Left, Front Left }
+   */
+  public static final int[] SWERVE_DRIVE_MOTOR_IDS = {10, 11, 12, 13};
+  public static final int[] SWERVE_STEER_MOTOR_IDS = {20, 21, 22, 23};
+  public static final int[] SWERVE_ENCODER_IDS = {30, 31, 32, 33};
 
-	public static final double[] SWERVE_SETPOINT_OFFSET = { 
-		//must be between 0 & 360 degrees
-		49.31, //Front Right
-		97.03, //Rear Right
-		89.21, //Rear Left
-		358.59  //Front Left
-	}; 
-       
-	public static final double[][] SWERVE_STEER_PID_CONSTANTS = { 
-		// kP   kI   kD
-		{ 0.8, 0.0, 0.016 }, //Front Right
-		{ 0.8, 0.0, 0.016 }, //Rear Right
-		{ 0.8, 0.0, 0.016 }, //Rear Left
-		{ 0.8, 0.0, 0.016 }  //Front Left
-	};
+  public static final int swerveModuleNumber = 4;
 
-	/*
-	 * Swerve rotation PID Constants
-	 */
-	public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {
-		1.0,
-		0.0,
-		0.0
-	};
+  public static final double[] SWERVE_SETPOINT_OFFSET = {
+    // must be between 0 & 360 degrees
+    49.31, // Front Right
+    97.03, // Rear Right
+    89.21, // Rear Left
+    358.59 // Front Left
+  };
 
-	public static final boolean[] STEER_MOTOR_INVERTED = { false, false, false, false };
-	public static final boolean[] DRIVE_MOTOR_INVERTED = { false, false, true, false };
-	
-	/*
-	 * Swerve constants for swerve module calculations
-	 */
-	public static final double SWERVE_FRAME_LENGTH = 27.5;
-	public static final double SWERVE_FRAME_WIDTH = 27.5;
-	public static final double SWERVE_RADIUS = Math.sqrt( Math.pow( SWERVE_FRAME_LENGTH, 2 ) + Math.pow( SWERVE_FRAME_WIDTH, 2 ) );
-	public static final double SWERVE_PID_TOLERANCE = 2.8e-4;
+  public static final double[][] SWERVE_STEER_PID_CONSTANTS = {
+    // kP   kI   kD
+    {0.8, 0.0, 0.016}, // Front Right
+    {0.8, 0.0, 0.016}, // Rear Right
+    {0.8, 0.0, 0.016}, // Rear Left
+    {0.8, 0.0, 0.016} // Front Left
+  };
 
-	////////////////////////////////////////
-	//             Arm & Claw             //
-	////////////////////////////////////////
+  /*
+   * Swerve rotation PID Constants
+   */
+  public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {1.0, 0.0, 0.0};
 
-	/*
-	 * Arm Motor IDs
-	 */
-	public static final int SHOULDER_ID = 1;
-	public static final int EXTEND_ID = 1;
+  public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
+  public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, true, false};
 
-	/*
-	 * Arm control constants
-	 */
-	public static final double EXTEND_SPEED = 0.2;
-	public static final double[] ARM_ANGLE_PID_CONSTANTS = { 0.0, 0.0, 0.0 };
-	public static final int ARM_ENCODER_ID = 1;
+  /*
+   * Swerve constants for swerve module calculations
+   */
+  public static final double SWERVE_FRAME_LENGTH = 27.5;
+  public static final double SWERVE_FRAME_WIDTH = 27.5;
+  public static final double SWERVE_RADIUS =
+      Math.sqrt(Math.pow(SWERVE_FRAME_LENGTH, 2) + Math.pow(SWERVE_FRAME_WIDTH, 2));
+  public static final double SWERVE_PID_TOLERANCE = 2.8e-4;
 
-	/*
-	 * Claw and Arm Pnuematic IDs
-	 */
-	public static final int CLAW_ID_OPEN = 1;
-	public static final int CLAW_ID_CLOSE = 2;
-	public static final int ARM_ID_OPEN = 3;
-	public static final int ARM_ID_CLOSE = 4;
+  ////////////////////////////////////////
+  //             Arm & Claw             //
+  ////////////////////////////////////////
+
+  /*
+   * Arm Motor IDs
+   */
+  public static final int SHOULDER_ID = 1;
+  public static final int EXTEND_ID = 1;
+
+  /*
+   * Arm control constants
+   */
+  public static final double EXTEND_SPEED = 0.2;
+  public static final double[] ARM_ANGLE_PID_CONSTANTS = {0.0, 0.0, 0.0};
+  public static final int ARM_ENCODER_ID = 1;
+
+  /*
+   * Claw and Arm Pnuematic IDs
+   */
+  public static final int CLAW_ID_OPEN = 1;
+  public static final int CLAW_ID_CLOSE = 2;
+  public static final int ARM_ID_OPEN = 3;
+  public static final int ARM_ID_CLOSE = 4;
 }
