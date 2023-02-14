@@ -74,7 +74,8 @@ public final class Constants {
 	/*
 	 * Arm Motor IDs
 	 */
-	public static final int SHOULDER_ID = 1;
+	public static final int SHOULDER_ID_1 = 1;
+	public static final int SHOULDER_ID_2 = 1;
 	public static final int EXTEND_ID = 1;
 
 	/*

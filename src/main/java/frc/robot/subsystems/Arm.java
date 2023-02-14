@@ -15,7 +15,8 @@ import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
-  private WPI_TalonSRX shoulder;
+  private WPI_TalonSRX shoulder1;
+  private WPI_TalonSRX shoulder2;
   private WPI_TalonSRX extend;
   private DutyCycleEncoder shoulderEncoder;
 
@@ -37,7 +38,8 @@ public class Arm extends SubsystemBase {
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
     armBrake.set(DoubleSolenoid.Value.kReverse);
-    shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
+    shoulder1 = new WPI_TalonSRX(Constants.SHOULDER_ID_1);
+    shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_ID);
 
     angleController = new PIDController(
@@ -53,12 +55,14 @@ public class Arm extends SubsystemBase {
   public void ArmDirectControl(double armSpeed, double extendSpeed){
     if(armSpeed > 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
-    shoulder.set(armSpeed);
+    shoulder1.set(armSpeed);
+    shoulder2.set(armSpeed);
     extend.set(extendSpeed);
   }
 
   public void ArmAngle(double angle) {
-    shoulder.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
+    shoulder1.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
+    shoulder2.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
     shoulderAtPos = !angleController.atSetpoint();
     
     if(!shoulderAtPos) 
