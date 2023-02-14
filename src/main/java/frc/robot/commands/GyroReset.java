@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class GyroReset extends CommandBase {
   /** Creates a new GyroReset. */
   ADIS16470_IMU m_gyro;
+
   public GyroReset(ADIS16470_IMU gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_gyro = gyro;

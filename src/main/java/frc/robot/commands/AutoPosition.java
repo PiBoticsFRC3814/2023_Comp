@@ -25,7 +25,7 @@ public class AutoPosition extends CommandBase {
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-  
+
   final double STRAFE_P = 0.04;
   final double STRAFE_I = 0.0;
   final double STRAFE_D = 0.0;
@@ -42,7 +42,6 @@ public class AutoPosition extends CommandBase {
   MedianFilter xFilter = new MedianFilter(3);
   MedianFilter zFilter = new MedianFilter(3);
   MedianFilter aFilter = new MedianFilter(3);
-  
 
   /** Creates a new AutoPosition. */
   public AutoPosition(GyroSwerveDrive drivetrain) {
@@ -69,30 +68,30 @@ public class AutoPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        // a whole bunch of PID stuff that maybe shouldn't be here    
-        double forwardSpeed = 0.0;
-        double rotateSpeed = 0.0;
-        double strafeSpeed = 0.0;
-        double distance = 0.0;
-        double poseResult[] = robotPose.get();
-    
-        if(gotTarget.get() == 1.0){
-          if(poseResult.length > 0){
-            double xPos = xFilter.calculate(xAngleSub.get());
-            double zPos = zFilter.calculate(poseResult[2]);
-            double aPos = aFilter.calculate(poseResult[4]);
+    // a whole bunch of PID stuff that maybe shouldn't be here
+    double forwardSpeed = 0.0;
+    double rotateSpeed = 0.0;
+    double strafeSpeed = 0.0;
+    double distance = 0.0;
+    double poseResult[] = robotPose.get();
 
-            distance = zPos / Math.cos(Math.toRadians(aPos));
-            forwardSpeed = distanceController.calculate(distance, -1.5);
-            rotateSpeed = turnController.calculate(aPos, 0.0);
-            strafeSpeed = -strafeController.calculate(xPos, 0.0);
-    
-            m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
-          }
-          DriverStation.reportError("Got Position", false);
-          DriverStation.reportError("" + distance, false);
-          DriverStation.reportError("Output " + forwardSpeed, false);
-        }
+    if (gotTarget.get() == 1.0) {
+      if (poseResult.length > 0) {
+        double xPos = xFilter.calculate(xAngleSub.get());
+        double zPos = zFilter.calculate(poseResult[2]);
+        double aPos = aFilter.calculate(poseResult[4]);
+
+        distance = zPos / Math.cos(Math.toRadians(aPos));
+        forwardSpeed = distanceController.calculate(distance, -1.5);
+        rotateSpeed = turnController.calculate(aPos, 0.0);
+        strafeSpeed = -strafeController.calculate(xPos, 0.0);
+
+        m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
+      }
+      DriverStation.reportError("Got Position", false);
+      DriverStation.reportError("" + distance, false);
+      DriverStation.reportError("Output " + forwardSpeed, false);
+    }
   }
 
   // Called once the command ends or is interrupted.

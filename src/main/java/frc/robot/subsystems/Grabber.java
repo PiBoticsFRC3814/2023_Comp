@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Grabber extends SubsystemBase {
-  private DoubleSolenoid claw = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
+  private DoubleSolenoid claw =
+      new DoubleSolenoid(
+          PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
   public boolean clawOpen;
   /** Creates a new Grabber. */
   public Grabber() {}
@@ -21,13 +23,13 @@ public class Grabber extends SubsystemBase {
   }
 
   public void GrabberOpen() {
-    //Opens the grabber
+    // Opens the grabber
     claw.set(DoubleSolenoid.Value.kForward);
     clawOpen = true;
   }
 
   public void GrabberClose() {
-    //Closes the Grabber
+    // Closes the Grabber
     claw.set(DoubleSolenoid.Value.kReverse);
     clawOpen = false;
   }

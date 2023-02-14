@@ -4,18 +4,16 @@
 
 package frc.robot;
 
-
-
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.*;
 import frc.robot.commands.drive.*;
 import frc.robot.subsystems.*;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,30 +34,24 @@ public class RobotContainer {
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   XboxController driveController = new XboxController(2);
-  XboxController armController =   new XboxController(0);
+  XboxController armController = new XboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    //*
+    // *
     m_gyroSwerveDrive.setDefaultCommand(
-      new GyroSwerveDriveCommand(
-        () -> driveController.getLeftX(),
-          () -> driveController.getLeftY(),
+        new GyroSwerveDriveCommand(
+            () -> driveController.getLeftX(),
+            () -> driveController.getLeftY(),
             () -> driveController.getRawAxis(2),
-              () -> driveController.getRawAxis(3),
-                m_gyrp,
-                  m_gyroSwerveDrive
-      )
-    );
+            () -> driveController.getRawAxis(3),
+            m_gyrp,
+            m_gyroSwerveDrive));
 
     m_arm.setDefaultCommand(
-      new DirectArmCommand(
-        m_arm,
-          () -> armController.getLeftY(),
-            () -> armController.getLeftX()
-      )
-    );
-    //*/
+        new DirectArmCommand(
+            m_arm, () -> armController.getLeftY(), () -> armController.getLeftX()));
+    // */
 
     // Configure the button bindings
     configureButtonBindings();
@@ -75,9 +67,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveController, XboxController.Button.kY.value).whileTrue(new GyroReset(m_gyrp));
-    new JoystickButton(driveController, XboxController.Button.kB.value).whileTrue(new HardBrake(m_gyroSwerveDrive));
-    new JoystickButton(armController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
+    new JoystickButton(driveController, XboxController.Button.kY.value)
+        .whileTrue(new GyroReset(m_gyrp));
+    new JoystickButton(driveController, XboxController.Button.kB.value)
+        .whileTrue(new HardBrake(m_gyroSwerveDrive));
+    new JoystickButton(armController, XboxController.Button.kX.value)
+        .whileTrue(new GrabberToggle(m_grabber));
   }
 
   /**
