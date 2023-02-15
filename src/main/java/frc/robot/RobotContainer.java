@@ -30,6 +30,7 @@ public class RobotContainer {
   public final Grabber m_grabber = new Grabber();
 
   private final AutoPosition m_followAprilTag = new AutoPosition(m_gyroSwerveDrive);
+  private final HardBrake m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -57,6 +58,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     m_autoChooser.setDefaultOption("Follow Apriltag", m_followAprilTag);
+    m_autoChooser.addOption("Do Nothing", m_brakeAndWait);
     SmartDashboard.putData(m_autoChooser);
   }
 
