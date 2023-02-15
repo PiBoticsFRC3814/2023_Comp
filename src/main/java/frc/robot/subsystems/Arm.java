@@ -42,7 +42,7 @@ public class Arm extends SubsystemBase {
     armBrake.set(DoubleSolenoid.Value.kReverse);
     shoulder1 = new WPI_TalonSRX(Constants.SHOULDER_ID_1);
     shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
-    shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_ID);
+    shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
 
     angleController =
         new PIDController(

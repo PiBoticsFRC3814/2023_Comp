@@ -60,8 +60,7 @@ public final class Constants {
    */
   public static final double SWERVE_FRAME_LENGTH = 27.5;
   public static final double SWERVE_FRAME_WIDTH = 27.5;
-  public static final double SWERVE_RADIUS =
-      Math.sqrt(Math.pow(SWERVE_FRAME_LENGTH, 2) + Math.pow(SWERVE_FRAME_WIDTH, 2));
+  public static final double SWERVE_RADIUS = Math.sqrt(Math.pow(SWERVE_FRAME_LENGTH, 2) + Math.pow(SWERVE_FRAME_WIDTH, 2));
   public static final double SWERVE_PID_TOLERANCE = 2.8e-4;
 
   ////////////////////////////////////////
@@ -71,16 +70,16 @@ public final class Constants {
 	/*
 	 * Arm Motor IDs
 	 */
-	public static final int SHOULDER_ID_1 = 1;
-	public static final int SHOULDER_ID_2 = 1;
-	public static final int EXTEND_ID = 1;
+	public static final int SHOULDER_ID_1 = 40;
+	public static final int SHOULDER_ID_2 = 41;
+	public static final int EXTEND_ID = 42;
 
   /*
    * Arm control constants
    */
   public static final double EXTEND_SPEED = 0.2;
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {0.0, 0.0, 0.0};
-  public static final int ARM_ENCODER_ID = 1;
+  public static final int ARM_ENCODER_PORT = 1;
 
   /*
    * Claw and Arm Pnuematic IDs
