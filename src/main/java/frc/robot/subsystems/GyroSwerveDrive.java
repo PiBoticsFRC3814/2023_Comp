@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -9,11 +11,40 @@ public class GyroSwerveDrive extends SubsystemBase {
   private double[] speed = {0.0, 0.0, 0.0, 0.0};
   private double[] angle = {0.0, 0.0, 0.0, 0.0};
 
+  PIDController steerController =
+      new PIDController(
+          Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
+          Constants.SWERVE_ROTATION_PID_CONSTANTS[1],
+          Constants.SWERVE_ROTATION_PID_CONSTANTS[2]);
+
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
   };
 
   public GyroSwerveDrive() {}
+
+  private double applyDeadzone(double input, double deadzone) {
+    if (Math.abs(input) < deadzone) return 0.0;
+    double result = (Math.abs(input) - deadzone) / (1.0 - deadzone);
+    return (input < 0.0 ? -result : result);
+  }
+
+  public void alteredGyroDrive(double dX, double dY, double dZ, double dZ2, double gyroAngle){
+    applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
+    applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
+    applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
+    applyDeadzone(dZ2, Constants.JOYSTICK_Z2_DEADZONE);
+    if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0) || (dZ2 != 0.0)) {
+      double steerControllerResult = 0.0;
+      double steerAngle = Math.toDegrees(Math.atan2(dZ, dZ2) + Math.PI);
+      if ((dZ != 0.0) || (dZ2 != 0.0)) {
+        steerControllerResult = steerController.calculate(steerAngle, gyroAngle);
+        steerControllerResult /= 360.0;
+      }
+      //gyroDrive(dX, dY, steerControllerResult, gyroAngle);
+      gyroDrive(dX, dY, dZ, gyroAngle);
+    }
+  }
 
   public void gyroDrive(double str, double fwd, double rot, double gyroAngle) {
     double intermediary = fwd * Math.cos(gyroAngle) + str * Math.sin(gyroAngle);

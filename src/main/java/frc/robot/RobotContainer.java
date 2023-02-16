@@ -30,7 +30,7 @@ public class RobotContainer {
   public final Grabber m_grabber = new Grabber();
 
   private final AutoPosition m_followAprilTag = new AutoPosition(m_gyroSwerveDrive);
-  private final HardBrake m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
+  //private final HardBrake m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -39,7 +39,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // *
     m_gyroSwerveDrive.setDefaultCommand(
         new GyroSwerveDriveCommand(
             () -> driveController.getLeftX(),
@@ -49,17 +48,17 @@ public class RobotContainer {
             m_gyrp,
             m_gyroSwerveDrive));
 
+    /*
     m_arm.setDefaultCommand(
         new DirectArmCommand(
             m_arm, () -> armController.getLeftY(), () -> armController.getLeftX()));
     // */
 
-    // Configure the button bindings
-    configureButtonBindings();
-
     m_autoChooser.setDefaultOption("Follow Apriltag", m_followAprilTag);
-    m_autoChooser.addOption("Do Nothing", m_brakeAndWait);
+    //m_autoChooser.addOption("Do Nothing", m_brakeAndWait);
     SmartDashboard.putData(m_autoChooser);
+
+    configureButtonBindings();
   }
 
   /**
@@ -69,12 +68,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveController, XboxController.Button.kY.value)
-        .whileTrue(new GyroReset(m_gyrp));
-    new JoystickButton(driveController, XboxController.Button.kB.value)
-        .whileTrue(new HardBrake(m_gyroSwerveDrive));
-    new JoystickButton(armController, XboxController.Button.kX.value)
-        .whileTrue(new GrabberToggle(m_grabber));
+    new JoystickButton(driveController, XboxController.Button.kY.value).whileTrue(new GyroReset(m_gyrp));
+    //new JoystickButton(driveController, XboxController.Button.kB.value).whileTrue(new HardBrake(m_gyroSwerveDrive));
+    new JoystickButton(armController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
   }
 
   /**

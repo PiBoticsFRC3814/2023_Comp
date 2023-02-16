@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
@@ -56,8 +58,16 @@ public class Arm extends SubsystemBase {
     shoulderAtPos = false;
   }
 
-  public void ArmDirectControl(double armSpeed, double extendSpeed) {
-    if (armSpeed > 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
+  private double applyDeadzone(double input, double deadzone) {
+    if (Math.abs(input) < deadzone) return 0.0;
+    double result = (Math.abs(input) - deadzone) / (1.0 - deadzone);
+    return (input < 0.0 ? -result : result);
+  }
+
+  public void ArmDirectControl(DoubleSupplier passedArm, DoubleSupplier passedExtend) {
+    double armSpeed = applyDeadzone(passedArm.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
+    double extendSpeed = applyDeadzone(passedExtend.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
+    if (armSpeed != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
     shoulder1.set(armSpeed);
     shoulder2.set(armSpeed);
