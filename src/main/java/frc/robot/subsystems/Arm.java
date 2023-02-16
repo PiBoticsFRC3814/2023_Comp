@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -46,6 +47,9 @@ public class Arm extends SubsystemBase {
     shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
     shoulder1.setInverted(false);
     shoulder2.setInverted(true);
+    shoulder1.setNeutralMode(NeutralMode.Brake);
+    shoulder2.setNeutralMode(NeutralMode.Brake);
+    extend.setNeutralMode(NeutralMode.Brake);
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
 
     angleController =
