@@ -39,9 +39,7 @@ public class Arm extends SubsystemBase {
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
     extend.setNeutralMode(NeutralMode.Brake);
 
-    armBrake =
-        new DoubleSolenoid(
-            PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
+    armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
     armBrake.set(DoubleSolenoid.Value.kReverse);
     shoulder1 = new WPI_TalonSRX(Constants.SHOULDER_ID_1);
     shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
@@ -50,6 +48,9 @@ public class Arm extends SubsystemBase {
     shoulder1.setNeutralMode(NeutralMode.Brake);
     shoulder2.setNeutralMode(NeutralMode.Brake);
     extend.setNeutralMode(NeutralMode.Brake);
+    shoulder1.configPeakCurrentLimit(70, 1);
+    shoulder2.configPeakCurrentLimit(70, 1);
+    extend.configPeakCurrentLimit(70, 1);
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
 
     angleController =

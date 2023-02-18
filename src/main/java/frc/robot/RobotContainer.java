@@ -48,7 +48,7 @@ public class RobotContainer {
             m_gyrp,
             m_gyroSwerveDrive));
 
-    /*
+    //*
     m_arm.setDefaultCommand(
         new DirectArmCommand(
             m_arm, () -> armController.getLeftY(), () -> armController.getLeftX()));
