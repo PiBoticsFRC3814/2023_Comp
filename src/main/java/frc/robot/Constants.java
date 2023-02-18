@@ -81,6 +81,14 @@ public final class Constants {
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {0.0, 0.0, 0.0};
   public static final int ARM_ENCODER_PORT = 1;
 
+  public static final double SCORE_DISTANCE = 1.0;
+  public static final double SCORE_SIDE_DISTANCE = 1.0;
+  public static final double SCORE_SPEED = 0.2;
+  public static final double SCORE_ANGLE_TOP = 90.0;
+  public static final double SCORE_ANGLE_MIDDLE = 60.0;
+  public static final double SCORE_ANGLE_BOTTOM = 40.0;
+  public static final double GRAB_ANGLE = 20.0;
+
   /*
    * Claw and Arm Pnuematic IDs
    */
