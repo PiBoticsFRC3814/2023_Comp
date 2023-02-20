@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -18,6 +19,8 @@ public class SwerveModule {
   private final double[] steerAnglePIDConstants;
   public double position;
   private double angleOffset;
+
+  private int index;
 
   /* the SwerveModule subsystem */
   public SwerveModule(int swerveModIndex) {
@@ -47,6 +50,7 @@ public class SwerveModule {
     steerAnglePIDController.setTolerance(Constants.SWERVE_PID_TOLERANCE);
 
     angleOffset = Constants.SWERVE_SETPOINT_OFFSET[swerveModIndex];
+    index = swerveModIndex;
   }
 
   private static final double INVERSE_180 = 1.0 / 180.0;
@@ -64,6 +68,7 @@ public class SwerveModule {
     // Calculate the turning motor output from the turning PID controller.
     steerMotor.set(
         MathUtil.clamp(steerAnglePIDController.calculate(getSteerAngle(), angle), -1.0, 1.0));
+        SmartDashboard.putNumber("Angle Steer" + index, angle);
 
     driveMotor.set(speed);
   }

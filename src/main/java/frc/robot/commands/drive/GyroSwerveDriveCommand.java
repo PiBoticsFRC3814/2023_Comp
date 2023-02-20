@@ -31,7 +31,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_gyroSwerveDrive.alteredGyroDrive(dX.getAsDouble(), dY.getAsDouble(), dZ.getAsDouble(), dZ2.getAsDouble(), m_gyro.getAngle());
+    m_gyroSwerveDrive.alteredGyroDrive(dX.getAsDouble(), dY.getAsDouble(), dZ.getAsDouble(), dZ2.getAsDouble(), Math.toRadians(m_gyro.getAngle()));
     DriverStation.reportError("Driving", false);
   }
 

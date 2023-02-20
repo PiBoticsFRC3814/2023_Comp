@@ -30,10 +30,10 @@ public class GyroSwerveDrive extends SubsystemBase {
   }
 
   public void alteredGyroDrive(double dX, double dY, double dZ, double dZ2, double gyroAngle){
-    applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
-    applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
-    applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
-    applyDeadzone(dZ2, Constants.JOYSTICK_Z2_DEADZONE);
+    dX = applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
+    dY = applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
+    dZ = applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
+    dZ2 = applyDeadzone(dZ2, Constants.JOYSTICK_Z2_DEADZONE);
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0) || (dZ2 != 0.0)) {
       double steerControllerResult = 0.0;
       double steerAngle = Math.toDegrees(Math.atan2(dZ, dZ2) + Math.PI);
@@ -42,7 +42,13 @@ public class GyroSwerveDrive extends SubsystemBase {
         steerControllerResult /= 360.0;
       }
       //gyroDrive(dX, dY, steerControllerResult, gyroAngle);
-      gyroDrive(dX, dY, dZ, gyroAngle);
+      drive(dX, dY, dZ);
+    } else{
+      speed[0] = 0.0;
+      speed[1] = 0.0;
+      speed[2] = 0.0;
+      speed[3] = 0.0;
+      setSetpoints();
     }
   }
 
@@ -62,10 +68,10 @@ public class GyroSwerveDrive extends SubsystemBase {
    * Brake system
    */
   public void brakeAngle() {
-    angle[0] = 0.25;
-    angle[1] = -0.25;
-    angle[2] = 0.25;
-    angle[3] = -0.25;
+    angle[0] = -0.25;
+    angle[1] = 0.25;
+    angle[2] = -0.25;
+    angle[3] = 0.25;
     speed[0] = 0.0;
     speed[1] = 0.0;
     speed[2] = 0.0;

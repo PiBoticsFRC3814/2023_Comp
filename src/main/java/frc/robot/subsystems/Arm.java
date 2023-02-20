@@ -74,8 +74,8 @@ public class Arm extends SubsystemBase {
     double extendSpeed = applyDeadzone(passedExtend.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
     if (armSpeed != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
-    shoulder1.set(armSpeed);
-    shoulder2.set(armSpeed);
+    shoulder1.set(armSpeed * 0.3);
+    shoulder2.set(armSpeed * 0.3);
     extend.set(extendSpeed);
   }
 
