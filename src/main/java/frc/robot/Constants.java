@@ -92,8 +92,8 @@ public final class Constants {
   /*
    * Claw and Arm Pnuematic IDs
    */
-  public static final int CLAW_ID_OPEN = 1;
-  public static final int CLAW_ID_CLOSE = 2;
+  public static final int CLAW_ID_OPEN = 0;
+  public static final int CLAW_ID_CLOSE = 1;
   public static final int ARM_ID_OPEN = 3;
-  public static final int ARM_ID_CLOSE = 4;
+  public static final int ARM_ID_CLOSE = 2;
 }
