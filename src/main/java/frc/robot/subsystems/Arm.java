@@ -93,9 +93,9 @@ public class Arm extends SubsystemBase {
   public void ArmAngle(double angle) {
     shoulder1.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
     shoulder2.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
-    shoulderAtPos = !angleController.atSetpoint();
+    shoulderAtPos = angleController.atSetpoint();
 
-    if (!shoulderAtPos) armBrake.set(DoubleSolenoid.Value.kReverse);
+    if (shoulderAtPos) armBrake.set(DoubleSolenoid.Value.kReverse);
     else armBrake.set(DoubleSolenoid.Value.kForward);
   }
 
