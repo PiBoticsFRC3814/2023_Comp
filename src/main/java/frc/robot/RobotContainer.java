@@ -51,7 +51,7 @@ public class RobotContainer {
     //*
     m_arm.setDefaultCommand(
         new DirectArmCommand(
-            m_arm, () -> armController.getRawAxis(3), () -> armController.getLeftX()));
+            m_arm, () -> armController.getRawAxis(3), () -> armController.getLeftY()));
     // */
 
     m_autoChooser.setDefaultOption("Follow Apriltag", m_followAprilTag);
@@ -71,6 +71,7 @@ public class RobotContainer {
     new JoystickButton(driveController, XboxController.Button.kY.value).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveController, XboxController.Button.kB.value).whileTrue(new HardBrake(m_gyroSwerveDrive));
     new JoystickButton(armController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
+    new JoystickButton(armController, XboxController.Button.kX.value).whileTrue(new ExtendPos0(m_arm));
   }
 
   /**

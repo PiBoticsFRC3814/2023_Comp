@@ -10,7 +10,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,10 +32,10 @@ public class Arm extends SubsystemBase {
 
   private PIDController angleController;
 
-  boolean switch1;
-  boolean switch2;
-  boolean switch3;
-  boolean switch4;
+  private DigitalInput switch1;
+  private DigitalInput switch2;
+  private DigitalInput switch3;
+  private DigitalInput switch4;
 
   public Arm() {
     extend = new WPI_TalonSRX(Constants.EXTEND_ID);
@@ -52,6 +54,11 @@ public class Arm extends SubsystemBase {
     shoulder2.configPeakCurrentLimit(70, 1);
     extend.configPeakCurrentLimit(70, 1);
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
+
+    switch1 = new DigitalInput(3);
+    switch2 = new DigitalInput(2);
+    switch3 = new DigitalInput(1);
+    switch4 = new DigitalInput(0);
 
     angleController =
         new PIDController(
@@ -79,6 +86,10 @@ public class Arm extends SubsystemBase {
     extend.set(extendSpeed);
   }
 
+  public double GetArmAngle(){
+    return shoulderEncoder.getAbsolutePosition();
+  }
+
   public void ArmAngle(double angle) {
     shoulder1.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
     shoulder2.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
@@ -89,36 +100,42 @@ public class Arm extends SubsystemBase {
   }
 
   public void ArmDistance(int position) {
-    extend.set(-1.0);
     extendAtPos = false;
+    while(!extendAtPos){
+      extend.set(Constants.EXTEND_SPEED);
+      if(!switch1.get()){
+        extend.set(0.0);
+        break;
+      }
+      DriverStation.reportError("homing", false);
+    }
+
     while (!extendAtPos) {
       switch (position) {
         case 0:
-          extend.set(Constants.EXTEND_SPEED);
-          if (switch1) {
-            extend.set(0.0);
-            extendAtPos = true;
-          }
-
+          break;
         case 1:
           extend.set(Constants.EXTEND_SPEED);
-          if (switch2) {
+          if (!switch2.get()) {
             extend.set(0.0);
-            extendAtPos = true;
+            break;
           }
+
         case 2:
           extend.set(Constants.EXTEND_SPEED);
-          if (switch3) {
+          if (!switch3.get()) {
             extend.set(0.0);
-            extendAtPos = true;
+            break;
           }
+
         case 3:
           extend.set(Constants.EXTEND_SPEED);
-          if (switch4) {
+          if (!switch4.get()) {
             extend.set(0.0);
-            extendAtPos = true;
+            break;
           }
       }
     }
+    extendAtPos = true;
   }
 }

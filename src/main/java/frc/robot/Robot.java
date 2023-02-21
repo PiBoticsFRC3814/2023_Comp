@@ -90,6 +90,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("Gyro Angle", m_robotContainer.m_gyrp.getAngle());
+    SmartDashboard.putNumber("Arm Angle", m_robotContainer.m_arm.GetArmAngle());
     m_robotContainer.m_gyroSwerveDrive.outputEncoderPos();
   }
 
