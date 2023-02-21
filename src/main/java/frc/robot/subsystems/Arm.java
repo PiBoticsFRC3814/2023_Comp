@@ -101,10 +101,11 @@ public class Arm extends SubsystemBase {
 
   public void ArmDistance(int position) {
     extendAtPos = false;
+    extend.set(-Constants.EXTEND_SPEED);
     while(!extendAtPos){
-      extend.set(Constants.EXTEND_SPEED);
       if(!switch1.get()){
         extend.set(0.0);
+        DriverStation.reportError("Home trigger", false);
         break;
       }
       DriverStation.reportError("homing", false);
