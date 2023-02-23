@@ -66,6 +66,7 @@ public class Arm extends SubsystemBase {
             Constants.ARM_ANGLE_PID_CONSTANTS[1],
             Constants.ARM_ANGLE_PID_CONSTANTS[2]);
 
+    angleController.disableContinuousInput();
     extendAtPos = false;
     shoulderAtPos = false;
   }
@@ -91,12 +92,14 @@ public class Arm extends SubsystemBase {
   }
 
   public void ArmAngle(double angle) {
-    shoulder1.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
-    shoulder2.set(angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle));
+    double correction = angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle);
+    DriverStation.reportError("" + correction, false);
+    //shoulder1.set(correction);
+    //shoulder2.set(correction);
     shoulderAtPos = angleController.atSetpoint();
 
-    if (shoulderAtPos) armBrake.set(DoubleSolenoid.Value.kReverse);
-    else armBrake.set(DoubleSolenoid.Value.kForward);
+    if (correction != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
+    else armBrake.set(DoubleSolenoid.Value.kReverse);
   }
 
   public void ArmDistance(int position) {
@@ -105,37 +108,42 @@ public class Arm extends SubsystemBase {
     while(!extendAtPos){
       if(!switch1.get()){
         extend.set(0.0);
-        DriverStation.reportError("Home trigger", false);
         break;
       }
-      DriverStation.reportError("homing", false);
     }
 
-    while (!extendAtPos) {
-      switch (position) {
-        case 0:
-          break;
-        case 1:
+    switch (position) {
+      case 0:
+        break;
+      case 1:
+        while(!extendAtPos){
           extend.set(Constants.EXTEND_SPEED);
           if (!switch2.get()) {
             extend.set(0.0);
             break;
           }
+        }
+        break;
 
-        case 2:
-          extend.set(Constants.EXTEND_SPEED);
-          if (!switch3.get()) {
-            extend.set(0.0);
-            break;
-          }
-
-        case 3:
-          extend.set(Constants.EXTEND_SPEED);
-          if (!switch4.get()) {
-            extend.set(0.0);
-            break;
-          }
+      case 2:
+      while(!extendAtPos){
+        extend.set(Constants.EXTEND_SPEED);
+        if (!switch3.get()) {
+          extend.set(0.0);
+        break;
       }
+    }
+      break;
+
+      case 3:
+      while(!extendAtPos){
+        extend.set(Constants.EXTEND_SPEED);
+        if (!switch4.get()) {
+          extend.set(0.0);
+        break;
+      }
+    }
+      break;
     }
     extendAtPos = true;
   }

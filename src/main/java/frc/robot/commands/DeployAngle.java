@@ -5,27 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Grabber;
 
-public class ExtendPos0 extends CommandBase {
-  /** Creates a new ExtendPos0. */
-  Arm m_arm;
-  public ExtendPos0(Arm arm) {
-    m_arm = arm;
-    addRequirements(arm);
+public class DeployAngle extends CommandBase {
+  /** Creates a new ScoreTop. */
+  Arm m_Arm;
+  Grabber m_Grabber;
+  boolean finished;
+  public DeployAngle(Arm arm, Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_Arm = arm;
+    m_Grabber = grabber;
+    addRequirements(arm, grabber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.extendAtPos = false;
+    finished = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.ArmDistance(0);
+    m_Arm.ArmAngle(Constants.DEPLOY_ANGLE);
+    m_Arm.ArmDistance(1);
+    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
+      finished = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +44,6 @@ public class ExtendPos0 extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.extendAtPos;
+    return finished;
   }
 }
