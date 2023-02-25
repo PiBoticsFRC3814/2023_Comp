@@ -20,6 +20,7 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class Arm extends SubsystemBase {
@@ -42,11 +43,11 @@ public class Arm extends SubsystemBase {
   private DigitalInput switch4;
 
   public Arm() {
-    extend = new CANSparkMax(Constants.EXTEND_ID, null);
+    extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
-    armBrake.set(DoubleSolenoid.Value.kReverse);
+    armBrake.set(DoubleSolenoid.Value.kForward);
     shoulder1 = new WPI_TalonSRX(Constants.SHOULDER_ID_1);
     shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
     shoulder1.setInverted(false);
