@@ -11,8 +11,7 @@ public class GyroSwerveDrive extends SubsystemBase {
   private double[] speed = {0.0, 0.0, 0.0, 0.0};
   private double[] angle = {0.0, 0.0, 0.0, 0.0};
 
-  PIDController steerController =
-      new PIDController(
+  PIDController steerController = new PIDController(
           Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
           Constants.SWERVE_ROTATION_PID_CONSTANTS[1],
           Constants.SWERVE_ROTATION_PID_CONSTANTS[2]);
@@ -21,7 +20,9 @@ public class GyroSwerveDrive extends SubsystemBase {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
   };
 
-  public GyroSwerveDrive() {}
+  public GyroSwerveDrive() {
+    steerController.enableContinuousInput(-Math.PI, Math.PI);
+  }
 
   private double applyDeadzone(double input, double deadzone) {
     if (Math.abs(input) < deadzone) return 0.0;
@@ -36,13 +37,12 @@ public class GyroSwerveDrive extends SubsystemBase {
     dZ2 = applyDeadzone(dZ2, Constants.JOYSTICK_Z2_DEADZONE);
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0) || (dZ2 != 0.0)) {
       double steerControllerResult = 0.0;
-      double steerAngle = Math.toDegrees(Math.atan2(dZ, dZ2) + Math.PI);
+      double steerAngle = Math.atan2(dZ, dZ2) + Math.PI;
       if ((dZ != 0.0) || (dZ2 != 0.0)) {
         steerControllerResult = steerController.calculate(steerAngle, gyroAngle);
-        steerControllerResult /= 360.0;
+        steerControllerResult /= Math.PI;
       }
-      //gyroDrive(dX, dY, steerControllerResult, gyroAngle);
-      drive(dX, dY, dZ);
+      gyroDrive(dX, dY, dZ, gyroAngle);
     } else{
       speed[0] = 0.0;
       speed[1] = 0.0;

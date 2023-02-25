@@ -18,11 +18,15 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+
+
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
   private WPI_TalonSRX shoulder1;
   private WPI_TalonSRX shoulder2;
-  private WPI_TalonSRX extend;
+  private CANSparkMax extend;
   private DutyCycleEncoder shoulderEncoder;
 
   public boolean extendAtPos;
@@ -38,8 +42,8 @@ public class Arm extends SubsystemBase {
   private DigitalInput switch4;
 
   public Arm() {
-    extend = new WPI_TalonSRX(Constants.EXTEND_ID);
-    extend.setNeutralMode(NeutralMode.Brake);
+    extend = new CANSparkMax(Constants.EXTEND_ID, null);
+    extend.setIdleMode(IdleMode.kBrake);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
     armBrake.set(DoubleSolenoid.Value.kReverse);
@@ -49,10 +53,9 @@ public class Arm extends SubsystemBase {
     shoulder2.setInverted(true);
     shoulder1.setNeutralMode(NeutralMode.Brake);
     shoulder2.setNeutralMode(NeutralMode.Brake);
-    extend.setNeutralMode(NeutralMode.Brake);
+    extend.setIdleMode(IdleMode.kBrake);
     shoulder1.configPeakCurrentLimit(70, 1);
     shoulder2.configPeakCurrentLimit(70, 1);
-    extend.configPeakCurrentLimit(70, 1);
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
 
     switch1 = new DigitalInput(3);
