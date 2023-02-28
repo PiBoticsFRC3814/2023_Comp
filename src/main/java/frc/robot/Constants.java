@@ -78,17 +78,18 @@ public final class Constants {
    * Arm control constants
    */
   public static final double EXTEND_SPEED = -0.5;
-  public static final double[] ARM_ANGLE_PID_CONSTANTS = {5.0, 0.0, 0.0};
+  public static final double[] ARM_ANGLE_PID_CONSTANTS = {11.0, 0.0, 2.0};
   public static final int ARM_ENCODER_PORT = 5;
 
   public static final double SCORE_DISTANCE = 1.0;
   public static final double SCORE_SIDE_TIME = 1.0;
   public static final double SCORE_SPEED = 0.2;
-  
-  public static final double SCORE_ANGLE_TOP = 90.0;
-  public static final double SCORE_ANGLE_MIDDLE = 60.0;
-  public static final double SCORE_ANGLE_BOTTOM = 40.0;
-  public static final double DEPLOY_ANGLE = 20.0;
+
+  public static final double SCORE_ANGLE_TOP = 0.6; // cone
+  public static final double SCORE_ANGLE_MIDDLE = 0.57;
+  public static final double SCORE_ANGLE_BOTTOM = 0.41;
+  //todo: add logic for lower cube top:0.547; middle:0.500
+  public static final double DEPLOY_ANGLE = 0.41;
   public static final double STOW_ANGLE = 20.0;
   public static final double SUBSTATION_ANGLE = 20.0;
 

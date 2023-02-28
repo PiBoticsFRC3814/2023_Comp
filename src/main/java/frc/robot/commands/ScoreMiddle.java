@@ -31,8 +31,8 @@ public class ScoreMiddle extends CommandBase {
   @Override
   public void execute() {
     m_Arm.ArmAngle(Constants.SCORE_ANGLE_MIDDLE);
-    m_Arm.ArmDistance(2);
-    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
+    //m_Arm.ArmDistance(2);
+    if(m_Arm.shoulderAtPos /*&& m_Arm.extendAtPos*/){
       m_Grabber.GrabberOpen();
       finished = true;
     }

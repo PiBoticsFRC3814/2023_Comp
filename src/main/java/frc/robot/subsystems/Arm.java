@@ -71,6 +71,7 @@ public class Arm extends SubsystemBase {
             Constants.ARM_ANGLE_PID_CONSTANTS[2]);
 
     angleController.disableContinuousInput();
+    angleController.setTolerance(0.02);
     extendAtPos = false;
     shoulderAtPos = false;
   }
@@ -96,13 +97,12 @@ public class Arm extends SubsystemBase {
   }
 
   public void ArmAngle(double angle) {
-    double correction = angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle);
-    DriverStation.reportError("" + correction, false);
-    //shoulder1.set(correction);
-    //shoulder2.set(correction);
+    double correction = -angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle);
+    shoulder1.set(correction);
+    shoulder2.set(correction);
     shoulderAtPos = angleController.atSetpoint();
 
-    if (correction != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
+    if (Math.abs(correction) <= 0.1) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
   }
 
