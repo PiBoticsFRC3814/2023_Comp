@@ -77,7 +77,8 @@ public final class Constants {
   /*
    * Arm control constants
    */
-  public static final double EXTEND_SPEED = -0.5;
+  public static final double EXTEND_HOME_SPEED = -0.5;
+  public static final double[] EXTEND_PID_CONSTANTS = {1.0e-5, 0.0, 0.0, 0.0, 0.0, -0.2, 0.2};
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {11.0, 0.0, 2.0};
   public static final int ARM_ENCODER_PORT = 5;
 
