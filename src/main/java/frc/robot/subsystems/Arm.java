@@ -9,6 +9,14 @@ import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -37,12 +45,21 @@ public class Arm extends SubsystemBase {
 
   private PIDController angleController;
 
+  private RelativeEncoder extendEncoder;
+  private SparkMaxPIDController extendController;
+  private SparkMaxLimitSwitch extendHomeSwitch;
+
+  private Double extendOffset;
+  private boolean extendIsHomed;
+
   private DigitalInput switch1;
   private DigitalInput switch2;
   private DigitalInput switch3;
   private DigitalInput switch4;
 
   public Arm() {
+    extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
+    extend.setIdleMode(IdleMode.kBrake);
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
 
@@ -54,10 +71,26 @@ public class Arm extends SubsystemBase {
     shoulder2.setInverted(true);
     shoulder1.setNeutralMode(NeutralMode.Brake);
     shoulder2.setNeutralMode(NeutralMode.Brake);
-    extend.setIdleMode(IdleMode.kBrake);
+
     shoulder1.configPeakCurrentLimit(70, 1);
     shoulder2.configPeakCurrentLimit(70, 1);
+
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
+
+    extendEncoder = extend.getEncoder();
+
+    extendController = extend.getPIDController();
+    extendController.setP(Constants.EXTEND_PID_CONSTANTS[0]);
+    extendController.setI(Constants.EXTEND_PID_CONSTANTS[1]);
+    extendController.setD(Constants.EXTEND_PID_CONSTANTS[2]);
+    extendController.setIZone(Constants.EXTEND_PID_CONSTANTS[3]);
+    extendController.setFF(Constants.EXTEND_PID_CONSTANTS[4]);
+    extendController.setOutputRange(Constants.EXTEND_PID_CONSTANTS[5], Constants.EXTEND_PID_CONSTANTS[6]);
+
+    extendHomeSwitch = extend.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+
+    extendOffset = 0.0;
+    extendIsHomed = false;
 
     switch1 = new DigitalInput(3);
     switch2 = new DigitalInput(2);
@@ -106,18 +139,29 @@ public class Arm extends SubsystemBase {
     else armBrake.set(DoubleSolenoid.Value.kReverse);
   }
 
+
+
   public void ArmDistance(int position) {
     extendAtPos = false;
-    extend.set(-Constants.EXTEND_SPEED);
-    while(!extendAtPos){
-      if(!switch1.get()){
-        extend.set(0.0);
-        break;
+    if(extendIsHomed){
+      extend.set(-Constants.EXTEND_HOME_SPEED);
+      while(!extendAtPos){
+        if(!extendHomeSwitch.isPressed()){
+          extend.set(0.0);
+          extendOffset = extendEncoder.getPosition();
+          extendIsHomed = true;
+          break;
+        }
       }
     }
+    extendController.setReference(1.0 + extendOffset, ControlType.kPosition);
 
-    switch (position) {
+    //switch now runs off currentPods instead of position, make it go from currentPos to position
+    //dont think we need it anymore, but i dont want to delete it just in case
+    /* int posOrNeg;
+    switch (currentPos) {
       case 0:
+        posOrNeg = position - currentPos;
         break;
       case 1:
         while(!extendAtPos){
@@ -149,6 +193,6 @@ public class Arm extends SubsystemBase {
     }
       break;
     }
-    extendAtPos = true;
+    extendAtPos = true;*/
   }
 }
