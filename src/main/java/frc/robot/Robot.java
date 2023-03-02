@@ -89,9 +89,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+<<<<<<< Updated upstream
     SmartDashboard.putNumber("Gyro Angle", m_robotContainer.m_gyrp.getAngle());
     SmartDashboard.putNumber("Arm Angle", m_robotContainer.m_arm.GetArmAngle());
     m_robotContainer.m_gyroSwerveDrive.outputEncoderPos();
+=======
+    m_robotContainer.m_gyroSwerveDrive.drive(1.0, 1.0, 0.0);
+>>>>>>> Stashed changes
   }
 
   @Override
@@ -102,7 +106,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

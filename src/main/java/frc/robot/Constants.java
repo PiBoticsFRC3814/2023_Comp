@@ -21,6 +21,7 @@ public final class Constants {
   //               Swerve               //
   ////////////////////////////////////////
 
+<<<<<<< Updated upstream
   /*
    * Swerve module motor and encoder ids
    * { Front Right, Back Right, Back Left, Front Left }
@@ -28,6 +29,43 @@ public final class Constants {
   public static final int[] SWERVE_DRIVE_MOTOR_IDS = {10, 11, 12, 13};
   public static final int[] SWERVE_STEER_MOTOR_IDS = {20, 21, 22, 23};
   public static final int[] SWERVE_ENCODER_IDS = {30, 31, 32, 33};
+=======
+	/*
+	 * Swerve module motor and encoder ids
+	 * { Front Right, Back Right, Back Left, Front Left }
+	 */
+	public static final int[] SWERVE_DRIVE_MOTOR_IDS =     { 10, 11, 12, 13 };
+	public static final int[] SWERVE_STEER_MOTOR_IDS =     { 20, 21, 22, 23 };
+	public static final int[] SWERVE_ENCODER_IDS =         { 30, 31, 32, 33 };
+
+	public static final int swerveModuleNumber = 4;
+
+	public static final double[] SWERVE_SETPOINT_OFFSET = { 
+		//must be between 0 & 360 degrees
+		49.31, //Front Right
+		97.03, //Rear Right
+		89.21, //Rear Left
+		358.59  //Front Left
+	}; 
+       
+	public static final double[][] SWERVE_STEER_PID_CONSTANTS = { 
+		// kP   kI   kD
+		{ 0.8, 0.0, 0.016 }, //Front Right
+		{ 0.8, 0.0, 0.016 }, //Rear Right
+		{ 0.8, 0.0, 0.016 }, //Rear Left
+		{ 0.8, 0.0, 0.016 }  //Front Left
+	};
+	
+	public static double[][] SWERVE_DRIVE_PID_CONSTANTS = { 
+		// kP   kI   kD  kIz  kFF  kMn  kMx
+		{ 2.0e-4, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Front Right
+		{ 2.0e-4, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Right
+		{ 2.0e-4, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }, //Rear Left
+		{ 2.0e-4, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0 }  //Front Left
+	};
+
+	public static double MAX_DRIVETRAIN_SPEED = 5000;
+>>>>>>> Stashed changes
 
   public static final int swerveModuleNumber = 4;
 
@@ -81,6 +119,7 @@ public final class Constants {
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {11.0, 0.0, 2.0};
   public static final int ARM_ENCODER_PORT = 5;
 
+<<<<<<< Updated upstream
   public static final double SCORE_DISTANCE = 1.0;
   public static final double SCORE_SIDE_TIME = 1.0;
   public static final double SCORE_SPEED = 0.2;
@@ -100,4 +139,20 @@ public final class Constants {
   public static final int CLAW_ID_CLOSE = 1;
   public static final int ARM_ID_OPEN = 3;
   public static final int ARM_ID_CLOSE = 2;
+=======
+	/*
+	 * Claw and Arm Pnuematic IDs
+	 */
+	public static final int CLAW_ID_OPEN = 1;
+	public static final int CLAW_ID_CLOSE = 2;
+	public static final int ARM_ID_OPEN = 3;
+	public static final int ARM_ID_CLOSE = 4;
+
+	/*
+	 * HolonomicDrive PID constants
+	 */
+	 public static final float HOLONOMIC_DRIVE_P = (float) 1.0;
+	 public static final float HOLONOMIC_DRIVE_I = (float) 0.0;
+	 public static final float HOLONOMIC_DRIVE_D = (float) 0.0;
+>>>>>>> Stashed changes
 }
