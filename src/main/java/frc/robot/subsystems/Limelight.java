@@ -47,10 +47,12 @@ public class Limelight extends SubsystemBase {
     turnController.disableContinuousInput();
     turnController.setTolerance(0.2);
 
+    // before getEntry it was getDoubleTopic
+    // before getDoubleArray it was getDoubleArrayTopic
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    xAngleSub = limelight.getDoubleTopic("tx").subscribe(0.0);
-    robotPose = limelight.getDoubleArrayTopic("campose").subscribe(result);
-    gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
+    xAngleSub = limelight.getEntry("tx").getDouble(0).subscribe(0.0);
+    robotPose = limelight.getDoubleArray("campose").subscribe(result);
+    gotTarget = limelight.getEntry("tv").getDouble(0).subscribe(0.0);
     pastDistance = robotPose.get()[2];
   }
 
