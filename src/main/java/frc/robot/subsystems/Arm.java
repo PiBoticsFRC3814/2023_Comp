@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
 
   private PIDController angleController;
 
-  private RelativeEncoder extendEncoder;
+  public RelativeEncoder extendEncoder;
   private SparkMaxPIDController extendController;
   private SparkMaxLimitSwitch extendHomeSwitch;
 
@@ -58,8 +58,6 @@ public class Arm extends SubsystemBase {
   private DigitalInput switch4;
 
   public Arm() {
-    extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
-    extend.setIdleMode(IdleMode.kBrake);
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
 
@@ -154,7 +152,7 @@ public class Arm extends SubsystemBase {
         }
       }
     }
-    extendController.setReference(1.0 + extendOffset, ControlType.kPosition);
+    //extendController.setReference(1.0 + extendOffset, ControlType.kPosition);
 
     //switch now runs off currentPods instead of position, make it go from currentPos to position
     //dont think we need it anymore, but i dont want to delete it just in case

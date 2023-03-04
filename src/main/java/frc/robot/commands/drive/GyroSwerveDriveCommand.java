@@ -9,7 +9,7 @@ import frc.robot.subsystems.GyroSwerveDrive;
 import java.util.function.DoubleSupplier;
 
 public class GyroSwerveDriveCommand extends CommandBase {
-  DoubleSupplier dX, dY, dZ, dZ2;
+  DoubleSupplier dX, dY, dZ;
   ADIS16470_IMU m_gyro;
   GyroSwerveDrive m_gyroSwerveDrive;
 
@@ -17,13 +17,11 @@ public class GyroSwerveDriveCommand extends CommandBase {
       DoubleSupplier stick_x,
       DoubleSupplier stick_y,
       DoubleSupplier stick_z,
-      DoubleSupplier stick_z2,
       ADIS16470_IMU imu,
       GyroSwerveDrive gyroSwerveDrive) {
     dX = stick_x;
     dY = stick_y;
     dZ = stick_z;
-    dZ2 = stick_z2;
     m_gyro = imu;
     m_gyroSwerveDrive = gyroSwerveDrive;
     addRequirements(m_gyroSwerveDrive);
@@ -31,7 +29,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
-    m_gyroSwerveDrive.alteredGyroDrive(dX.getAsDouble(), dY.getAsDouble(), dZ.getAsDouble(), dZ2.getAsDouble(), Math.toRadians(m_gyro.getAngle()));
+    m_gyroSwerveDrive.gyroDrive(dX.getAsDouble(), dY.getAsDouble(), dZ.getAsDouble(), Math.toRadians(m_gyro.getAngle()));
     DriverStation.reportError("Driving", false);
   }
 

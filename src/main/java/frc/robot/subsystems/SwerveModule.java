@@ -82,23 +82,17 @@ public class SwerveModule {
 		//SmartDashboard.putNumber("Velocity" + index, driveMotor.getEncoder().getVelocity());
 	}
 
-<<<<<<< HEAD
   // angle and speed should be from -1.0 to 1.0, like a joystick input
-  public void drive(double speed, double angle) {
+  public void drive(double speed, double angle, double driveMultiplier) {
     // Calculate the turning motor output from the turning PID controller.
     steerMotor.set(
         MathUtil.clamp(steerAnglePIDController.calculate(getSteerAngle(), angle), -1.0, 1.0));
         SmartDashboard.putNumber("Angle Steer" + index, angle);
 
-    driveMotor.set(speed * 0.2);
+    driveMotor.set(speed * driveMultiplier);
   }
 
   public void initDefaultCommand() {
     // NOTE: no default command unless running swerve modules seperately
   }
-=======
-    public void initDefaultCommand() {
-			// NOTE: no default command unless running swerve modules seperately
-    }
->>>>>>> f40a2a8ba01dec5dd2c889460c21efe0a7cf7b8f
 }

@@ -16,6 +16,8 @@ public final class Constants {
 
   public static final int DRIVE_CONTROLLER_PORT = 2;
   public static final int STEER_CONTROLLER_PORT = 0;
+  public static final double SLOW_SPEED = 0.5;
+  public static final double FAST_SPEED = 1.0;
 
   ////////////////////////////////////////
   //               Swerve               //
@@ -101,4 +103,10 @@ public final class Constants {
   public static final int CLAW_ID_CLOSE = 1;
   public static final int ARM_ID_OPEN = 3;
   public static final int ARM_ID_CLOSE = 2;
+
+  /*Extension Angles (rev):
+   1 - 13.19
+   2 - 104.5
+   3 - 171.36
+   */
 }

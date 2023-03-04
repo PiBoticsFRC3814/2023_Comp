@@ -47,6 +47,7 @@ public class Limelight extends SubsystemBase {
     turnController.disableContinuousInput();
     turnController.setTolerance(0.2);
 
+    /*
     // before getEntry it was getDoubleTopic
     // before getDoubleArray it was getDoubleArrayTopic
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
@@ -54,8 +55,10 @@ public class Limelight extends SubsystemBase {
     robotPose = limelight.getDoubleArray("campose").subscribe(result);
     gotTarget = limelight.getEntry("tv").getDouble(0).subscribe(0.0);
     pastDistance = robotPose.get()[2];
+    //*/
   }
 
+  /*
   public double limelightAngleX() {
     return xAngleSub.get();
   }
@@ -67,7 +70,7 @@ public class Limelight extends SubsystemBase {
   public double limelightAngleAlpha() {
     return robotPose.get()[4];
   }
-
+//*/
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

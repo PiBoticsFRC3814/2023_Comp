@@ -12,9 +12,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.*;
-import frc.robot.commands.drive.*;
-import frc.robot.subsystems.*;
+import frc.robot.commands.ArmLevel;
+import frc.robot.commands.AutoPosition;
+import frc.robot.commands.DirectArmCommand;
+import frc.robot.commands.DriveFast;
+import frc.robot.commands.DriveSlow;
+import frc.robot.commands.GrabberToggle;
+import frc.robot.commands.GyroReset;
+import frc.robot.commands.MoveLeft;
+import frc.robot.commands.MoveRight;
+import frc.robot.commands.ScoreLow;
+import frc.robot.commands.ScoreMiddle;
+import frc.robot.commands.ScoreTop;
+import frc.robot.commands.drive.GyroSwerveDriveCommand;
+import frc.robot.commands.drive.HardBrake;
+import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.GyroSwerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,7 +49,8 @@ public class RobotContainer {
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
-  XboxController driveController = new XboxController(2);
+  Joystick driveStick = new Joystick(2);
+  //XboxController driveController = new XboxController(2);
   XboxController armController = new XboxController(1);
   XboxController testController = new XboxController(0);
 
@@ -43,10 +58,9 @@ public class RobotContainer {
   public RobotContainer() {
     m_gyroSwerveDrive.setDefaultCommand(
         new GyroSwerveDriveCommand(
-            () -> driveController.getLeftX(),
-            () -> driveController.getLeftY(),
-            () -> driveController.getRawAxis(2),
-            () -> driveController.getRawAxis(3),
+            () -> driveStick.getX(),
+            () -> driveStick.getY(),
+            () -> driveStick.getZ(),
             m_gyrp,
             m_gyroSwerveDrive));
 
@@ -70,8 +84,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveController, XboxController.Button.kY.value).whileTrue(new GyroReset(m_gyrp));
-    new JoystickButton(driveController, XboxController.Button.kB.value).whileTrue(new HardBrake(m_gyroSwerveDrive));
+    new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
+    new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
+    new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_gyroSwerveDrive));
+    new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_gyroSwerveDrive));
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber));
