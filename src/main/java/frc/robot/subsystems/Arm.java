@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Driver;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -47,15 +48,15 @@ public class Arm extends SubsystemBase {
 
   public RelativeEncoder extendEncoder;
   private SparkMaxPIDController extendController;
-  private SparkMaxLimitSwitch extendHomeSwitch;
 
-  private Double extendOffset;
+  public Double extendOffset;
   private boolean extendIsHomed;
 
   private DigitalInput switch1;
   private DigitalInput switch2;
   private DigitalInput switch3;
   private DigitalInput switch4;
+  public DigitalInput extendHomeSwitch;
 
   public Arm() {
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
@@ -85,7 +86,7 @@ public class Arm extends SubsystemBase {
     extendController.setFF(Constants.EXTEND_PID_CONSTANTS[4]);
     extendController.setOutputRange(Constants.EXTEND_PID_CONSTANTS[5], Constants.EXTEND_PID_CONSTANTS[6]);
 
-    extendHomeSwitch = extend.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+    extendHomeSwitch = new DigitalInput(6);
 
     extendOffset = 0.0;
     extendIsHomed = false;
@@ -116,11 +117,14 @@ public class Arm extends SubsystemBase {
   public void ArmDirectControl(DoubleSupplier passedArm, DoubleSupplier passedExtend) {
     double armSpeed = applyDeadzone(passedArm.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
     double extendSpeed = applyDeadzone(passedExtend.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
+    if(!extendHomeSwitch.get() && (extendSpeed <= 0.0)){
+      extendSpeed = 0.0;
+    }
     if (armSpeed != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
     shoulder1.set(armSpeed * 0.3);
     shoulder2.set(armSpeed * 0.3);
-    extend.set(extendSpeed);
+    extend.set(-extendSpeed);
   }
 
   public double GetArmAngle(){
@@ -128,69 +132,36 @@ public class Arm extends SubsystemBase {
   }
 
   public void ArmAngle(double angle) {
-    double correction = -angleController.calculate(shoulderEncoder.getAbsolutePosition(), angle);
-    shoulder1.set(correction);
-    shoulder2.set(correction);
-    shoulderAtPos = angleController.atSetpoint();
+    double trueAngle = shoulderEncoder.getAbsolutePosition();
+    double correction = 0.0;
+    if((trueAngle >= 0.2) && (trueAngle <= 0.7)){
+      correction = -angleController.calculate(trueAngle, angle);
+      shoulder1.set(correction);
+      shoulder2.set(correction);
+      shoulderAtPos = angleController.atSetpoint();
+    } else DriverStation.reportError("Encoder out of bounds", false);
 
-    if (Math.abs(correction) <= 0.1) armBrake.set(DoubleSolenoid.Value.kForward);
+    if (Math.abs(correction) >= 0.05) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
   }
 
 
 
-  public void ArmDistance(int position) {
+  public void ArmDistance(double position) {
     extendAtPos = false;
-    if(extendIsHomed){
+    if(!extendIsHomed){
       extend.set(-Constants.EXTEND_HOME_SPEED);
       while(!extendAtPos){
-        if(!extendHomeSwitch.isPressed()){
+        if(!extendHomeSwitch.get()){
           extend.set(0.0);
           extendOffset = extendEncoder.getPosition();
           extendIsHomed = true;
+          DriverStation.reportError("Is homed", false);
           break;
         }
       }
     }
-    //extendController.setReference(1.0 + extendOffset, ControlType.kPosition);
-
-    //switch now runs off currentPods instead of position, make it go from currentPos to position
-    //dont think we need it anymore, but i dont want to delete it just in case
-    /* int posOrNeg;
-    switch (currentPos) {
-      case 0:
-        posOrNeg = position - currentPos;
-        break;
-      case 1:
-        while(!extendAtPos){
-          extend.set(Constants.EXTEND_SPEED);
-          if (!switch2.get()) {
-            extend.set(0.0);
-            break;
-          }
-        }
-        break;
-
-      case 2:
-      while(!extendAtPos){
-        extend.set(Constants.EXTEND_SPEED);
-        if (!switch3.get()) {
-          extend.set(0.0);
-        break;
-      }
-    }
-      break;
-
-      case 3:
-      while(!extendAtPos){
-        extend.set(Constants.EXTEND_SPEED);
-        if (!switch4.get()) {
-          extend.set(0.0);
-        break;
-      }
-    }
-      break;
-    }
-    extendAtPos = true;*/
+    extendController.setReference(position + extendOffset, ControlType.kPosition);
+    extendAtPos = Math.abs(extend.getEncoder().getPosition() + extendOffset - position) <= 0.2;
   }
 }

@@ -9,12 +9,12 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
 
-public class ScoreTop extends CommandBase {
+public class TestExtend extends CommandBase {
   /** Creates a new ScoreTop. */
   Arm m_Arm;
   Grabber m_Grabber;
   boolean finished;
-  public ScoreTop(Arm arm, Grabber grabber) {
+  public TestExtend(Arm arm, Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
     m_Grabber = grabber;
@@ -30,9 +30,8 @@ public class ScoreTop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP);
     m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
-    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
+    if(m_Arm.extendAtPos){
       m_Grabber.GrabberOpen();
       finished = true;
     }
@@ -45,6 +44,6 @@ public class ScoreTop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

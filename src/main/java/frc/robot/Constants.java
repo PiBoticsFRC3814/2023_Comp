@@ -79,22 +79,25 @@ public final class Constants {
   /*
    * Arm control constants
    */
-  public static final double EXTEND_HOME_SPEED = -0.5;
-  public static final double[] EXTEND_PID_CONSTANTS = {1.0e-5, 0.0, 0.0, 0.0, 0.0, -0.2, 0.2};
-  public static final double[] ARM_ANGLE_PID_CONSTANTS = {11.0, 0.0, 2.0};
+  public static final double EXTEND_HOME_SPEED = -0.6;
+  public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
+  public static final double[] ARM_ANGLE_PID_CONSTANTS = {5.0, 0.0, 0.1};
   public static final int ARM_ENCODER_PORT = 5;
 
   public static final double SCORE_DISTANCE = 1.0;
   public static final double SCORE_SIDE_TIME = 1.0;
-  public static final double SCORE_SPEED = 0.2;
+  public static final double SCORE_SPEED = -0.2;
 
-  public static final double SCORE_ANGLE_TOP = 0.6; // cone
+  public static final double SCORE_ANGLE_TOP = 0.595; // cone
   public static final double SCORE_ANGLE_MIDDLE = 0.57;
   public static final double SCORE_ANGLE_BOTTOM = 0.41;
   //todo: add logic for lower cube top:0.547; middle:0.500
   public static final double DEPLOY_ANGLE = 0.41;
-  public static final double STOW_ANGLE = 20.0;
+  public static final double STOW_ANGLE = 0.375;
   public static final double SUBSTATION_ANGLE = 20.0;
+  public static final double EXTEND_REVS_1 = -13.09;
+  public static final double EXTEND_REVS_2 = -88.45;
+  public static final double EXTEND_REVS_3 = -145.88;
 
   /*
    * Claw and Arm Pnuematic IDs
@@ -103,10 +106,4 @@ public final class Constants {
   public static final int CLAW_ID_CLOSE = 1;
   public static final int ARM_ID_OPEN = 3;
   public static final int ARM_ID_CLOSE = 2;
-
-  /*Extension Angles (rev):
-   1 - 13.19
-   2 - 104.5
-   3 - 171.36
-   */
 }

@@ -24,6 +24,7 @@ import frc.robot.commands.MoveRight;
 import frc.robot.commands.ScoreLow;
 import frc.robot.commands.ScoreMiddle;
 import frc.robot.commands.ScoreTop;
+import frc.robot.commands.TestExtend;
 import frc.robot.commands.drive.GyroSwerveDriveCommand;
 import frc.robot.commands.drive.HardBrake;
 import frc.robot.subsystems.Arm;
@@ -105,6 +106,7 @@ public class RobotContainer {
 
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
     new JoystickButton(testController, XboxController.Button.kB.value).whileTrue(new ArmLevel(m_arm));
+    new JoystickButton(testController, 6).whileTrue(new TestExtend(m_arm, m_grabber));
   }
 
   /**
