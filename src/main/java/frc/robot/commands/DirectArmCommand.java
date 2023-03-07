@@ -13,21 +13,14 @@ public class DirectArmCommand extends CommandBase {
   /** Creates a new ArmCommand. */
   Arm m_arm;
 
-  double armAngleSpeed;
-  double armExtendSpeed;
+  DoubleSupplier armAngleSpeed, armExtendSpeed;
 
   public DirectArmCommand(Arm arm, DoubleSupplier angleSpeed, DoubleSupplier extendSpeed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = arm;
-    armAngleSpeed = applyDeadzone(angleSpeed.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
-    armExtendSpeed = applyDeadzone(extendSpeed.getAsDouble(), Constants.JOYSTICK_Y_DEADZONE);
-    addRequirements(arm);
-  }
-
-  private double applyDeadzone(double input, double deadzone){
-    if(Math.abs(input) < deadzone) return 0.0;
-    double result = (Math.abs(input) - deadzone) / (1.0 - deadzone);
-    return (input < 0.0 ? -result : result);
+    armAngleSpeed = angleSpeed;
+    armExtendSpeed = extendSpeed;
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.

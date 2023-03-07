@@ -4,18 +4,41 @@
 
 package frc.robot.subsystems;
 
+import java.sql.Driver;
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
-  private WPI_TalonSRX shoulder;
-  private WPI_TalonSRX extend;
+  private WPI_TalonSRX shoulder1;
+  private WPI_TalonSRX shoulder2;
+  private CANSparkMax extend;
+  private DutyCycleEncoder shoulderEncoder;
 
   public boolean extendAtPos;
   public boolean shoulderAtPos;
@@ -24,83 +47,126 @@ public class Arm extends SubsystemBase {
 
   private PIDController angleController;
 
-  boolean switch1;
-  boolean switch2;
-  boolean switch3;
-  boolean switch4;
+  public RelativeEncoder extendEncoder;
+  private SparkMaxPIDController extendController;
+
+  public Double extendOffset;
+  private boolean extendIsHomed;
+
+  private DigitalInput switch1;
+  private DigitalInput switch2;
+  private DigitalInput switch3;
+  private DigitalInput switch4;
+  public DigitalInput extendHomeSwitch;
 
   public Arm() {
-    shoulder = new WPI_TalonSRX(Constants.SHOULDER_ID);
-    extend = new WPI_TalonSRX(Constants.EXTEND_ID);
-
-    extend.setNeutralMode(NeutralMode.Brake);
+    extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
+    extend.setIdleMode(IdleMode.kBrake);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
     armBrake.set(DoubleSolenoid.Value.kReverse);
+    shoulder1 = new WPI_TalonSRX(Constants.SHOULDER_ID_1);
+    shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
+    shoulder1.setInverted(false);
+    shoulder2.setInverted(true);
+    shoulder1.setNeutralMode(NeutralMode.Brake);
+    shoulder2.setNeutralMode(NeutralMode.Brake);
 
-    angleController = new PIDController(
-      Constants.ARM_ANGLE_PID_CONSTANTS[0],
-        Constants.ARM_ANGLE_PID_CONSTANTS[1],
-          Constants.ARM_ANGLE_PID_CONSTANTS[2]
-    );
+    shoulder1.configPeakCurrentLimit(70, 1);
+    shoulder2.configPeakCurrentLimit(70, 1);
 
+    shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
+
+    extendEncoder = extend.getEncoder();
+
+    extendController = extend.getPIDController();
+    extendController.setP(Constants.EXTEND_PID_CONSTANTS[0]);
+    extendController.setI(Constants.EXTEND_PID_CONSTANTS[1]);
+    extendController.setD(Constants.EXTEND_PID_CONSTANTS[2]);
+    extendController.setIZone(Constants.EXTEND_PID_CONSTANTS[3]);
+    extendController.setFF(Constants.EXTEND_PID_CONSTANTS[4]);
+    extendController.setOutputRange(Constants.EXTEND_PID_CONSTANTS[5], Constants.EXTEND_PID_CONSTANTS[6]);
+
+    extendHomeSwitch = new DigitalInput(6);
+
+    extendOffset = 0.0;
+    extendIsHomed = false;
+
+    switch1 = new DigitalInput(3);
+    switch2 = new DigitalInput(2);
+    switch3 = new DigitalInput(1);
+    switch4 = new DigitalInput(0);
+
+    angleController =
+        new PIDController(
+            Constants.ARM_ANGLE_PID_CONSTANTS[0],
+            Constants.ARM_ANGLE_PID_CONSTANTS[1],
+            Constants.ARM_ANGLE_PID_CONSTANTS[2]);
+
+    angleController.disableContinuousInput();
+    angleController.setTolerance(0.3);
     extendAtPos = false;
     shoulderAtPos = false;
   }
 
-  public void ArmDirectControl(double armSpeed, double extendSpeed){
-    if(armSpeed > 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
+  private double applyDeadzone(double input, double deadzone) {
+    if (Math.abs(input) < deadzone) return 0.0;
+    double result = (Math.abs(input) - deadzone) / (1.0 - deadzone);
+    return (input < 0.0 ? -result : result);
+  }
+
+  public void ArmDirectControl(DoubleSupplier passedArm, DoubleSupplier passedExtend) {
+    double armSpeed = applyDeadzone(passedArm.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
+    double extendSpeed = applyDeadzone(passedExtend.getAsDouble(), Constants.JOYSTICK_X_DEADZONE);
+    if(!extendHomeSwitch.get() && (extendSpeed <= 0.0)){
+      extendSpeed = 0.0;
+    }
+    if (armSpeed != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
-    shoulder.set(armSpeed);
-    extend.set(extendSpeed);
+    shoulder1.set(armSpeed * 0.3);
+    shoulder2.set(armSpeed * 0.3);
+    extend.set(-extendSpeed);
+  }
+
+  public double GetArmAngle(){
+    return shoulderEncoder.getAbsolutePosition();
   }
 
   public void ArmAngle(double angle) {
-    double encoder = 0.0;
-
-    shoulder.set(angleController.calculate(encoder, angle));
-    shoulderAtPos = !angleController.atSetpoint();
-    
-    if(!shoulderAtPos) 
-      armBrake.set(DoubleSolenoid.Value.kReverse);
-    else
+    double correction = 0;
+    //*
+    double trueAngle = GetArmAngle();
+    if((trueAngle >= 0.2) && (trueAngle <= 0.7)){
+      correction = -angleController.calculate(trueAngle, angle);
       armBrake.set(DoubleSolenoid.Value.kForward);
-    
+    }
+    //*/
+    shoulderAtPos = angleController.atSetpoint();
+    if (Math.abs(angle - trueAngle) <= 0.08){
+      armBrake.set(DoubleSolenoid.Value.kReverse);
+      DriverStation.reportError("Brake on", false);
+    } else {
+      armBrake.set(DoubleSolenoid.Value.kForward);
+      DriverStation.reportError("Brake off", false);
+    }
+
+    shoulder1.set(correction);
+    shoulder2.set(correction);
   }
 
-  public void ArmDistance(int position) {
-    extend.set(-1.0);
+  public void ArmDistance(double position) {
     extendAtPos = false;
-    while(!extendAtPos) {
-      switch(position) {
-        case 0:
-          extend.set(Constants.EXTEND_SPEED);
-          if(switch1){
-            extend.set(0.0);
-            extendAtPos = true;
-          }
-
-        case 1:
-          extend.set(Constants.EXTEND_SPEED);
-          if(switch2){
-            extend.set(0.0);
-            extendAtPos = true;
-          }
-        case 2:
-          extend.set(Constants.EXTEND_SPEED);
-          if(switch3){
-            extend.set(0.0);
-            extendAtPos = true;
-          }
-        case 3:
-          extend.set(Constants.EXTEND_SPEED);
-          if(switch4){
-            extend.set(0.0);
-            extendAtPos = true;
-          }
+    if(!extendIsHomed){
+      extend.set(-Constants.EXTEND_HOME_SPEED);
+      if(!extendHomeSwitch.get()){
+        extend.set(0.0);
+        extendOffset = extendEncoder.getPosition();
+        extendIsHomed = true;
+        DriverStation.reportError("Is homed", false);
       }
+    } else{
+      extendController.setReference(position + extendOffset, ControlType.kPosition);
     }
+    extendAtPos = Math.abs(extend.getEncoder().getPosition() - extendOffset - position) <= 1;
   }
 }
-
-

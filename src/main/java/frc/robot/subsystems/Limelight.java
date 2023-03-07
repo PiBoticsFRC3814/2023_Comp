@@ -23,7 +23,7 @@ public class Limelight extends SubsystemBase {
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
-  
+
   final double STRAFE_P = 0.04;
   final double STRAFE_I = 0.0;
   final double STRAFE_D = 0.0;
@@ -47,25 +47,30 @@ public class Limelight extends SubsystemBase {
     turnController.disableContinuousInput();
     turnController.setTolerance(0.2);
 
+    /*
+    // before getEntry it was getDoubleTopic
+    // before getDoubleArray it was getDoubleArrayTopic
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    xAngleSub = limelight.getDoubleTopic("tx").subscribe(0.0);
-    robotPose = limelight.getDoubleArrayTopic("campose").subscribe(result);
-    gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
+    xAngleSub = limelight.getEntry("tx").getDouble(0).subscribe(0.0);
+    robotPose = limelight.getDoubleArray("campose").subscribe(result);
+    gotTarget = limelight.getEntry("tv").getDouble(0).subscribe(0.0);
     pastDistance = robotPose.get()[2];
+    //*/
   }
 
-  public double limelightAngleX(){
+  /*
+  public double limelightAngleX() {
     return xAngleSub.get();
   }
 
-  public double limelightPosZ(){
+  public double limelightPosZ() {
     return robotPose.get()[2];
   }
 
-  public double limelightAngleAlpha(){
+  public double limelightAngleAlpha() {
     return robotPose.get()[4];
   }
-
+//*/
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

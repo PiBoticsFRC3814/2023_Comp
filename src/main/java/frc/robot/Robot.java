@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -82,11 +83,18 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    m_robotContainer.m_gyrp.reset();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putNumber("Gyro Angle", m_robotContainer.m_gyrp.getAngle());
+    SmartDashboard.putNumber("Arm Angle", m_robotContainer.m_arm.GetArmAngle());
+    SmartDashboard.putNumber("Arm Distance (rev)", m_robotContainer.m_arm.extendEncoder.getPosition() - m_robotContainer.m_arm.extendOffset);
+    m_robotContainer.m_gyroSwerveDrive.outputEncoderPos();
+    SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
+  }
 
   @Override
   public void testInit() {
@@ -96,7 +104,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

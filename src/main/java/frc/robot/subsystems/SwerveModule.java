@@ -10,6 +10,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class SwerveModule {
 	public CANSparkMax            driveMotor;
@@ -74,11 +82,21 @@ public class SwerveModule {
 	    // Calculate the turning motor output from the turning PID controller.
 		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
-		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED, CANSparkMax.ControlType.kVelocity);
+		driveVelocityPIDController.setReference(speed * Constants.MAX_DRIVETRAIN_SPEED, CANSparkMax.ControlType.kVelocity);
 		SmartDashboard.putData("Steer PID Controller " + index, steerAnglePIDController);
 	}
 
-    public void initDefaultCommand() {
-			// NOTE: no default command unless running swerve modules seperately
-    }
+  // angle and speed should be from -1.0 to 1.0, like a joystick input
+  public void drive(double speed, double angle, double driveMultiplier) {
+    // Calculate the turning motor output from the turning PID controller.
+    steerMotor.set(
+        MathUtil.clamp(steerAnglePIDController.calculate(getSteerAngle(), angle), -1.0, 1.0));
+        SmartDashboard.putNumber("Angle Steer" + index, angle);
+
+    driveMotor.set(speed * driveMultiplier);
+  }
+
+  public void initDefaultCommand() {
+    // NOTE: no default command unless running swerve modules seperately
+  }
 }

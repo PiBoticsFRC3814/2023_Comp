@@ -5,27 +5,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
 
-public class GrabberToggle extends CommandBase {
-  /** Creates a new GrabberCommand. */
-  Grabber m_grabber;
-
-  public GrabberToggle(Grabber grabber) {
+public class ScoreMiddle extends CommandBase {
+  /** Creates a new ScoreTop. */
+  Arm m_Arm;
+  Grabber m_Grabber;
+  boolean finished;
+  public ScoreMiddle(Arm arm, Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_grabber = grabber;
-    addRequirements(grabber);
+    m_Arm = arm;
+    m_Grabber = grabber;
+    addRequirements(arm, grabber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    finished = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_grabber.clawOpen) m_grabber.GrabberClose();
-    else m_grabber.GrabberOpen();
+    m_Arm.ArmAngle(Constants.SCORE_ANGLE_MIDDLE);
+    m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
+      //m_Grabber.GrabberOpen();
+      finished = true;
+    }
+    //*/
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +46,6 @@ public class GrabberToggle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }
