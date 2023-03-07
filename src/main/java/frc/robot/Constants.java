@@ -43,10 +43,10 @@ public final class Constants {
 
   public static final double[][] SWERVE_STEER_PID_CONSTANTS = {
     // kP   kI   kD
-    {1.0, 0.0, 0.0}, // Front Right
-    {1.0, 0.0, 0.0}, // Rear Right
-    {1.0, 0.0, 0.0}, // Rear Left
-    {1.0, 0.0, 0.0} // Front Left
+    { 0.8, 0.0, 0.016 }, //Front Right
+		{ 0.8, 0.0, 0.016 }, //Rear Right
+		{ 0.8, 0.0, 0.016 }, //Rear Left
+		{ 0.8, 0.0, 0.016 }
   };
 
   /*
