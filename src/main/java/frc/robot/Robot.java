@@ -93,6 +93,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Arm Angle", m_robotContainer.m_arm.GetArmAngle());
     SmartDashboard.putNumber("Arm Distance (rev)", m_robotContainer.m_arm.extendEncoder.getPosition() - m_robotContainer.m_arm.extendOffset);
     m_robotContainer.m_gyroSwerveDrive.outputEncoderPos();
+    m_robotContainer.m_gyroSwerveDrive.drive(1.0, 0.0, 0.0);
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
   }
 

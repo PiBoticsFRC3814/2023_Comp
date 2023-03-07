@@ -33,7 +33,7 @@ public final class Constants {
 
   public static final int swerveModuleNumber = 4;
 
-	public static final double[] SWERVE_SETPOINT_OFFSET = { 
+	public static final double[] SWERVE_SETPOINT_OFFSET = {   
 		//must be between 0 & 360 degrees
 		49.31, //Front Right
 		97.03, //Rear Right
@@ -43,10 +43,10 @@ public final class Constants {
        
 	public static final double[][] SWERVE_STEER_PID_CONSTANTS = { 
 		// kP   kI   kD
-		{ 0.8, 0.0, 0.016 }, //Front Right
-		{ 0.8, 0.0, 0.016 }, //Rear Right
-		{ 0.8, 0.0, 0.016 }, //Rear Left
-		{ 0.8, 0.0, 0.016 }  //Front Left
+		{ 1.0, 0.0, 0.0 }, //Front Right
+		{ 1.0, 0.0, 0.0 }, //Rear Right
+		{ 1.0, 0.0, 0.0 }, //Rear Left
+		{ 1.0, 0.0, 0.0 }  //Front Left
 	};
 	
 	public static double[][] SWERVE_DRIVE_PID_CONSTANTS = { 

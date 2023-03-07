@@ -85,7 +85,7 @@ public class SwerveModule {
 		driveVelocityPIDController.setReference(speed * Constants.MAX_DRIVETRAIN_SPEED, CANSparkMax.ControlType.kVelocity);
 		SmartDashboard.putData("Steer PID Controller " + index, steerAnglePIDController);
 	}
-
+/*
   // angle and speed should be from -1.0 to 1.0, like a joystick input
   public void drive(double speed, double angle, double driveMultiplier) {
     // Calculate the turning motor output from the turning PID controller.
@@ -95,6 +95,7 @@ public class SwerveModule {
 
     driveMotor.set(speed * driveMultiplier);
   }
+  //*/
 
   public void initDefaultCommand() {
     // NOTE: no default command unless running swerve modules seperately
