@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -63,7 +64,7 @@ public class Arm extends SubsystemBase {
     extend.setIdleMode(IdleMode.kBrake);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
-    armBrake.set(DoubleSolenoid.Value.kForward);
+    armBrake.set(DoubleSolenoid.Value.kReverse);
     shoulder1 = new WPI_TalonSRX(Constants.SHOULDER_ID_1);
     shoulder2 = new WPI_TalonSRX(Constants.SHOULDER_ID_2);
     shoulder1.setInverted(false);
@@ -103,7 +104,7 @@ public class Arm extends SubsystemBase {
             Constants.ARM_ANGLE_PID_CONSTANTS[2]);
 
     angleController.disableContinuousInput();
-    angleController.setTolerance(0.02);
+    angleController.setTolerance(0.3);
     extendAtPos = false;
     shoulderAtPos = false;
   }
@@ -132,36 +133,40 @@ public class Arm extends SubsystemBase {
   }
 
   public void ArmAngle(double angle) {
-    double trueAngle = shoulderEncoder.getAbsolutePosition();
-    double correction = 0.0;
+    double correction = 0;
+    //*
+    double trueAngle = GetArmAngle();
     if((trueAngle >= 0.2) && (trueAngle <= 0.7)){
       correction = -angleController.calculate(trueAngle, angle);
-      shoulder1.set(correction);
-      shoulder2.set(correction);
-      shoulderAtPos = angleController.atSetpoint();
-    } else DriverStation.reportError("Encoder out of bounds", false);
+      armBrake.set(DoubleSolenoid.Value.kForward);
+    }
+    //*/
+    shoulderAtPos = angleController.atSetpoint();
+    if (Math.abs(angle - trueAngle) <= 0.08){
+      armBrake.set(DoubleSolenoid.Value.kReverse);
+      DriverStation.reportError("Brake on", false);
+    } else {
+      armBrake.set(DoubleSolenoid.Value.kForward);
+      DriverStation.reportError("Brake off", false);
+    }
 
-    if (Math.abs(correction) >= 0.05) armBrake.set(DoubleSolenoid.Value.kForward);
-    else armBrake.set(DoubleSolenoid.Value.kReverse);
+    shoulder1.set(correction);
+    shoulder2.set(correction);
   }
-
-
 
   public void ArmDistance(double position) {
     extendAtPos = false;
     if(!extendIsHomed){
       extend.set(-Constants.EXTEND_HOME_SPEED);
-      while(!extendAtPos){
-        if(!extendHomeSwitch.get()){
-          extend.set(0.0);
-          extendOffset = extendEncoder.getPosition();
-          extendIsHomed = true;
-          DriverStation.reportError("Is homed", false);
-          break;
-        }
+      if(!extendHomeSwitch.get()){
+        extend.set(0.0);
+        extendOffset = extendEncoder.getPosition();
+        extendIsHomed = true;
+        DriverStation.reportError("Is homed", false);
       }
+    } else{
+      extendController.setReference(position + extendOffset, ControlType.kPosition);
     }
-    extendController.setReference(position + extendOffset, ControlType.kPosition);
-    extendAtPos = Math.abs(extend.getEncoder().getPosition() + extendOffset - position) <= 0.2;
+    extendAtPos = Math.abs(extend.getEncoder().getPosition() - extendOffset - position) <= 1;
   }
 }

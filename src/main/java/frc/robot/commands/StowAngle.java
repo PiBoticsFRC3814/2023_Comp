@@ -31,7 +31,7 @@ public class StowAngle extends CommandBase {
   @Override
   public void execute() {
     m_Arm.ArmAngle(Constants.STOW_ANGLE);
-    m_Arm.ArmDistance(1);
+    m_Arm.ArmDistance(0);
     if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
       finished = true;
     }

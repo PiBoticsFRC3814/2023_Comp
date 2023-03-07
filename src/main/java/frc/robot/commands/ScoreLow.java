@@ -31,11 +31,12 @@ public class ScoreLow extends CommandBase {
   @Override
   public void execute() {
     m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
-    //m_Arm.ArmDistance(1);
-    if(m_Arm.shoulderAtPos /*&& m_Arm.extendAtPos*/){
-      m_Grabber.GrabberOpen();
+    m_Arm.ArmDistance(Constants.EXTEND_REVS_2);
+    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
+      m_Grabber.GrabberClose();
       finished = true;
     }
+    //*/
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +46,6 @@ public class ScoreLow extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

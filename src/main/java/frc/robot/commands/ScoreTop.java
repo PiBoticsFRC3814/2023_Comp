@@ -32,10 +32,12 @@ public class ScoreTop extends CommandBase {
   public void execute() {
     m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP);
     m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
+    /*
     if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
-      m_Grabber.GrabberOpen();
+      //m_Grabber.GrabberOpen();
       finished = true;
     }
+    //*/
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +47,6 @@ public class ScoreTop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }
