@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ArmLevel;
 import frc.robot.commands.AutoPosition;
@@ -45,7 +46,7 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
 
-  private final AutoPosition m_followAprilTag = new AutoPosition(m_gyroSwerveDrive);
+  private final CommandBase m_auton = new AutoPosition(m_gyroSwerveDrive);
   //private final HardBrake m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
@@ -71,10 +72,6 @@ public class RobotContainer {
             m_arm, () -> armController.getRawAxis(3), () -> armController.getLeftY()));
     // */
 
-    m_autoChooser.setDefaultOption("Follow Apriltag", m_followAprilTag);
-    //m_autoChooser.addOption("Do Nothing", m_brakeAndWait);
-    SmartDashboard.putData(m_autoChooser);
-
     configureButtonBindings();
   }
 
@@ -87,8 +84,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
-    new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_gyroSwerveDrive));
-    new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_gyroSwerveDrive));
+    //new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_gyroSwerveDrive));
+    //new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_gyroSwerveDrive));
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber));
@@ -116,6 +113,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoChooser.getSelected();
+    return m_auton;
   }
 }

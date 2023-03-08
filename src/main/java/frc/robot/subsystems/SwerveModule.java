@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,6 +22,7 @@ public class SwerveModule {
 	public double                 position;
 	private double                angleOffset;
 	private int index;
+	public RelativeEncoder velocityEncoder;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -31,13 +33,17 @@ public class SwerveModule {
 		driveMotor.setSmartCurrentLimit(70, 50);
 
 
-    /*
+    //*
 		driveVelocityPIDController = driveMotor.getPIDController();
 		driveVelocityPIDController.setP(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][0]);
 		driveVelocityPIDController.setI(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][1]);
 		driveVelocityPIDController.setD(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][2]);
 		driveVelocityPIDController.setIZone(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][3]);
 		driveVelocityPIDController.setFF(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][4]);
+
+		if(swerveModIndex == 0){
+			velocityEncoder = driveMotor.getEncoder();
+		}
     //*/
 
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
@@ -74,22 +80,27 @@ public class SwerveModule {
 	// angle and speed should be from -1.0 to 1.0, like a joystick input
 	public void drive( double speed, double angle ) {
 	    // Calculate the turning motor output from the turning PID controller.
+
+		//*// Delete slash for tuning offset
 		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
-		//driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED * speed, CANSparkMax.ControlType.kVelocity);
-		driveMotor.set(speed);
-    //SmartDashboard.putData("Steer PID Controller " + index, steerAnglePIDController);
-		//SmartDashboard.putNumber("Velocity" + index, driveMotor.getEncoder().getVelocity());
+		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED * speed, CANSparkMax.ControlType.kVelocity);
+		//driveMotor.set(speed);
+		//*/SmartDashboard.putNumber("Angle Module " + index, steerAngleEncoder.getAbsolutePosition());
 	}
 
   // angle and speed should be from -1.0 to 1.0, like a joystick input
   public void drive(double speed, double angle, double driveMultiplier) {
     // Calculate the turning motor output from the turning PID controller.
+
+	//* // Delete slash for tuning offset
     steerMotor.set(
         MathUtil.clamp(steerAnglePIDController.calculate(getSteerAngle(), angle), -1.0, 1.0));
         SmartDashboard.putNumber("Angle Steer" + index, angle);
 
     driveMotor.set(speed * driveMultiplier);
+	//*/SmartDashboard.putNumber("Angle Module " + index, steerAngleEncoder.getAbsolutePosition());
+
   }
 
   public void initDefaultCommand() {

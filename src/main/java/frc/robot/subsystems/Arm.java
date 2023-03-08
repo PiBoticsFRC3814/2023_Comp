@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -123,8 +124,8 @@ public class Arm extends SubsystemBase {
     }
     if (armSpeed != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
-    shoulder1.set(armSpeed * 0.3);
-    shoulder2.set(armSpeed * 0.3);
+    shoulder1.set(armSpeed * 0.4);
+    shoulder2.set(armSpeed * 0.4);
     extend.set(-extendSpeed);
   }
 
@@ -136,7 +137,7 @@ public class Arm extends SubsystemBase {
     double correction = 0;
     //*
     double trueAngle = GetArmAngle();
-    if((trueAngle >= 0.2) && (trueAngle <= 0.7)){
+    if((trueAngle >= 0.2) && (trueAngle <= 0.75)){
       correction = -angleController.calculate(trueAngle, angle);
       armBrake.set(DoubleSolenoid.Value.kForward);
     }
@@ -150,6 +151,7 @@ public class Arm extends SubsystemBase {
       DriverStation.reportError("Brake off", false);
     }
 
+    correction = MathUtil.clamp(correction, -0.5, 0.5);
     shoulder1.set(correction);
     shoulder2.set(correction);
   }

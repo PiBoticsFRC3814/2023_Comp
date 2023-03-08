@@ -11,7 +11,7 @@ public final class Constants {
 
   public static final double JOYSTICK_X_DEADZONE = 0.2;
   public static final double JOYSTICK_Y_DEADZONE = 0.2;
-  public static final double JOYSTICK_Z_DEADZONE = 0.2;
+  public static final double JOYSTICK_Z_DEADZONE = 0.25;
   public static final double JOYSTICK_Z2_DEADZONE = 0.2;
 
   public static final int DRIVE_CONTROLLER_PORT = 2;
@@ -35,19 +35,29 @@ public final class Constants {
 
   public static final double[] SWERVE_SETPOINT_OFFSET = {
     // must be between 0 & 360 degrees
-    51.31, // Front Right
-    97.03, // Rear Right
-    84.21, // Rear Left
-    355.59 // Front Left
+    360 - 125.6, // Front Right
+    360 - 82.8, // Rear Right
+    360 - 275.6, // Rear Left
+    360 - 178.3 // Front Left
   };
 
   public static final double[][] SWERVE_STEER_PID_CONSTANTS = {
     // kP   kI   kD
-    { 0.8, 0.0, 0.016 }, //Front Right
-		{ 0.8, 0.0, 0.016 }, //Rear Right
-		{ 0.8, 0.0, 0.016 }, //Rear Left
-		{ 0.8, 0.0, 0.016 }
+    { 1.0, 0.0, 0.016 }, //Front Right
+		{ 1.0, 0.0, 0.016 }, //Rear Right
+		{ 1.0, 0.0, 0.016 }, //Rear Left
+		{ 1.0, 0.0, 0.016 }
   };
+
+  public static double[][] SWERVE_DRIVE_PID_CONSTANTS = { 
+		// kP   kI   kD  kIz  kFF  kMn  kMx
+		{ 1.0e-4, 1.0e-6, 2.0e-4, 0.0, 1.0e-5, -1.0, 1.0 }, //Front Right
+		{ 1.0e-4, 1.0e-6, 2.0e-4, 0.0, 1.0e-5, -1.0, 1.0 }, //Rear Right
+		{ 1.0e-4, 1.0e-6, 2.0e-4, 0.0, 1.0e-5, -1.0, 1.0 }, //Rear Left
+		{ 1.0e-4, 1.0e-6, 2.0e-4, 0.0, 1.0e-5, -1.0, 1.0 }  //Front Left
+	};
+
+  public static final double MAX_DRIVETRAIN_SPEED = 5000;
 
   /*
    * Swerve rotation PID Constants
@@ -55,7 +65,7 @@ public final class Constants {
   public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {1.0, 0.0, 0.0};
 
   public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
-  public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, true, false};
+  public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, false, false};
 
   /*
    * Swerve constants for swerve module calculations
@@ -88,8 +98,8 @@ public final class Constants {
   public static final double SCORE_SIDE_TIME = 1.0;
   public static final double SCORE_SPEED = -0.2;
 
-  public static final double SCORE_ANGLE_TOP = 0.65; // cone
-  public static final double SCORE_ANGLE_MIDDLE = 0.57;
+  public static final double SCORE_ANGLE_TOP = 0.63; // cone
+  public static final double SCORE_ANGLE_MIDDLE = 0.50;
   public static final double SCORE_ANGLE_BOTTOM = 0.355;
   //todo: add logic for lower cube top:0.547; middle:0.500
   public static final double DEPLOY_ANGLE = 0.41;

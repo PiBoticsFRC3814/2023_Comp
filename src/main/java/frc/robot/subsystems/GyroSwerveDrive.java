@@ -15,7 +15,8 @@ public class GyroSwerveDrive extends SubsystemBase {
   PIDController steerController = new PIDController(
           Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
           Constants.SWERVE_ROTATION_PID_CONSTANTS[1],
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[2]);
+          Constants.SWERVE_ROTATION_PID_CONSTANTS[2]
+  );
 
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
@@ -31,18 +32,11 @@ public class GyroSwerveDrive extends SubsystemBase {
     return (input < 0.0 ? -result : result);
   }
 
-  public void alteredGyroDrive(double dX, double dY, double dZ, double dZ2, double gyroAngle){
-    dX = applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
-    dY = applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
-    dZ = applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
-    dZ2 = applyDeadzone(dZ2, Constants.JOYSTICK_Z2_DEADZONE);
-    if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0) || (dZ2 != 0.0)) {
-      double steerControllerResult = 0.0;
-      double steerAngle = Math.atan2(dZ, dZ2) + Math.PI;
-      if ((dZ != 0.0) || (dZ2 != 0.0)) {
-        steerControllerResult = steerController.calculate(steerAngle, gyroAngle);
-        steerControllerResult /= Math.PI;
-      }
+  public void alteredGyroDrive(double dX, double dY, double dZ, double gyroAngle){
+    dX = -applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
+    dY = -applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
+    dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
+    if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
       gyroDrive(dX, dY, dZ, gyroAngle);
     } else{
       speed[0] = 0.0;
@@ -54,12 +48,9 @@ public class GyroSwerveDrive extends SubsystemBase {
   }
 
   public void gyroDrive(double str, double fwd, double rot, double gyroAngle) {
-    str = applyDeadzone(str, Constants.JOYSTICK_X_DEADZONE);
-    fwd = applyDeadzone(fwd, Constants.JOYSTICK_Y_DEADZONE);
-    rot = applyDeadzone(rot, Constants.JOYSTICK_Z_DEADZONE);
     double intermediary = fwd * Math.cos(gyroAngle) + str * Math.sin(gyroAngle);
     str = -fwd * Math.sin(gyroAngle) + str * Math.cos(gyroAngle);
-    computeSwerveInputs(str, intermediary, rot);
+    drive(str, intermediary, rot);
     setSetpoints();
   }
 

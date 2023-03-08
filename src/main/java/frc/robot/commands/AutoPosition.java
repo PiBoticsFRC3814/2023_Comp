@@ -16,17 +16,17 @@ import frc.robot.subsystems.GyroSwerveDrive;
 
 public class AutoPosition extends CommandBase {
 
-  final double LINEAR_P = 1.0;
+  final double LINEAR_P = 0.2;
   final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.0;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
 
-  final double ANGULAR_P = 0.015;
+  final double ANGULAR_P = 0.0;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
 
-  final double STRAFE_P = 0.04;
+  final double STRAFE_P = 0.0;
   final double STRAFE_I = 0.0;
   final double STRAFE_D = 0.0;
   PIDController strafeController = new PIDController(STRAFE_P, STRAFE_I, STRAFE_D);
@@ -60,8 +60,9 @@ public class AutoPosition extends CommandBase {
 
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     xAngleSub = limelight.getDoubleTopic("tx").subscribe(0.0);
-    robotPose = limelight.getDoubleArrayTopic("campose").subscribe(result);
+    robotPose = limelight.getDoubleArrayTopic("camerapose_targetspace").subscribe(result);
     gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
+    DriverStation.reportError("Init", false);
     pastDistance = robotPose.get()[2];
   }
 
@@ -69,6 +70,7 @@ public class AutoPosition extends CommandBase {
   @Override
   public void execute() {
     // a whole bunch of PID stuff that maybe shouldn't be here
+    DriverStation.reportError("" + gotTarget.get(), false);
     double forwardSpeed = 0.0;
     double rotateSpeed = 0.0;
     double strafeSpeed = 0.0;
