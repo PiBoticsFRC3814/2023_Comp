@@ -31,6 +31,7 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
+  public static final CommLEDS m_commLEDS = new CommLEDS();
 
   private final CommandBase m_scorePosition = new PositionSubstation(m_gyroSwerveDrive);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
@@ -75,10 +76,13 @@ public class RobotContainer {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
     new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive));
+    new JoystickButton(driveStick, 10).whileTrue(new LightsCone(m_commLEDS));
+    new JoystickButton(driveStick, 11).whileTrue(new LightsCube(m_commLEDS));
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
+
 
     //TODO: Add substation, stow, and deploy
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));

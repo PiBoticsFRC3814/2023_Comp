@@ -19,6 +19,8 @@ public final class Constants {
   public static final double SLOW_SPEED = 0.5;
   public static final double FAST_SPEED = 1.0;
 
+  public static final int LIGHT_RELAY_PORT = 0; //port for Spike controlling lights
+
   ////////////////////////////////////////
   //               Swerve               //
   ////////////////////////////////////////
