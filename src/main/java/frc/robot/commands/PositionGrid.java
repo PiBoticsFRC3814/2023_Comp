@@ -21,7 +21,7 @@ import frc.robot.subsystems.RobotStates;
 
 public class PositionGrid extends CommandBase {
 
-  final double LINEAR_P = 0.8;
+  final double LINEAR_P = 0.4;
   final double LINEAR_I = 0.001;
   final double LINEAR_D = 0.0;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
@@ -31,7 +31,7 @@ public class PositionGrid extends CommandBase {
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
 
-  final double STRAFE_P = 0.8;
+  final double STRAFE_P = 0.4;
   final double STRAFE_I = 0.001;
   final double STRAFE_D = 0.0;
   PIDController strafeController = new PIDController(STRAFE_P, STRAFE_I, STRAFE_D);
@@ -99,7 +99,7 @@ public class PositionGrid extends CommandBase {
           distance = zPos / Math.cos(Math.toRadians(aPos));
           distanceX = xPos;
           if(distance != 0.0){
-            if(Math.abs(distance - 1.05) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05); else inPositionZ = true;
+            if(Math.abs(distance - 1.00) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.00); else inPositionZ = true;
             if(Math.abs(aPos) >= 0.03) rotateSpeed = turnController.calculate(aPos, 0.0); else inPositionA = true;
             if(Math.abs(distanceX) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.0); else inPositionX = true;
           }

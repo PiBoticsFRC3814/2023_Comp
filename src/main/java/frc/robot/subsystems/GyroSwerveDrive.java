@@ -10,6 +10,7 @@ import frc.robot.Constants;
 public class GyroSwerveDrive extends SubsystemBase {
   private double[] speed = {0.0, 0.0, 0.0, 0.0};
   private double[] angle = {0.0, 0.0, 0.0, 0.0};
+  private RobotStates m_RobotStates;
 
   PIDController steerController = new PIDController(
           Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
@@ -21,8 +22,9 @@ public class GyroSwerveDrive extends SubsystemBase {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
   };
 
-  public GyroSwerveDrive() {
+  public GyroSwerveDrive(RobotStates robotStates) {
     steerController.enableContinuousInput(-Math.PI, Math.PI);
+    m_RobotStates = robotStates;
   }
 
   private double applyDeadzone(double input, double deadzone) {
@@ -37,6 +39,7 @@ public class GyroSwerveDrive extends SubsystemBase {
     dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
       gyroDrive(dX * driveMultiplier, dY * driveMultiplier, dZ * driveMultiplier, gyroAngle);
+      m_RobotStates.inFrontOfCubeStation = false;
     } else{
       speed[0] = 0.0;
       speed[1] = 0.0;

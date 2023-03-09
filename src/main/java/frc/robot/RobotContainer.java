@@ -27,11 +27,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final ADIS16470_IMU m_gyrp = new ADIS16470_IMU();
 
-  public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive();
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
   public static final CommLEDS m_commLEDS = new CommLEDS();
+  public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
 
   private final CommandBase m_scorePosition = new PositionSubstation(m_gyroSwerveDrive);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);

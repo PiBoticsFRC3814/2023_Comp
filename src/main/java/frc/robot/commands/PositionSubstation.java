@@ -18,7 +18,7 @@ import frc.robot.subsystems.GyroSwerveDrive;
 
 public class PositionSubstation extends CommandBase {
 
-  final double LINEAR_P = 0.8;
+  final double LINEAR_P = 0.4;
   final double LINEAR_I = 0.001;
   final double LINEAR_D = 0.0;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
@@ -28,7 +28,7 @@ public class PositionSubstation extends CommandBase {
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
 
-  final double STRAFE_P = 0.8;
+  final double STRAFE_P = 0.4;
   final double STRAFE_I = 0.001;
   final double STRAFE_D = 0.0;
   PIDController strafeController = new PIDController(STRAFE_P, STRAFE_I, STRAFE_D);
