@@ -52,6 +52,7 @@ public class Arm extends SubsystemBase {
   public Arm() {
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
+    extend.setSmartCurrentLimit(70, 50);
 
     armBrake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.ARM_ID_OPEN, Constants.ARM_ID_CLOSE);
     armBrake.set(DoubleSolenoid.Value.kReverse);
