@@ -99,7 +99,7 @@ public class PositionGrid extends CommandBase {
           distance = zPos / Math.cos(Math.toRadians(aPos));
           distanceX = xPos;
           if(distance != 0.0){
-            if(Math.abs(distance - 1.00) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.00); else inPositionZ = true;
+            if(Math.abs(distance - 0.50) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 0.5); else inPositionZ = true;
             if(Math.abs(aPos) >= 0.03) rotateSpeed = turnController.calculate(aPos, 0.0); else inPositionA = true;
             if(Math.abs(distanceX) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.0); else inPositionX = true;
           }
@@ -108,9 +108,9 @@ public class PositionGrid extends CommandBase {
         }
         DriverStation.reportError("Got Position", false);
       }
-      forwardSpeed = MathUtil.clamp(forwardSpeed, -0.6, 0.6);
-      rotateSpeed = MathUtil.clamp(rotateSpeed, -0.6, 0.6);
-      strafeSpeed = MathUtil.clamp(strafeSpeed, -0.6, 0.6);
+      forwardSpeed = MathUtil.clamp(forwardSpeed, -0.5, 0.5);
+      rotateSpeed = MathUtil.clamp(rotateSpeed, -0.5, 0.5);
+      strafeSpeed = MathUtil.clamp(strafeSpeed, -0.5, 0.5);
     } else {
       m_robotStates.inFrontOfCubeStation = true;
       m_robotStates.moveFromLastAlign = 0;
