@@ -94,9 +94,8 @@ public final class Constants {
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {2.0, 0.001, 0.016, 1.3};
   public static final int ARM_ENCODER_PORT = 4;
 
-  public static final double SCORE_DISTANCE = 1.0;
-  public static final double SCORE_SIDE_TIME = 1.0;
-  public static final double SCORE_SPEED = -0.2;
+  public static final double SCORE_SIDE_TIME = 0.5;
+  public static final double SCORE_SPEED = 0.3;
 
   public static final double SCORE_ANGLE_TOP = 0.62; //cube position high: 0.56
   public static final double SCORE_ANGLE_MIDDLE = 0.56;

@@ -4,22 +4,18 @@
 
 package frc.robot.subsystems;
 
-import java.sql.Driver;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -29,10 +25,6 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class Arm extends SubsystemBase {
@@ -55,10 +47,6 @@ public class Arm extends SubsystemBase {
   public Double extendOffset;
   private boolean extendIsHomed;
 
-  private DigitalInput switch1;
-  private DigitalInput switch2;
-  private DigitalInput switch3;
-  private DigitalInput switch4;
   public DigitalInput extendHomeSwitch;
 
   public Arm() {
@@ -93,11 +81,6 @@ public class Arm extends SubsystemBase {
 
     extendOffset = 0.0;
     extendIsHomed = false;
-
-    switch1 = new DigitalInput(3);
-    switch2 = new DigitalInput(2);
-    switch3 = new DigitalInput(1);
-    switch4 = new DigitalInput(0);
 
     angleController =
         new PIDController(

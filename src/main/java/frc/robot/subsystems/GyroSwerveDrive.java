@@ -10,7 +10,6 @@ import frc.robot.Constants;
 public class GyroSwerveDrive extends SubsystemBase {
   private double[] speed = {0.0, 0.0, 0.0, 0.0};
   private double[] angle = {0.0, 0.0, 0.0, 0.0};
-  public double driveMultiplier = Constants.SLOW_SPEED;
 
   PIDController steerController = new PIDController(
           Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
@@ -32,12 +31,12 @@ public class GyroSwerveDrive extends SubsystemBase {
     return (input < 0.0 ? -result : result);
   }
 
-  public void alteredGyroDrive(double dX, double dY, double dZ, double gyroAngle){
+  public void alteredGyroDrive(double dX, double dY, double dZ, double driveMultiplier, double gyroAngle){
     dX = -applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
     dY = -applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
     dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
-      gyroDrive(dX, dY, dZ, gyroAngle);
+      gyroDrive(dX * driveMultiplier, dY * driveMultiplier, dZ * driveMultiplier, gyroAngle);
     } else{
       speed[0] = 0.0;
       speed[1] = 0.0;
@@ -108,7 +107,7 @@ public class GyroSwerveDrive extends SubsystemBase {
         angle[i] = Math.abs(Math.abs(angle[i] + 2.0) % 2.0) - 1.0;
         speed[i] = -speed[i];
       }
-      swerveMod[i].drive(speed[i] * driveMultiplier, angle[i]);
+      swerveMod[i].drive(speed[i], angle[i]);
     }
   }
 

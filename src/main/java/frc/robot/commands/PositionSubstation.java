@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GyroSwerveDrive;
 
-public class AutoPosition extends CommandBase {
+public class PositionSubstation extends CommandBase {
 
   final double LINEAR_P = 0.8;
   final double LINEAR_I = 0.001;
@@ -46,7 +46,7 @@ public class AutoPosition extends CommandBase {
   MedianFilter aFilter = new MedianFilter(3);
 
   /** Creates a new AutoPosition. */
-  public AutoPosition(GyroSwerveDrive drivetrain) {
+  public PositionSubstation(GyroSwerveDrive drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     addRequirements(m_drivetrain);
@@ -63,7 +63,6 @@ public class AutoPosition extends CommandBase {
     strafeController.setTolerance(0.1);
 
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    xAngleSub = limelight.getDoubleTopic("tx").subscribe(0.0);
     robotPose = limelight.getDoubleArrayTopic("targetpose_cameraspace").subscribe(result);
     gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
     DriverStation.reportError("Init", false);

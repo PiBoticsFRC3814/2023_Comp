@@ -13,25 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.ArmLevel;
-import frc.robot.commands.AutoPosition;
-import frc.robot.commands.DirectArmCommand;
-import frc.robot.commands.DriveFast;
-import frc.robot.commands.DriveSlow;
-import frc.robot.commands.GrabberToggle;
-import frc.robot.commands.GyroReset;
-import frc.robot.commands.MoveLeft;
-import frc.robot.commands.MoveRight;
-import frc.robot.commands.ScoreLow;
-import frc.robot.commands.ScoreMiddle;
-import frc.robot.commands.ScoreTop;
-import frc.robot.commands.SubstationAngle;
-import frc.robot.commands.TestExtend;
-import frc.robot.commands.drive.GyroSwerveDriveCommand;
-import frc.robot.commands.drive.HardBrake;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.GyroSwerveDrive;
+import frc.robot.commands.*;
+import frc.robot.commands.drive.*;
+import frc.robot.subsystems.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -47,13 +31,12 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
 
-  private final CommandBase m_auton = new AutoPosition(m_gyroSwerveDrive);
-  //private final HardBrake m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
+  private final CommandBase m_scorePosition = new PositionSubstation(m_gyroSwerveDrive);
+  private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   Joystick driveStick = new Joystick(2);
-  //XboxController driveController = new XboxController(2);
   XboxController armController = new XboxController(1);
   XboxController testController = new XboxController(0);
 
@@ -64,6 +47,7 @@ public class RobotContainer {
             () -> driveStick.getX(),
             () -> driveStick.getY(),
             () -> driveStick.getZ(),
+            () -> driveStick.getRawButtonPressed(2),
             m_gyrp,
             m_gyroSwerveDrive));
 
@@ -72,6 +56,10 @@ public class RobotContainer {
         new DirectArmCommand(
             m_arm, () -> armController.getRawAxis(3), () -> armController.getLeftY()));
     // */
+
+    m_autoChooser.setDefaultOption("ScorePosition", m_scorePosition);
+    m_autoChooser.addOption("Brake and wait", m_brakeAndWait);
+    SmartDashboard.putData("Auton Chooser", m_autoChooser);
 
     configureButtonBindings();
   }
@@ -85,8 +73,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
-    //new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_gyroSwerveDrive));
-    //new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_gyroSwerveDrive));
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber));
@@ -97,9 +83,9 @@ public class RobotContainer {
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     //new JoystickButton(armController, 9).whileTrue(new ArmDeploy(m_arm, m_grabber));
 
-    new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive));
-    new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive));
-    new JoystickButton(armController, 7).whileTrue(new AutoPosition(m_gyroSwerveDrive));
+    //new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive));
+    //new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive));
+    new JoystickButton(armController, 7).whileTrue(new PositionSubstation(m_gyroSwerveDrive));
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
 
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
@@ -114,6 +100,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_auton;
+    return m_autoChooser.getSelected();
   }
 }
