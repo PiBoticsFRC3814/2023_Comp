@@ -55,15 +55,14 @@ public class GyroSwerveDrive extends SubsystemBase {
   }
 
   public void drive(double str, double fwd, double rot) {
-    computeSwerveInputs(str, fwd, rot);
-    for (int i = 0; i < 4; i++) {
-      double steerAngle = swerveMod[i].getSteerAngle();
-      if (getDeltaAngle(angle[i], steerAngle) > 0.5) {
-        angle[i] = Math.abs(Math.abs(angle[i] + 2.0) % 2.0) - 1.0;
-        speed[i] = -speed[i];
-      }
-      swerveMod[i].drive(speed[i], angle[i]);
+    if(str != 0.0 || fwd != 0.0 || rot != 0.0) computeSwerveInputs(str, fwd, rot);
+    else{
+      speed[0] = 0.0;
+      speed[1] = 0.0;
+      speed[2] = 0.0;
+      speed[3] = 0.0;
     }
+    setSetpoints();
   }
 
   /*

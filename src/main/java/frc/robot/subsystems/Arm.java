@@ -19,6 +19,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -105,7 +106,8 @@ public class Arm extends SubsystemBase {
             Constants.ARM_ANGLE_PID_CONSTANTS[2]);
 
     angleController.disableContinuousInput();
-    angleController.setTolerance(0.3);
+    angleController.setTolerance(0.01);
+
     extendAtPos = false;
     shoulderAtPos = false;
   }
@@ -138,12 +140,14 @@ public class Arm extends SubsystemBase {
     //*
     double trueAngle = GetArmAngle();
     if((trueAngle >= 0.2) && (trueAngle <= 0.75)){
-      correction = -angleController.calculate(trueAngle, angle);
-      armBrake.set(DoubleSolenoid.Value.kForward);
+      correction = -angleController.calculate(trueAngle, angle) + (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3];
+      SmartDashboard.putNumber("FF", (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3]);
+      SmartDashboard.putNumber("correction", correction);
+      //armBrake.set(DoubleSolenoid.Value.kForward);
     }
     //*/
     shoulderAtPos = angleController.atSetpoint();
-    if (Math.abs(angle - trueAngle) <= 0.08){
+    if (shoulderAtPos){
       armBrake.set(DoubleSolenoid.Value.kReverse);
       DriverStation.reportError("Brake on", false);
     } else {

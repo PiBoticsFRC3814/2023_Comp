@@ -31,12 +31,8 @@ public class ScoreLow extends CommandBase {
   @Override
   public void execute() {
     m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
-    m_Arm.ArmDistance(Constants.EXTEND_REVS_2);
-    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
-      m_Grabber.GrabberClose();
-      finished = true;
-    }
-    //*/
+    if(!finished) finished = m_Arm.shoulderAtPos;
+    if(finished) m_Arm.ArmDistance(Constants.EXTEND_REVS_2);
   }
 
   // Called once the command ends or is interrupted.

@@ -13,7 +13,9 @@ public class SubstationAngle extends CommandBase {
   /** Creates a new ScoreTop. */
   Arm m_Arm;
   Grabber m_Grabber;
-  boolean finished;
+  boolean finished1;
+  boolean finished2;
+  boolean finished3;
   public SubstationAngle(Arm arm, Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
@@ -24,16 +26,27 @@ public class SubstationAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    finished = false;
+    finished1 = false;
+    finished2 = false;
+    finished3 = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmAngle(Constants.SUBSTATION_ANGLE);
-    m_Arm.ArmDistance(1);
-    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
-      finished = true;
+    if(!finished1) {
+      m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+      finished1 = m_Arm.extendAtPos;
+    }
+
+    if(finished1){
+      m_Arm.ArmAngle(Constants.SUBSTATION_ANGLE);
+      finished2 = m_Arm.shoulderAtPos;
+    }
+
+    if(finished1 && finished2 && !finished3){
+      m_Arm.ArmDistance(Constants.SUBSTATION_REV);
+      finished2 = m_Arm.shoulderAtPos && m_Arm.extendAtPos;
     }
   }
 
@@ -44,6 +57,6 @@ public class SubstationAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return finished1 && finished2 && finished3;
   }
 }

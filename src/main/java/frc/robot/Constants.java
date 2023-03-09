@@ -91,20 +91,21 @@ public final class Constants {
    */
   public static final double EXTEND_HOME_SPEED = -0.6;
   public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
-  public static final double[] ARM_ANGLE_PID_CONSTANTS = {4.0, 0.0, 0.2};
+  public static final double[] ARM_ANGLE_PID_CONSTANTS = {2.0, 0.001, 0.016, 1.0};
   public static final int ARM_ENCODER_PORT = 4;
 
   public static final double SCORE_DISTANCE = 1.0;
   public static final double SCORE_SIDE_TIME = 1.0;
   public static final double SCORE_SPEED = -0.2;
 
-  public static final double SCORE_ANGLE_TOP = 0.63; // cone
-  public static final double SCORE_ANGLE_MIDDLE = 0.50;
-  public static final double SCORE_ANGLE_BOTTOM = 0.355;
+  public static final double SCORE_ANGLE_TOP = 0.615; //cube position high: 0.56
+  public static final double SCORE_ANGLE_MIDDLE = 0.55;
+  public static final double SCORE_ANGLE_BOTTOM = 0.41;
   //todo: add logic for lower cube top:0.547; middle:0.500
   public static final double DEPLOY_ANGLE = 0.41;
   public static final double STOW_ANGLE = 0.375;
-  public static final double SUBSTATION_ANGLE = 20.0;
+  public static final double SUBSTATION_ANGLE = 0.575;
+  public static final double SUBSTATION_REV = -79.3;
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;
   public static final double EXTEND_REVS_3 = -145.88;

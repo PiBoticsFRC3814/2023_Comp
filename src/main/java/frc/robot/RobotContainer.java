@@ -25,6 +25,7 @@ import frc.robot.commands.MoveRight;
 import frc.robot.commands.ScoreLow;
 import frc.robot.commands.ScoreMiddle;
 import frc.robot.commands.ScoreTop;
+import frc.robot.commands.SubstationAngle;
 import frc.robot.commands.TestExtend;
 import frc.robot.commands.drive.GyroSwerveDriveCommand;
 import frc.robot.commands.drive.HardBrake;
@@ -92,7 +93,7 @@ public class RobotContainer {
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
 
     //TODO: Add substation, stow, and deploy
-    //new JoystickButton(armController, 1).whileTrue(new ArmSubstation(m_arm, m_grabber));
+    new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     //new JoystickButton(armController, 9).whileTrue(new ArmDeploy(m_arm, m_grabber));
 

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
@@ -11,23 +12,24 @@ import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GyroSwerveDrive;
 
 public class AutoPosition extends CommandBase {
 
-  final double LINEAR_P = 0.2;
-  final double LINEAR_I = 0.0;
+  final double LINEAR_P = 0.8;
+  final double LINEAR_I = 0.001;
   final double LINEAR_D = 0.0;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
 
-  final double ANGULAR_P = 0.0;
+  final double ANGULAR_P = 0.01;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
 
-  final double STRAFE_P = 0.0;
-  final double STRAFE_I = 0.0;
+  final double STRAFE_P = 0.8;
+  final double STRAFE_I = 0.001;
   final double STRAFE_D = 0.0;
   PIDController strafeController = new PIDController(STRAFE_P, STRAFE_I, STRAFE_D);
 
@@ -56,11 +58,13 @@ public class AutoPosition extends CommandBase {
     double[] result = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     turnController.disableContinuousInput();
-    turnController.setTolerance(0.2);
+    turnController.setTolerance(0.3);
+    distanceController.setTolerance(0.1);
+    strafeController.setTolerance(0.1);
 
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     xAngleSub = limelight.getDoubleTopic("tx").subscribe(0.0);
-    robotPose = limelight.getDoubleArrayTopic("camerapose_targetspace").subscribe(result);
+    robotPose = limelight.getDoubleArrayTopic("targetpose_cameraspace").subscribe(result);
     gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
     DriverStation.reportError("Init", false);
     pastDistance = robotPose.get()[2];
@@ -70,30 +74,36 @@ public class AutoPosition extends CommandBase {
   @Override
   public void execute() {
     // a whole bunch of PID stuff that maybe shouldn't be here
-    DriverStation.reportError("" + gotTarget.get(), false);
     double forwardSpeed = 0.0;
     double rotateSpeed = 0.0;
     double strafeSpeed = 0.0;
     double distance = 0.0;
+    double distanceX = 0.0;
     double poseResult[] = robotPose.get();
+    double aPos;
 
     if (gotTarget.get() == 1.0) {
       if (poseResult.length > 0) {
-        double xPos = xFilter.calculate(xAngleSub.get());
+        double xPos = xFilter.calculate(poseResult[0]);
         double zPos = zFilter.calculate(poseResult[2]);
-        double aPos = aFilter.calculate(poseResult[4]);
+        aPos = Math.abs(poseResult[4] - 2.0) >= 2.0 ? aFilter.calculate(poseResult[4]) : 0.0;
 
         distance = zPos / Math.cos(Math.toRadians(aPos));
-        forwardSpeed = distanceController.calculate(distance, -1.5);
-        rotateSpeed = turnController.calculate(aPos, 0.0);
-        strafeSpeed = -strafeController.calculate(xPos, 0.0);
+        distanceX = xPos;
+        if(distance != 0.0){
+          if(Math.abs(distance - 1.1) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05);
+          rotateSpeed = turnController.calculate(aPos, 0.0);
+          if(Math.abs(distanceX + 0.5) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, -0.45);
+        }
 
-        m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
+        SmartDashboard.putNumber("Distance", distanceX);
       }
       DriverStation.reportError("Got Position", false);
-      DriverStation.reportError("" + distance, false);
-      DriverStation.reportError("Output " + forwardSpeed, false);
     }
+    forwardSpeed = MathUtil.clamp(forwardSpeed, -0.6, 0.6);
+    rotateSpeed = MathUtil.clamp(rotateSpeed, -0.6, 0.6);
+    strafeSpeed = MathUtil.clamp(strafeSpeed, -0.6, 0.6);
+    m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
   }
 
   // Called once the command ends or is interrupted.
