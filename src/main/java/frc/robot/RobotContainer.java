@@ -30,6 +30,7 @@ public class RobotContainer {
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive();
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
+  public final RobotStates m_robotStates = new RobotStates();
 
   private final CommandBase m_scorePosition = new PositionSubstation(m_gyroSwerveDrive);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
@@ -73,9 +74,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
+    new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive));
 
-    new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber));
-    new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber));
+    new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
+    new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
 
     //TODO: Add substation, stow, and deploy
@@ -83,9 +85,9 @@ public class RobotContainer {
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     //new JoystickButton(armController, 9).whileTrue(new ArmDeploy(m_arm, m_grabber));
 
-    //new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive));
-    //new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive));
-    new JoystickButton(armController, 7).whileTrue(new PositionSubstation(m_gyroSwerveDrive));
+    new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive, m_robotStates));
+    new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive, m_robotStates));
+    new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates));
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
 
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));

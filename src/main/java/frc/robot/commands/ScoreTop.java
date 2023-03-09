@@ -8,17 +8,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.RobotStates;
 
 public class ScoreTop extends CommandBase {
   /** Creates a new ScoreTop. */
   Arm m_Arm;
   Grabber m_Grabber;
+  RobotStates m_robotStates;
   boolean finished;
-  public ScoreTop(Arm arm, Grabber grabber) {
+  public ScoreTop(Arm arm, Grabber grabber, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
     m_Grabber = grabber;
-    addRequirements(arm, grabber);
+    m_robotStates = robotStates;
+    addRequirements(arm, grabber, robotStates);
   }
 
   // Called when the command is initially scheduled.
@@ -30,7 +33,9 @@ public class ScoreTop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP);
+    if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CUBE);
+    else m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CONE);
+    
     if(!finished) finished = m_Arm.shoulderAtPos;
     if(finished) m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
   }

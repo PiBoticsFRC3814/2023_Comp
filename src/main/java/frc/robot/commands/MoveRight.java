@@ -8,16 +8,19 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.GyroSwerveDrive;
+import frc.robot.subsystems.RobotStates;
 
 public class MoveRight extends CommandBase {
   /** Creates a new MoveRight. */
   private GyroSwerveDrive m_drivetrain;
+  private RobotStates m_robotStates;
   private Timer timer;
   private boolean finished;
-  public MoveRight(GyroSwerveDrive drivetrain) {
+  public MoveRight(GyroSwerveDrive drivetrain, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
-    addRequirements(drivetrain);
+    m_robotStates = robotStates;
+    addRequirements(drivetrain, robotStates);
   }
 
   // Called when the command is initially scheduled.
@@ -31,9 +34,11 @@ public class MoveRight extends CommandBase {
   @Override
   public void execute() {
     m_drivetrain.drive(Constants.SCORE_SPEED, 0, 0);
-    if(timer.hasElapsed(Constants.SCORE_SIDE_TIME)){
+    if(timer.hasElapsed(Constants.SCORE_STRAFE_TIME)){
       m_drivetrain.drive(0, 0, 0);
       finished = true;
+      m_robotStates.moveFromLastAlign += 1;
+      m_robotStates.inFrontOfCubeStation = Math.abs(m_robotStates.moveFromLastAlign) % 3 == 0;
     }
   }
 

@@ -30,9 +30,9 @@ public class ScoreLow extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
-    if(!finished) finished = m_Arm.shoulderAtPos;
-    if(finished) m_Arm.ArmDistance(Constants.EXTEND_REVS_2);
+    m_Arm.ArmDistance(Constants.EXTEND_REVS_2);
+    if(!finished) finished = m_Arm.extendAtPos;
+    if(finished) m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
   }
 
   // Called once the command ends or is interrupted.
