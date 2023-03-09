@@ -58,7 +58,7 @@ public class AutoPosition extends CommandBase {
     double[] result = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     turnController.disableContinuousInput();
-    turnController.setTolerance(0.3);
+    turnController.setTolerance(0.2);
     distanceController.setTolerance(0.1);
     strafeController.setTolerance(0.1);
 
@@ -86,12 +86,12 @@ public class AutoPosition extends CommandBase {
       if (poseResult.length > 0) {
         double xPos = xFilter.calculate(poseResult[0]);
         double zPos = zFilter.calculate(poseResult[2]);
-        aPos = Math.abs(poseResult[4] - 2.0) >= 2.0 ? aFilter.calculate(poseResult[4]) : 0.0;
+        aPos = Math.abs(poseResult[4] - 1.0) >= 1.0 ? aFilter.calculate(poseResult[4]) : 0.0;
 
         distance = zPos / Math.cos(Math.toRadians(aPos));
         distanceX = xPos;
         if(distance != 0.0){
-          if(Math.abs(distance - 1.1) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05);
+          if(Math.abs(distance - 1.05) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05);
           rotateSpeed = turnController.calculate(aPos, 0.0);
           if(Math.abs(distanceX + 0.5) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, -0.45);
         }
