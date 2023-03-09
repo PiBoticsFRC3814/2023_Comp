@@ -113,6 +113,7 @@ public final class Constants {
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;
   public static final double EXTEND_REVS_3 = -145.88;
+  public static final double EXTEND_REVS_DEPLOY = -65.88;
 
   /*
    * Claw and Arm Pnuematic IDs

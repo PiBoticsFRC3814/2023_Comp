@@ -87,7 +87,7 @@ public class RobotContainer {
     //TODO: Add substation, stow, and deploy
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
-    //new JoystickButton(armController, 9).whileTrue(new ArmDeploy(m_arm, m_grabber));
+    new JoystickButton(armController, 9).whileTrue(new DeployAngle(m_arm, m_grabber));
 
     new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive, m_robotStates));
     new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive, m_robotStates));

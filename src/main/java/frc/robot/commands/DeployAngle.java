@@ -30,11 +30,9 @@ public class DeployAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmAngle(Constants.DEPLOY_ANGLE);
-    m_Arm.ArmDistance(1);
-    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
-      finished = true;
-    }
+    m_Arm.ArmDistance(Constants.EXTEND_REVS_DEPLOY);
+    if(!finished) finished = m_Arm.extendAtPos;
+    if(finished) m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +42,6 @@ public class DeployAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }
