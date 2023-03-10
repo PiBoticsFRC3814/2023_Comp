@@ -90,7 +90,7 @@ public class PositionSubstation extends CommandBase {
         distance = zPos;// / Math.cos(Math.toRadians(aPos));
         distanceX = xPos;
         if(distance != 0.0){
-          if(Math.abs(distance - 1.05) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05);
+          if(Math.abs(distance - 1.1) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.1);
           rotateSpeed = turnController.calculate(aPos, 0.0);
           if(Math.abs(distanceX + 0.5) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, -0.45);
         }
