@@ -87,7 +87,7 @@ public class PositionSubstation extends CommandBase {
         double zPos = zFilter.calculate(poseResult[2]);
         aPos = Math.abs(poseResult[4] - 1.0) >= 1.0 ? aFilter.calculate(poseResult[4]) : 0.0;
 
-        distance = zPos / Math.cos(Math.toRadians(aPos));
+        distance = zPos;// / Math.cos(Math.toRadians(aPos));
         distanceX = xPos;
         if(distance != 0.0){
           if(Math.abs(distance - 1.05) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05);
