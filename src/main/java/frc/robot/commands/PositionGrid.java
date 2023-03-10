@@ -56,6 +56,7 @@ public class PositionGrid extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     m_robotStates = robotStates;
+    timer = new Timer();
     addRequirements(m_drivetrain, m_robotStates);
   }
 

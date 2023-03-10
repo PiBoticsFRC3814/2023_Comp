@@ -14,27 +14,28 @@ public class MoveRight extends CommandBase {
   /** Creates a new MoveRight. */
   private GyroSwerveDrive m_drivetrain;
   private RobotStates m_robotStates;
-  private Timer timer;
+  private Timer timer2;
   private boolean finished;
   public MoveRight(GyroSwerveDrive drivetrain, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     m_robotStates = robotStates;
+    timer2 = new Timer();
     addRequirements(drivetrain, robotStates);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
+    timer2.reset();
+    timer2.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_drivetrain.drive(Constants.SCORE_SPEED, 0, 0);
-    if(timer.hasElapsed(Constants.SCORE_STRAFE_TIME)){
+    if(timer2.hasElapsed(Constants.SCORE_STRAFE_TIME)){
       m_drivetrain.drive(0, 0, 0);
       finished = true;
       m_robotStates.moveFromLastAlign += 1;
