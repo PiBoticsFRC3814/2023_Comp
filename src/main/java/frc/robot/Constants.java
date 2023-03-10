@@ -94,6 +94,8 @@ public final class Constants {
   public static final double EXTEND_HOME_SPEED = -0.6;
   public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {2.0, 0.001, 0.016, 1.3};
+  public static final double[] ARM_ANGLE_FF_UP = {0.0, 5.73, 0.61, 0.59};
+  public static final double[] ARM_ANGLE_FF_DOWN = {0.0, 5.73, 0.61, 0.59};
   public static final int ARM_ENCODER_PORT = 4;
 
   public static final double SCORE_STRAFE_TIME = 0.0;

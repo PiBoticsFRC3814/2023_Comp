@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -46,6 +47,8 @@ public class Arm extends SubsystemBase {
 
   public Double extendOffset;
   private boolean extendIsHomed;
+
+  ArmFeedforward armFFUp, armFFDown;
 
   public DigitalInput extendHomeSwitch;
 
@@ -92,6 +95,9 @@ public class Arm extends SubsystemBase {
     angleController.disableContinuousInput();
     angleController.setTolerance(0.01);
 
+    armFFUp = new ArmFeedforward(Constants.ARM_ANGLE_FF_UP[0], Constants.ARM_ANGLE_FF_UP[1], Constants.ARM_ANGLE_FF_UP[2], Constants.ARM_ANGLE_FF_UP[3]);
+    armFFDown = new ArmFeedforward(Constants.ARM_ANGLE_FF_DOWN[0], Constants.ARM_ANGLE_FF_DOWN[1], Constants.ARM_ANGLE_FF_DOWN[2], Constants.ARM_ANGLE_FF_DOWN[3]);
+
     extendAtPos = false;
     shoulderAtPos = false;
   }
@@ -121,11 +127,14 @@ public class Arm extends SubsystemBase {
 
   public void ArmAngle(double angle) {
     double correction = 0;
+    double feedforward = 0;
     //*
     double trueAngle = GetArmAngle();
     if((trueAngle >= 0.2) && (trueAngle <= 0.75)){
+      feedforward = angle > 0.53 ? armFFUp.calculate((2 * angle - 0.78889) * Math.PI, 0.0) : armFFDown.calculate((2 * angle - 0.78889) * Math.PI, 0.0);
       correction = -angleController.calculate(trueAngle, angle) + (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3];
-      SmartDashboard.putNumber("FF", (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3]);
+      //correction += feedforward;
+      SmartDashboard.putNumber("FF", feedforward);
       SmartDashboard.putNumber("correction", correction);
       //armBrake.set(DoubleSolenoid.Value.kForward);
     }
