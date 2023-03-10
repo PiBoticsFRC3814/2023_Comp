@@ -131,7 +131,7 @@ public class Arm extends SubsystemBase {
     //*
     double trueAngle = GetArmAngle();
     if((trueAngle >= 0.2) && (trueAngle <= 0.75)){
-      feedforward = angle > 0.53 ? armFFUp.calculate((2 * angle - 0.78889) * Math.PI, 0.0) : armFFDown.calculate((2 * angle - 0.78889) * Math.PI, 0.0);
+      feedforward = angle > 0.53 ? armFFUp.calculate((2 * angle - 0.78889) * Math.PI, 0.0) : armFFDown.calculate((0.78889 - 2 * angle) * Math.PI, 0.0);
       correction = -angleController.calculate(trueAngle, angle) + (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3];
       //correction += feedforward;
       SmartDashboard.putNumber("FF", feedforward);
