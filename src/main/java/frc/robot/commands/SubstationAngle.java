@@ -46,7 +46,7 @@ public class SubstationAngle extends CommandBase {
 
     if(finished1 && finished2 && !finished3){
       m_Arm.ArmDistance(Constants.SUBSTATION_REV);
-      finished2 = m_Arm.shoulderAtPos && m_Arm.extendAtPos;
+      finished3 = m_Arm.shoulderAtPos && m_Arm.extendAtPos;
     }
   }
 
