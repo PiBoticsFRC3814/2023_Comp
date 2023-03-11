@@ -52,6 +52,8 @@ public class Arm extends SubsystemBase {
 
   public DigitalInput extendHomeSwitch;
 
+  public boolean brake;
+
   public Arm() {
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
@@ -93,13 +95,14 @@ public class Arm extends SubsystemBase {
             Constants.ARM_ANGLE_PID_CONSTANTS[2]);
 
     angleController.disableContinuousInput();
-    angleController.setTolerance(0.01, 0.05);
+    angleController.setTolerance(0.01);
 
     armFFUp = new ArmFeedforward(Constants.ARM_ANGLE_FF_UP[0], Constants.ARM_ANGLE_FF_UP[1], Constants.ARM_ANGLE_FF_UP[2]);
     armFFDown = new ArmFeedforward(Constants.ARM_ANGLE_FF_DOWN[0], Constants.ARM_ANGLE_FF_DOWN[1], Constants.ARM_ANGLE_FF_DOWN[2]);
 
     extendAtPos = false;
     shoulderAtPos = false;
+    brake = false;
   }
 
   private double applyDeadzone(double input, double deadzone) {
@@ -138,7 +141,9 @@ public class Arm extends SubsystemBase {
     }
     //*/
     shoulderAtPos = angleController.atSetpoint();
-    if (shoulderAtPos){
+    if(!brake) brake = Math.abs(angle - trueAngle) <= 0.01;
+    //if (Math.abs(angle - trueAngle) <= 0.01){
+    if(brake){
       armBrake.set(DoubleSolenoid.Value.kReverse);
       DriverStation.reportError("Brake on", false);
     } else {

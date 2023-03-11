@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -79,7 +80,7 @@ public class SwerveModule {
 	public void drive( double speed, double angle ) {
 	    // Calculate the turning motor output from the turning PID controller.
 
-		//*// Delete slash for tuning offset
+		//* Delete slash for tuning offset
 		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
 		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED * speed, CANSparkMax.ControlType.kVelocity);

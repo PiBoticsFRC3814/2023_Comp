@@ -29,6 +29,7 @@ public class SubstationAngle extends CommandBase {
     finished1 = false;
     finished2 = false;
     finished3 = false;
+    m_Arm.brake = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -57,6 +58,6 @@ public class SubstationAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished1 && finished2 && finished3;
+    return finished1 && finished2 && finished3 && false;
   }
 }

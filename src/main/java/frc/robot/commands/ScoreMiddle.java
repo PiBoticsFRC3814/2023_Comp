@@ -28,6 +28,7 @@ public class ScoreMiddle extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
+    m_Arm.brake = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

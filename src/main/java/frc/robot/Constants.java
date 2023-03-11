@@ -37,10 +37,10 @@ public final class Constants {
 
   public static final double[] SWERVE_SETPOINT_OFFSET = {
     // must be between 0 & 360 degrees
-    360 - 125.6, // Front Right
-    360 - 82.8, // Rear Right
-    360 - 275.6, // Rear Left
-    360 - 178.3 // Front Left
+    360 - 305.1, // Front Right
+    360 - 83.7, // Rear Right
+    360 - 275.8, // Rear Left
+    360 - 59.2 // Front Left
   };
 
   public static final double[][] SWERVE_STEER_PID_CONSTANTS = {
@@ -67,7 +67,7 @@ public final class Constants {
   public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {1.0, 0.0, 0.0};
 
   public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
-  public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, false, false};
+  public static final boolean[] DRIVE_MOTOR_INVERTED = {true, false, false, true};
 
   /*
    * Swerve constants for swerve module calculations
@@ -102,7 +102,7 @@ public final class Constants {
   public static final double SCORE_FWD_TIME = 0.0;
   public static final double SCORE_SPEED = 0.0;
 
-  public static final double SCORE_ANGLE_TOP_CONE = 0.59;
+  public static final double SCORE_ANGLE_TOP_CONE = 0.60;
   public static final double SCORE_ANGLE_TOP_CUBE = 0.57;
   public static final double SCORE_ANGLE_MIDDLE_CONE = 0.56;
   public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.51;
@@ -110,7 +110,7 @@ public final class Constants {
   //todo: add logic for lower cube top:0.547; middle:0.500
   public static final double DEPLOY_ANGLE = 0.41;
   public static final double STOW_ANGLE = 0.41;
-  public static final double SUBSTATION_ANGLE = 0.56;
+  public static final double SUBSTATION_ANGLE = 0.58;
   public static final double SUBSTATION_REV = -79.3;
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;
