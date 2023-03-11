@@ -35,6 +35,8 @@ public class RobotContainer {
 
   private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
+  private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
+  private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -59,8 +61,10 @@ public class RobotContainer {
             m_arm, () -> armController.getRawAxis(3), () -> armController.getLeftY()));
     // */
 
-    m_autoChooser.setDefaultOption("ScorePosition", m_scorePosition);
-    m_autoChooser.addOption("Brake and wait", m_brakeAndWait);
+    m_autoChooser.setDefaultOption("Do Nothing", m_brakeAndWait);
+    m_autoChooser.addOption("Far left", m_auton1);
+    m_autoChooser.addOption("Far Right", m_auton2);
+    m_autoChooser.addOption("MoveToScore", m_scorePosition);
     SmartDashboard.putData("Auton Chooser", m_autoChooser);
 
     configureButtonBindings();
