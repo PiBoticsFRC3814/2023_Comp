@@ -24,7 +24,7 @@ public class PositionSubstation extends CommandBase {
   final double LINEAR_D = 0.005;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
 
-  final double ANGULAR_P = 0.005;
+  final double ANGULAR_P = 0.01;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.00;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
@@ -104,9 +104,9 @@ public class PositionSubstation extends CommandBase {
     } else{
       rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 0.0);
     }
-    forwardSpeed = MathUtil.clamp(forwardSpeed, -0.3, 0.3);
-    rotateSpeed = MathUtil.clamp(rotateSpeed, -0.3, 0.3);
-    strafeSpeed = MathUtil.clamp(strafeSpeed, -0.3, 0.3);
+    forwardSpeed = MathUtil.clamp(forwardSpeed, -0.2, 0.2);
+    rotateSpeed = MathUtil.clamp(rotateSpeed, -0.2, 0.2);
+    strafeSpeed = MathUtil.clamp(strafeSpeed, -0.2, 0.2);
     m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
   }
 
