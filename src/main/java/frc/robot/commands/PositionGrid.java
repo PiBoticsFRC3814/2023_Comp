@@ -69,7 +69,7 @@ public class PositionGrid extends CommandBase {
   public void initialize() {
     double[] result = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-    turnController.disableContinuousInput();
+    turnController.enableContinuousInput(0.0, 360.0);
     turnController.setTolerance(0.01);
     distanceController.setTolerance(0.01);
     strafeController.setTolerance(0.01);
@@ -104,7 +104,7 @@ public class PositionGrid extends CommandBase {
           distanceX = xPos;
           if(distance != 0.0){
             if(Math.abs(distance - 0.78) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 0.78); else inPositionZ = true;
-            rotateSpeed = turnController.calculate(m_gyro.getAngle(), 180.0);
+            rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 180.0);
             if(Math.abs(distanceX - 0.2023) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.1523); else inPositionX = true;
           }
 
