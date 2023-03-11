@@ -28,6 +28,7 @@ public class ScoreMiddle extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
+    m_Arm.brake = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,7 +38,10 @@ public class ScoreMiddle extends CommandBase {
     else m_Arm.ArmAngle(Constants.SCORE_ANGLE_MIDDLE_CONE);
     
     if(!finished) finished = m_Arm.shoulderAtPos;
-    if(finished) m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+    if(finished) {
+      if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmDistance(Constants.EXTEND_REVS_MID_CUBE);
+      else m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+    }
   }
 
   // Called once the command ends or is interrupted.

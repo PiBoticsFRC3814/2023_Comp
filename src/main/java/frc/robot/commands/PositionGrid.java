@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,17 +24,17 @@ public class PositionGrid extends CommandBase {
 
   final double LINEAR_P = 0.4;
   final double LINEAR_I = 0.001;
-  final double LINEAR_D = 0.0;
+  final double LINEAR_D = 0.005;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
 
-  final double ANGULAR_P = 0.01;
+  final double ANGULAR_P = 0.005;
   final double ANGULAR_I = 0.0;
   final double ANGULAR_D = 0.0;
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
 
   final double STRAFE_P = 0.4;
   final double STRAFE_I = 0.001;
-  final double STRAFE_D = 0.0;
+  final double STRAFE_D = 0.005;
   PIDController strafeController = new PIDController(STRAFE_P, STRAFE_I, STRAFE_D);
 
   DoubleSubscriber xAngleSub;
@@ -51,12 +52,15 @@ public class PositionGrid extends CommandBase {
 
   boolean inPositionX, inPositionZ, inPositionA, finished;
 
+  ADIS16470_IMU m_gyro;
+
   /** Creates a new AutoPosition. */
-  public PositionGrid(GyroSwerveDrive drivetrain, RobotStates robotStates) {
+  public PositionGrid(GyroSwerveDrive drivetrain, RobotStates robotStates, ADIS16470_IMU gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     m_robotStates = robotStates;
     timer = new Timer();
+    m_gyro = gyro;
     addRequirements(m_drivetrain, m_robotStates);
   }
 
@@ -65,13 +69,13 @@ public class PositionGrid extends CommandBase {
   public void initialize() {
     double[] result = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-    turnController.disableContinuousInput();
-    turnController.setTolerance(0.1);
-    distanceController.setTolerance(0.1);
-    strafeController.setTolerance(0.1);
+    turnController.enableContinuousInput(0.0, 360.0);
+    turnController.setTolerance(0.01);
+    distanceController.setTolerance(0.01);
+    strafeController.setTolerance(0.01);
 
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    robotPose = limelight.getDoubleArrayTopic("targetpose_cameraspace").subscribe(result);
+    robotPose = limelight.getDoubleArrayTopic("targetpose_robotspace").subscribe(result);
     gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
     DriverStation.reportError("Init", false);
 
@@ -86,7 +90,7 @@ public class PositionGrid extends CommandBase {
     double forwardSpeed = 0.0;
     double rotateSpeed = 0.0;
     double strafeSpeed = 0.0;
-    if(!(inPositionA && inPositionX && inPositionZ)){
+    if(!(inPositionX && inPositionZ)){
       double distance = 0.0;
       double distanceX = 0.0;
       double poseResult[] = robotPose.get();
@@ -95,41 +99,40 @@ public class PositionGrid extends CommandBase {
         if (poseResult.length > 0) {
           double xPos = xFilter.calculate(poseResult[0]);
           double zPos = zFilter.calculate(poseResult[2]);
-          double aPos = Math.abs(poseResult[4] - 1.0) >= 1.0 ? aFilter.calculate(poseResult[4]) : 0.0;
 
-          distance = zPos / Math.cos(Math.toRadians(aPos));
+          distance = zPos;
           distanceX = xPos;
           if(distance != 0.0){
-            if(Math.abs(distance - 0.5) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 0.5); else inPositionZ = true;
-            if(Math.abs(aPos) >= 0.03) rotateSpeed = turnController.calculate(aPos, 0.0); else inPositionA = true;
-            if(Math.abs(distanceX) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.0); else inPositionX = true;
+            if(Math.abs(distance - 0.78) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 0.78); else inPositionZ = true;
+            rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 180.0);
+            if(Math.abs(distanceX - 0.2023) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.1523); else inPositionX = true;
           }
 
-          SmartDashboard.putNumber("Distance", distanceX);
+          SmartDashboard.putNumber("Distance", distance);
+          SmartDashboard.putNumber("Correction", forwardSpeed);
         }
         DriverStation.reportError("Got Position", false);
       }
-      forwardSpeed = MathUtil.clamp(forwardSpeed, -0.5, 0.5);
-      rotateSpeed = MathUtil.clamp(rotateSpeed, -0.5, 0.5);
-      strafeSpeed = MathUtil.clamp(strafeSpeed, -0.5, 0.5);
+      forwardSpeed = MathUtil.clamp(forwardSpeed, -0.2, 0.2);
+      rotateSpeed =   MathUtil.clamp(rotateSpeed, -0.2, 0.2);
+      strafeSpeed =   MathUtil.clamp(strafeSpeed, -0.2, 0.2);
     } else {
-      m_robotStates.inFrontOfCubeStation = true;
-      m_robotStates.moveFromLastAlign = 0;
-      timer.reset();
-      timer.start();
     }
-    if(timer.hasElapsed(Constants.SCORE_FWD_TIME)) forwardSpeed = Constants.SCORE_SPEED;
+    //if(timer.hasElapsed(Constants.SCORE_FWD_TIME)) forwardSpeed = Constants.SCORE_SPEED;
 
     m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_robotStates.inFrontOfCubeStation = true;
+    m_robotStates.moveFromLastAlign = 0;
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

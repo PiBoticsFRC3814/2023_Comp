@@ -19,7 +19,7 @@ public class Auton1 extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new GyroReset(gyro),
-      new PositionGrid(drivetrain, robotStates),
+      new PositionGrid(drivetrain, robotStates, gyro),
       new ScoreTop(arm, grabber, robotStates),
       new StowAngle(arm, grabber),
       new AutoDriveDistance(drivetrain, gyro, () -> Constants.AUTON_1_DISTANCE)

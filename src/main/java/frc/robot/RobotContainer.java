@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,10 +31,9 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
-  public static final CommLEDS m_commLEDS = new CommLEDS();
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
 
-  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates);
+  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
   private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
   private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
@@ -79,9 +79,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
-    new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive));
-    new JoystickButton(driveStick, 10).whileTrue(new LightsCone(m_commLEDS));
-    new JoystickButton(driveStick, 11).whileTrue(new LightsCube(m_commLEDS));
+    new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive, m_gyrp));
+    new JoystickButton(driveStick, 1).whileTrue(new LightsCube());
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
@@ -95,7 +94,7 @@ public class RobotContainer {
 
     new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive, m_robotStates));
     new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive, m_robotStates));
-    new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates));
+    new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp));
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
 
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));

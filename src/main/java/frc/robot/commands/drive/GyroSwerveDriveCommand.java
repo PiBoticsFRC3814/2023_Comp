@@ -13,6 +13,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
   BooleanSupplier driveFast;
   ADIS16470_IMU m_gyro;
   GyroSwerveDrive m_gyroSwerveDrive;
+  double driveMult;
 
   public GyroSwerveDriveCommand(
       DoubleSupplier dX,
@@ -32,11 +33,12 @@ public class GyroSwerveDriveCommand extends CommandBase {
 
   @Override
   public void execute() {
+    driveMult = driveFast.getAsBoolean() ? Constants.FAST_SPEED : Constants.SLOW_SPEED;
     m_gyroSwerveDrive.alteredGyroDrive(
       dX.getAsDouble(),
        dY.getAsDouble(),
         dZ.getAsDouble(),
-         driveFast.getAsBoolean() ? Constants.FAST_SPEED : Constants.SLOW_SPEED,
+         driveMult,
           Math.toRadians(m_gyro.getAngle())
     );
   }
