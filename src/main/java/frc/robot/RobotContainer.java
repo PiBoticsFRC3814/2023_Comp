@@ -75,6 +75,7 @@ public class RobotContainer {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
     new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive, m_gyrp));
+    new JoystickButton(driveStick, 1).whileTrue(new LightsCube());
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));

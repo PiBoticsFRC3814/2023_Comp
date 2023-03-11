@@ -35,7 +35,7 @@ public class SubstationAngle extends CommandBase {
   @Override
   public void execute() {
     if(!finished1) {
-      m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+      m_Arm.ArmDistance(0);
       finished1 = m_Arm.extendAtPos;
     }
 
