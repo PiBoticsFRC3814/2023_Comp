@@ -93,29 +93,30 @@ public final class Constants {
    */
   public static final double EXTEND_HOME_SPEED = -0.6;
   public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
-  public static final double[] ARM_ANGLE_PID_CONSTANTS = {2.0, 0.001, 0.016, 1.3};
-  public static final double[] ARM_ANGLE_FF_UP =   {0.0, 2.86, 0.61, 0.19};
-  public static final double[] ARM_ANGLE_FF_DOWN = {0.0, 2.86, 0.61, 0.19};
+  public static final double[] ARM_ANGLE_PID_CONSTANTS = {4.0, 0.2, 0.016, 1.3};
+  public static final double[] ARM_ANGLE_FF_UP =   {0.5, 1.0, 0.21};
+  public static final double[] ARM_ANGLE_FF_DOWN = {0.5, 1.0, 0.21};
   public static final int ARM_ENCODER_PORT = 4;
 
   public static final double SCORE_STRAFE_TIME = 0.0;
   public static final double SCORE_FWD_TIME = 0.0;
-  public static final double SCORE_SPEED = 0.3;
+  public static final double SCORE_SPEED = 0.0;
 
-  public static final double SCORE_ANGLE_TOP_CONE = 0.62;
-  public static final double SCORE_ANGLE_TOP_CUBE = 0.56;
+  public static final double SCORE_ANGLE_TOP_CONE = 0.60;
+  public static final double SCORE_ANGLE_TOP_CUBE = 0.57;
   public static final double SCORE_ANGLE_MIDDLE_CONE = 0.56;
-  public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.56;
+  public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.51;
   public static final double SCORE_ANGLE_BOTTOM = 0.41;
   //todo: add logic for lower cube top:0.547; middle:0.500
   public static final double DEPLOY_ANGLE = 0.41;
   public static final double STOW_ANGLE = 0.41;
-  public static final double SUBSTATION_ANGLE = 0.575;
+  public static final double SUBSTATION_ANGLE = 0.565;
   public static final double SUBSTATION_REV = -79.3;
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;
   public static final double EXTEND_REVS_3 = -145.88;
   public static final double EXTEND_REVS_DEPLOY = -65.88;
+  public static final double EXTEND_REVS_MID_CUBE = -43.14;
 
   /*
    * Claw and Arm Pnuematic IDs
