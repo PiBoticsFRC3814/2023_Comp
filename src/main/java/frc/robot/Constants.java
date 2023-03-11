@@ -110,7 +110,7 @@ public final class Constants {
   //todo: add logic for lower cube top:0.547; middle:0.500
   public static final double DEPLOY_ANGLE = 0.41;
   public static final double STOW_ANGLE = 0.41;
-  public static final double SUBSTATION_ANGLE = 0.555;
+  public static final double SUBSTATION_ANGLE = 0.56;
   public static final double SUBSTATION_REV = -79.3;
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;
