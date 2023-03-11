@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -65,6 +66,14 @@ public class GyroSwerveDrive extends SubsystemBase {
       speed[3] = 0.0;
     }
     setSetpoints();
+  }
+
+  public void drive(double[] inputs) {
+    drive(inputs[0], inputs[1], inputs[2]);
+  }
+
+  public void driveAtHeading(double heading, double fwd, double str, double gyroAngle){
+    drive(str, fwd, MathUtil.clamp(steerController.calculate(gyroAngle % 360.0, heading), -0.3, 0.3));
   }
 
   /*

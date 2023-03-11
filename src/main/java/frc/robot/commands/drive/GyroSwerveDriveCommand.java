@@ -37,7 +37,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
        dY.getAsDouble(),
         dZ.getAsDouble(),
          driveFast.getAsBoolean() ? Constants.FAST_SPEED : Constants.SLOW_SPEED,
-          Math.toRadians(m_gyro.getAngle())
+          Math.toRadians(m_gyro.getAngle() % 360.0)
     );
   }
 

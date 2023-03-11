@@ -21,6 +21,12 @@ public final class Constants {
 
   public static final int LIGHT_RELAY_PORT = 0; //port for Spike controlling lights
 
+  public static final double GRID_X_SETPOINT = 0.5;
+  public static final double GRID_Y_SETPOINT = 0.8;
+  public static final double RIGHT_SUBSTATION_X = 0.5;
+  public static final double LEFT_SUBSTATION_X = -0.5;
+  public static final double SUBSTATION_Y = 1.1;
+
   ////////////////////////////////////////
   //               Swerve               //
   ////////////////////////////////////////
@@ -64,7 +70,10 @@ public final class Constants {
   /*
    * Swerve rotation PID Constants
    */
-  public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {1.0, 0.0, 0.0};
+  public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {0.005, 0.0, 0.001};
+  public static final double[] SWERVE_STR_PID = {0.0, 0.0, 0.0};
+  public static final double[] SWERVE_FWD_PID = {0.0, 0.0, 0.0};
+
 
   public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
   public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, false, false};
