@@ -30,11 +30,9 @@ public class StowAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmAngle(Constants.STOW_ANGLE);
     m_Arm.ArmDistance(0);
-    if(m_Arm.shoulderAtPos && m_Arm.extendAtPos){
-      finished = true;
-    }
+    m_Grabber.GrabberClose();
+    if(m_Arm.extendAtPos) m_Arm.ArmAngle(Constants.STOW_ANGLE);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,6 +42,6 @@ public class StowAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return m_Arm.shoulderAtPos && m_Arm.extendAtPos;
   }
 }

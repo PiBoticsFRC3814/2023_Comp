@@ -16,6 +16,7 @@ public class ScoreTop extends CommandBase {
   Grabber m_Grabber;
   RobotStates m_robotStates;
   boolean finished;
+  boolean finished2;
   public ScoreTop(Arm arm, Grabber grabber, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
@@ -28,6 +29,7 @@ public class ScoreTop extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
+    finished2 = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,8 +38,12 @@ public class ScoreTop extends CommandBase {
     if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CUBE);
     else m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CONE);
     
-    if(!finished) finished = m_Arm.shoulderAtPos;
-    if(finished) m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
+    if(finished){
+      m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
+      finished2 = m_Arm.extendAtPos;
+    } else finished = m_Arm.shoulderAtPos;
+
+    if(finished && finished2 && m_robotStates.autonomous) m_Grabber.GrabberOpen();
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +53,6 @@ public class ScoreTop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_Arm.extendAtPos && m_Arm.shoulderAtPos && m_robotStates.autonomous;
   }
 }

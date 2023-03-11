@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,13 +20,20 @@ public class GyroSwerveDrive extends SubsystemBase {
           Constants.SWERVE_ROTATION_PID_CONSTANTS[2]
   );
 
+  private SlewRateLimiter joystickSlewLimiterX;
+  private SlewRateLimiter joystickSlewLimiterY;
+  private SlewRateLimiter joystickSlewLimiterZ;
+
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
   };
 
   public GyroSwerveDrive(RobotStates robotStates) {
-    steerController.enableContinuousInput(-Math.PI, Math.PI);
+    steerController.enableContinuousInput(0, 360);
     m_RobotStates = robotStates;
+    joystickSlewLimiterX = new SlewRateLimiter(Constants.JOYSTICK_X_SLEW_RATE);
+    joystickSlewLimiterY = new SlewRateLimiter(Constants.JOYSTICK_Y_SLEW_RATE);
+    joystickSlewLimiterZ = new SlewRateLimiter(Constants.JOYSTICK_Z_SLEW_RATE);
   }
 
   private double applyDeadzone(double input, double deadzone) {
@@ -38,7 +47,12 @@ public class GyroSwerveDrive extends SubsystemBase {
     dY = -applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
     dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE);
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
-      gyroDrive(dX * driveMultiplier, dY * driveMultiplier, dZ * driveMultiplier, gyroAngle);
+      gyroDrive(
+        joystickSlewLimiterX.calculate(dX * driveMultiplier),
+         joystickSlewLimiterY.calculate(dY * driveMultiplier),
+         joystickSlewLimiterZ.calculate(dZ * driveMultiplier),
+          gyroAngle
+      );
       m_RobotStates.inFrontOfCubeStation = false;
     } else{
       speed[0] = 0.0;
@@ -65,6 +79,10 @@ public class GyroSwerveDrive extends SubsystemBase {
       speed[3] = 0.0;
     }
     setSetpoints();
+  }
+
+  public void driveAtHeading(double heading, double fwd, double str, double gyroAngle){
+    drive(str, fwd, MathUtil.clamp(steerController.calculate(gyroAngle % 360.0, heading), -0.3, 0.3));
   }
 
   /*

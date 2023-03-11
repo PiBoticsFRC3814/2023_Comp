@@ -33,7 +33,7 @@ public class RobotContainer {
   public static final CommLEDS m_commLEDS = new CommLEDS();
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
 
-  private final CommandBase m_scorePosition = new PositionSubstation(m_gyroSwerveDrive);
+  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();

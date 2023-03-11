@@ -15,15 +15,15 @@ public class GyroSwerveDriveCommand extends CommandBase {
   GyroSwerveDrive m_gyroSwerveDrive;
 
   public GyroSwerveDriveCommand(
-      DoubleSupplier stick_x,
-      DoubleSupplier stick_y,
-      DoubleSupplier stick_z,
+      DoubleSupplier dX,
+      DoubleSupplier dY,
+      DoubleSupplier dZ,
       BooleanSupplier multiplier,
       ADIS16470_IMU imu,
       GyroSwerveDrive gyroSwerveDrive) {
-    dX = stick_x;
-    dY = stick_y;
-    dZ = stick_z;
+    this.dX = dX;
+    this.dY = dY;
+    this.dZ = dZ;
     driveFast = multiplier;
     m_gyro = imu;
     m_gyroSwerveDrive = gyroSwerveDrive;

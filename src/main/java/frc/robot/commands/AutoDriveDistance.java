@@ -4,54 +4,54 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.GyroSwerveDrive;
-import frc.robot.subsystems.RobotStates;
 
-public class MoveLeft extends CommandBase {
-  /** Creates a new MoveLeft. */
+public class AutoDriveDistance extends CommandBase {
+  /** Creates a new AutoDriveDistance. */
   private GyroSwerveDrive drivetrain;
-  private RobotStates robotStates;
-  private Timer timer1;
+  private ADIS16470_IMU gyro;
+  private Timer autoTimer;
   private TrapezoidProfile driveProfile;
-
-  public MoveLeft(GyroSwerveDrive drivetrain, RobotStates robotStates) {
+  
+  public AutoDriveDistance(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro, DoubleSupplier distance) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
-    this.robotStates = robotStates;
+    this.gyro = gyro;
     driveProfile = new TrapezoidProfile(
       new TrapezoidProfile.Constraints(5, 9.8),
-       new TrapezoidProfile.State(-Constants.SCORE_STRAFE_DISTANCE, 0.0),
+       new TrapezoidProfile.State(distance.getAsDouble(), 0.0),
         new TrapezoidProfile.State(0.0, 0.0)
     );
+    
+    autoTimer = new Timer();
 
-    timer1 = new Timer();
-
-    addRequirements(drivetrain, robotStates);
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer1.reset();
-    timer1.start();
+    autoTimer.reset();
+    autoTimer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var setpoint = driveProfile.calculate(timer1.get());
-    drivetrain.drive(setpoint.velocity, 0, 0);
+    var setpoint = driveProfile.calculate(autoTimer.get());
+    drivetrain.driveAtHeading(180.0, setpoint.velocity, 0.0, gyro.getAngle());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    robotStates.moveFromLastAlign -= 1;
-    robotStates.inFrontOfCubeStation = robotStates.moveFromLastAlign % 3 == 0;
+    autoTimer.stop();
   }
 
   // Returns true when the command should end.

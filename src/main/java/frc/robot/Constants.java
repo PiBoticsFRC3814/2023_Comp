@@ -13,11 +13,17 @@ public final class Constants {
   public static final double JOYSTICK_Y_DEADZONE = 0.2;
   public static final double JOYSTICK_Z_DEADZONE = 0.25;
   public static final double JOYSTICK_Z2_DEADZONE = 0.2;
+  public static final double JOYSTICK_X_SLEW_RATE = 1.0;
+  public static final double JOYSTICK_Y_SLEW_RATE = 1.0;
+  public static final double JOYSTICK_Z_SLEW_RATE = 1.0;
 
   public static final int DRIVE_CONTROLLER_PORT = 2;
   public static final int STEER_CONTROLLER_PORT = 0;
   public static final double SLOW_SPEED = 0.5;
   public static final double FAST_SPEED = 1.0;
+
+  public static final double AUTON_1_DISTANCE = 5.0; //meters
+  public static final double AUTON_2_DISTANCE = 10.0; //meters
 
   public static final int LIGHT_RELAY_PORT = 0; //port for Spike controlling lights
 
@@ -98,7 +104,7 @@ public final class Constants {
   public static final double[] ARM_ANGLE_FF_DOWN = {0.0, 2.86, 0.61, 0.19};
   public static final int ARM_ENCODER_PORT = 4;
 
-  public static final double SCORE_STRAFE_TIME = 0.0;
+  public static final double SCORE_STRAFE_DISTANCE = 1.0;
   public static final double SCORE_FWD_TIME = 0.0;
   public static final double SCORE_SPEED = 0.3;
 
