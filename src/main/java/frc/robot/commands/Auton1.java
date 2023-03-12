@@ -23,7 +23,7 @@ public class Auton1 extends SequentialCommandGroup {
       new ScoreTop(arm, grabber, robotStates),
       new PositionGrid(drivetrain, robotStates, gyro, grabber),
       new GrabberToggle(grabber),
-      new WaitCommand(0.5),
+      new WaitCommand(1.0),
       new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_1_DISTANCE, () -> 0.0, () -> 10.0),
       new GyroReset(gyro)
     );
