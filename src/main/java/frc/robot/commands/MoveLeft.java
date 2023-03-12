@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -12,15 +13,23 @@ import frc.robot.subsystems.RobotStates;
 
 public class MoveLeft extends CommandBase {
   /** Creates a new MoveLeft. */
-  private GyroSwerveDrive m_drivetrain;
-  private RobotStates m_robotStates;
+  private GyroSwerveDrive drivetrain;
+  private RobotStates robotStates;
   private Timer timer1;
-  private boolean finished;
+  private TrapezoidProfile driveProfile;
+
   public MoveLeft(GyroSwerveDrive drivetrain, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drivetrain = drivetrain;
-    m_robotStates = robotStates;
+    this.drivetrain = drivetrain;
+    this.robotStates = robotStates;
+    driveProfile = new TrapezoidProfile(
+      new TrapezoidProfile.Constraints(5, 9.8),
+       new TrapezoidProfile.State(-Constants.SCORE_STRAFE_DISTANCE, 0.0),
+        new TrapezoidProfile.State(0.0, 0.0)
+    );
+
     timer1 = new Timer();
+
     addRequirements(drivetrain, robotStates);
   }
 
@@ -34,22 +43,20 @@ public class MoveLeft extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.drive(-Constants.SCORE_SPEED, 0, 0);
-    if(timer1.hasElapsed(Constants.SCORE_STRAFE_TIME)){
-      m_drivetrain.drive(0, 0, 0);
-      finished = true;
-      m_robotStates.moveFromLastAlign -= 1;
-      m_robotStates.inFrontOfCubeStation = Math.abs(m_robotStates.moveFromLastAlign) % 3 == 0;
-    }
+    var setpoint = driveProfile.calculate(timer1.get());
+    drivetrain.drive(setpoint.velocity, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    robotStates.moveFromLastAlign -= 1;
+    robotStates.inFrontOfCubeStation = robotStates.moveFromLastAlign % 3 == 0;
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

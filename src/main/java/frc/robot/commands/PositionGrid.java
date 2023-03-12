@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.RobotStates;
 
@@ -53,15 +54,17 @@ public class PositionGrid extends CommandBase {
   boolean inPositionX, inPositionZ, inPositionA, finished;
 
   ADIS16470_IMU m_gyro;
+  Grabber grabber;
 
   /** Creates a new AutoPosition. */
-  public PositionGrid(GyroSwerveDrive drivetrain, RobotStates robotStates, ADIS16470_IMU gyro) {
+  public PositionGrid(GyroSwerveDrive drivetrain, RobotStates robotStates, ADIS16470_IMU gyro, Grabber grabber) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     m_robotStates = robotStates;
     timer = new Timer();
     m_gyro = gyro;
-    addRequirements(m_drivetrain, m_robotStates);
+    this.grabber = grabber;
+    addRequirements(m_drivetrain, m_robotStates, grabber);
   }
 
   // Called when the command is initially scheduled.
@@ -104,7 +107,8 @@ public class PositionGrid extends CommandBase {
           distanceX = xPos;
           if(distance != 0.0){
             if(Math.abs(distance - 0.78) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 0.78); else inPositionZ = true;
-            rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 180.0);
+            if(m_robotStates.autonomous)rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 0.0);
+            else  rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 180.0);
             if(Math.abs(distanceX - 0.2023) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.1523); else inPositionX = true;
           }
 
@@ -128,11 +132,12 @@ public class PositionGrid extends CommandBase {
   public void end(boolean interrupted) {
     m_robotStates.inFrontOfCubeStation = true;
     m_robotStates.moveFromLastAlign = 0;
+    m_drivetrain.drive(0.0, 0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return inPositionZ && m_robotStates.autonomous;
   }
 }
