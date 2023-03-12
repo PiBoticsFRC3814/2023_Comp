@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.*;
 
@@ -19,10 +20,12 @@ public class Auton2 extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new GyroReset(gyro),
-      new PositionGrid(drivetrain, robotStates, gyro),
       new ScoreTop(arm, grabber, robotStates),
-      new StowAngle(arm, grabber),
-      new AutoDriveDistance(drivetrain, gyro, () -> Constants.AUTON_2_DISTANCE)
+      new PositionGrid(drivetrain, robotStates, gyro, grabber),
+      new GrabberToggle(grabber),
+      new WaitCommand(0.5),
+      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> Constants.AUTON_2_DISTANCE, () -> 180.0, () -> -10.0),
+      new GyroReset(gyro)
     );
   }
 }

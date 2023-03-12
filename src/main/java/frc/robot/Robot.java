@@ -96,6 +96,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Arm Distance (rev)", m_robotContainer.m_arm.extendEncoder.getPosition() - m_robotContainer.m_arm.extendOffset);
     m_robotContainer.m_gyroSwerveDrive.outputEncoderPos();
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
+    SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
   }
 
   @Override

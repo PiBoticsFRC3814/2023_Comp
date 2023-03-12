@@ -15,7 +15,9 @@ public class Grabber extends SubsystemBase {
           PneumaticsModuleType.CTREPCM, Constants.CLAW_ID_OPEN, Constants.CLAW_ID_CLOSE);
   public boolean clawOpen;
   /** Creates a new Grabber. */
-  public Grabber() {}
+  public Grabber() {
+    clawOpen = false;
+  }
 
   @Override
   public void periodic() {

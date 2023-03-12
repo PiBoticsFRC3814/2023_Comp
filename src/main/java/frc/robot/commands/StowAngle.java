@@ -32,7 +32,6 @@ public class StowAngle extends CommandBase {
   @Override
   public void execute() {
     m_Arm.ArmDistance(0);
-    m_Grabber.GrabberClose();
     if(m_Arm.extendAtPos) m_Arm.ArmAngle(Constants.STOW_ANGLE);
   }
 

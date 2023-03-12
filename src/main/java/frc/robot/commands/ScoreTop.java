@@ -42,8 +42,6 @@ public class ScoreTop extends CommandBase {
       m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
       finished2 = m_Arm.extendAtPos;
     } else finished = m_Arm.shoulderAtPos;
-
-    if(finished && finished2 && m_robotStates.autonomous) m_Grabber.GrabberOpen();
   }
 
   // Called once the command ends or is interrupted.

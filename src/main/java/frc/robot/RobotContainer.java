@@ -33,7 +33,7 @@ public class RobotContainer {
   public final RobotStates m_robotStates = new RobotStates();
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
 
-  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp);
+  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp, m_grabber);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
   private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
   private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
@@ -94,7 +94,7 @@ public class RobotContainer {
 
     new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive, m_robotStates));
     new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive, m_robotStates));
-    new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp));
+    new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp, m_grabber));
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
 
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));

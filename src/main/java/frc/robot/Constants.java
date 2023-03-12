@@ -22,8 +22,8 @@ public final class Constants {
   public static final double SLOW_SPEED = 0.5;
   public static final double FAST_SPEED = 1.0;
 
-  public static final double AUTON_1_DISTANCE = 5.0; //meters
-  public static final double AUTON_2_DISTANCE = 10.0; //meters
+  public static final double AUTON_1_DISTANCE = 0.9; //meters
+  public static final double AUTON_2_DISTANCE = 1.1; //meters
 
   public static final int LIGHT_RELAY_PORT = 0; //port for Spike controlling lights
 
