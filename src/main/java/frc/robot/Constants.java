@@ -110,7 +110,7 @@ public final class Constants {
 
   public static final double SCORE_ANGLE_TOP_CONE = 0.60;
   public static final double SCORE_ANGLE_TOP_CUBE = 0.57;
-  public static final double SCORE_ANGLE_MIDDLE_CONE = 0.56;
+  public static final double SCORE_ANGLE_MIDDLE_CONE = 0.555;
   public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.51;
   public static final double SCORE_ANGLE_BOTTOM = 0.41;
   //todo: add logic for lower cube top:0.547; middle:0.500

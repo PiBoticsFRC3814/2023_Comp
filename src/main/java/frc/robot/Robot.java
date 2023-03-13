@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     m_robotContainer.m_robotStates.autonomous = true;
+    m_robotContainer.m_gyroSwerveDrive.WheelToBrake();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -85,6 +86,10 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.m_gyrp.reset();
+
+    //Comment out if necessary
+    m_robotContainer.m_gyroSwerveDrive.WheelToCoast();
+
     m_robotContainer.m_robotStates.autonomous = false;
   }
 
