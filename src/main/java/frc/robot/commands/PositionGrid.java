@@ -23,7 +23,7 @@ import frc.robot.subsystems.RobotStates;
 public class PositionGrid extends CommandBase {
 
   final double LINEAR_P = 0.4;
-  final double LINEAR_I = 0.001;
+  final double LINEAR_I = 0.0;
   final double LINEAR_D = 0.005;
   PIDController distanceController = new PIDController(LINEAR_P, LINEAR_I, LINEAR_D);
 
@@ -33,7 +33,7 @@ public class PositionGrid extends CommandBase {
   PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
 
   final double STRAFE_P = 0.4;
-  final double STRAFE_I = 0.001;
+  final double STRAFE_I = 0.0;
   final double STRAFE_D = 0.005;
   PIDController strafeController = new PIDController(STRAFE_P, STRAFE_I, STRAFE_D);
 
@@ -106,22 +106,18 @@ public class PositionGrid extends CommandBase {
           distanceX = xPos;
           if(distance != 0.0){
             if(Math.abs(distance - 0.78) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 0.78); else inPositionZ = true;
+            //*
             if(m_robotStates.autonomous)rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 0.0);
             else  rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 180.0);
+            //*/
             if(Math.abs(distanceX - 0.2023) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, 0.1523); else inPositionX = true;
           }
-
-          SmartDashboard.putNumber("Distance", distance);
-          SmartDashboard.putNumber("Correction", forwardSpeed);
         }
-        DriverStation.reportError("Got Position", false);
       }
       forwardSpeed = MathUtil.clamp(forwardSpeed, -0.2, 0.2);
       rotateSpeed =   MathUtil.clamp(rotateSpeed, -0.2, 0.2);
       strafeSpeed =   MathUtil.clamp(strafeSpeed, -0.2, 0.2);
-    } else {
     }
-    //if(timer.hasElapsed(Constants.SCORE_FWD_TIME)) forwardSpeed = Constants.SCORE_SPEED;
 
     m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
   }

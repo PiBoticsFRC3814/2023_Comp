@@ -22,7 +22,7 @@ public class AutonWithBalance extends SequentialCommandGroup {
       new GyroReset(gyro),
       new ScoreTop(arm, grabber, robotStates),
       new PositionGrid(drivetrain, robotStates, gyro, grabber),
-      new ScoreTop(arm, grabber, robotStates),
+      //new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber),
       new WaitCommand(1.0),
       new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_BALANCE_DISTANCE,  () -> 0.0),

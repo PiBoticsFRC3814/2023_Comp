@@ -30,7 +30,7 @@ public class AutoDriveDistance extends CommandBase {
     this.direction = direction.getAsDouble();
 
     driveProfile = new TrapezoidProfile(
-      new TrapezoidProfile.Constraints(0.5, 0.5),
+      new TrapezoidProfile.Constraints(0.3, 0.5),
        new TrapezoidProfile.State(distance.getAsDouble(), 0.0),
         new TrapezoidProfile.State(0.0, 0.0)
     );
@@ -51,7 +51,7 @@ public class AutoDriveDistance extends CommandBase {
   @Override
   public void execute() {
     var setpoint = driveProfile.calculate(autoTimer.get());;
-    drivetrain.gyroDrive(setpoint.velocity * Math.sin(Math.toRadians(direction)), setpoint.velocity * Math.cos(Math.toRadians(direction)), 0.0, Math.toRadians(gyro.getAngle()));
+    drivetrain.drive(setpoint.velocity * Math.sin(Math.toRadians(direction)), setpoint.velocity * Math.cos(Math.toRadians(direction)), 0.0);
   }
 
   // Called once the command ends or is interrupted.
