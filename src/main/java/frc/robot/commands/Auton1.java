@@ -15,13 +15,13 @@ import frc.robot.subsystems.*;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class Auton1 extends SequentialCommandGroup {
   /** Creates a new Auton1. */
-  public Auton1(GyroSwerveDrive drivetrain, RobotStates robotStates, Grabber grabber, Arm arm, ADIS16470_IMU gyro) {
+  public Auton1(GyroSwerveDrive drivetrain, RobotStates robotStates, Grabber grabber, Arm arm, ADIS16470_IMU gyro, Limelight limelight) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new GyroReset(gyro),
       new ScoreTop(arm, grabber, robotStates),
-      new PositionGrid(drivetrain, robotStates, gyro, grabber),
+      new PositionGrid(drivetrain, robotStates, limelight, gyro),
       new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber),
       new WaitCommand(1.0),
