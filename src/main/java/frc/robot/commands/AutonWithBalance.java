@@ -13,9 +13,9 @@ import frc.robot.subsystems.*;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Auton1 extends SequentialCommandGroup {
-  /** Creates a new Auton1. */
-  public Auton1(GyroSwerveDrive drivetrain, RobotStates robotStates, Grabber grabber, Arm arm, ADIS16470_IMU gyro) {
+public class AutonWithBalance extends SequentialCommandGroup {
+  /** Creates a new AutonWithBalance. */
+  public AutonWithBalance(GyroSwerveDrive drivetrain, RobotStates robotStates, Grabber grabber, Arm arm, ADIS16470_IMU gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -25,9 +25,8 @@ public class Auton1 extends SequentialCommandGroup {
       new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber),
       new WaitCommand(1.0),
-      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_1_DISTANCE, () -> 10.0),
-      new TurnToHeading(drivetrain, gyro, () -> 180.0),
-      new GyroReset(gyro)
+      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_BALANCE_DISTANCE,  () -> 0.0),
+      new AutoBalance(drivetrain, gyro)
     );
   }
 }

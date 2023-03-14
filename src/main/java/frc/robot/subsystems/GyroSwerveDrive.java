@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,12 +12,6 @@ public class GyroSwerveDrive extends SubsystemBase {
   private double[] angle = {0.0, 0.0, 0.0, 0.0};
   private RobotStates m_RobotStates;
 
-  PIDController steerController = new PIDController(
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[1],
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[2]
-  );
-
   private SlewRateLimiter joystickSlewLimiterX;
   private SlewRateLimiter joystickSlewLimiterY;
   private SlewRateLimiter joystickSlewLimiterZ;
@@ -29,7 +21,6 @@ public class GyroSwerveDrive extends SubsystemBase {
   };
 
   public GyroSwerveDrive(RobotStates robotStates) {
-    steerController.enableContinuousInput(0, 360);
     m_RobotStates = robotStates;
     joystickSlewLimiterX = new SlewRateLimiter(Constants.JOYSTICK_X_SLEW_RATE);
     joystickSlewLimiterY = new SlewRateLimiter(Constants.JOYSTICK_Y_SLEW_RATE);

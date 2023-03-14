@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,10 +32,10 @@ public class RobotContainer {
   public final RobotStates m_robotStates = new RobotStates();
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
 
-  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp, m_grabber);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
   private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
   private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
+  private final CommandBase m_balanceAuton = new AutonWithBalance(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -64,7 +63,7 @@ public class RobotContainer {
     m_autoChooser.setDefaultOption("Do Nothing", m_brakeAndWait);
     m_autoChooser.addOption("Far left", m_auton1);
     m_autoChooser.addOption("Far Right", m_auton2);
-    m_autoChooser.addOption("MoveToScore", m_scorePosition);
+    m_autoChooser.addOption("Center with balance (WIP)", m_balanceAuton);
     SmartDashboard.putData("Auton Chooser", m_autoChooser);
 
     configureButtonBindings();

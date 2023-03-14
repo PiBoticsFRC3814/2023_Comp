@@ -83,7 +83,6 @@ public class PositionSubstation extends CommandBase {
     double distance = 0.0;
     double distanceX = 0.0;
     double poseResult[] = robotPose.get();
-    double aPos;
 
     if (gotTarget.get() == 1.0) {
       if (poseResult.length > 0) {
