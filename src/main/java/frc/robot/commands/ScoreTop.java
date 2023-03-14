@@ -16,7 +16,7 @@ public class ScoreTop extends CommandBase {
   Grabber m_Grabber;
   RobotStates m_robotStates;
   boolean finished;
-  boolean finished2;
+  boolean finished2, startMove;
   public ScoreTop(Arm arm, Grabber grabber, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
@@ -29,19 +29,25 @@ public class ScoreTop extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
+    startMove = !m_robotStates.autonomous;
     m_Arm.brake = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CUBE);
-    else m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CONE);
-    
-    if(finished){
-      m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
-      finished2 = m_Arm.extendAtPos;
-    } else finished = m_Arm.shoulderAtPos;
+    if(startMove){
+      if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CUBE);
+      else m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CONE);
+      
+      if(finished){
+        m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
+        finished2 = m_Arm.extendAtPos;
+      } else finished = m_Arm.shoulderAtPos;
+    } else {
+      m_Arm.ArmDistance(5);
+      startMove = m_Arm.extendAtPos;
+    }
   }
 
   // Called once the command ends or is interrupted.
