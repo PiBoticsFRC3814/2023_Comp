@@ -85,8 +85,6 @@ public class RobotContainer {
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
 
-
-    //TODO: Add substation, stow, and deploy
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     new JoystickButton(armController, 9).whileTrue(new DeployAngle(m_arm, m_grabber));
