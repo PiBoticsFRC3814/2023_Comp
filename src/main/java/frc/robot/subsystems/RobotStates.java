@@ -10,10 +10,12 @@ public class RobotStates extends SubsystemBase {
   /** Creates a new RobotStates. */
   public boolean inFrontOfCubeStation;
   public int moveFromLastAlign;
+  public boolean autonomous;
 
   public RobotStates() {
     inFrontOfCubeStation = false;
     moveFromLastAlign = 0;
+    autonomous = false;
   }
 
   @Override

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,12 +31,13 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
-  public static final CommLEDS m_commLEDS = new CommLEDS();
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
   public final Limelight m_Limelight = new Limelight();
 
   private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_Limelight, m_gyrp);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
+  private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);
+  private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -60,8 +62,10 @@ public class RobotContainer {
             m_arm, () -> armController.getRawAxis(3), () -> armController.getLeftY()));
     // */
 
-    m_autoChooser.setDefaultOption("ScorePosition", m_scorePosition);
-    m_autoChooser.addOption("Brake and wait", m_brakeAndWait);
+    m_autoChooser.setDefaultOption("Do Nothing", m_brakeAndWait);
+    m_autoChooser.addOption("Far left", m_auton1);
+    m_autoChooser.addOption("Far Right", m_auton2);
+    m_autoChooser.addOption("MoveToScore", m_scorePosition);
     SmartDashboard.putData("Auton Chooser", m_autoChooser);
 
     configureButtonBindings();
@@ -76,10 +80,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
-    new JoystickButton(driveStick, 4).whileTrue(new PositionSubstationRight(m_gyroSwerveDrive, m_robotStates, m_Limelight, m_gyrp));
-    new JoystickButton(driveStick, 3).whileTrue(new PositionSubstationLeft(m_gyroSwerveDrive, m_robotStates, m_Limelight, m_gyrp));
-    new JoystickButton(driveStick, 10).whileTrue(new LightsCone(m_commLEDS));
-    new JoystickButton(driveStick, 11).whileTrue(new LightsCube(m_commLEDS));
+    new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive, m_gyrp));
+    new JoystickButton(driveStick, 1).whileTrue(new LightsCube());
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));

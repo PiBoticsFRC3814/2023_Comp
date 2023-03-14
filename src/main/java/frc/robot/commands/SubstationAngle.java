@@ -29,13 +29,14 @@ public class SubstationAngle extends CommandBase {
     finished1 = false;
     finished2 = false;
     finished3 = false;
+    m_Arm.brake = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(!finished1) {
-      m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+      m_Arm.ArmDistance(0);
       finished1 = m_Arm.extendAtPos;
     }
 
@@ -46,7 +47,7 @@ public class SubstationAngle extends CommandBase {
 
     if(finished1 && finished2 && !finished3){
       m_Arm.ArmDistance(Constants.SUBSTATION_REV);
-      finished2 = m_Arm.shoulderAtPos && m_Arm.extendAtPos;
+      finished3 = m_Arm.shoulderAtPos && m_Arm.extendAtPos;
     }
   }
 
@@ -57,6 +58,6 @@ public class SubstationAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished1 && finished2 && finished3;
+    return finished1 && finished2 && finished3 && false;
   }
 }

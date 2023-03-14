@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotStates;
@@ -19,6 +20,9 @@ public class PositionGrid extends CommandBase {
   ADIS16470_IMU gyro;
 
   boolean finished;
+
+  ADIS16470_IMU m_gyro;
+  Grabber grabber;
 
   /** Creates a new AutoPosition. */
   public PositionGrid(GyroSwerveDrive drivetrain, RobotStates robotStates, Limelight limelight, ADIS16470_IMU gyro) {

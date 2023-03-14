@@ -52,6 +52,8 @@ public class Arm extends SubsystemBase {
 
   public DigitalInput extendHomeSwitch;
 
+  public boolean brake;
+
   public Arm() {
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
@@ -95,11 +97,12 @@ public class Arm extends SubsystemBase {
     angleController.disableContinuousInput();
     angleController.setTolerance(0.01);
 
-    armFFUp = new ArmFeedforward(Constants.ARM_ANGLE_FF_UP[0], Constants.ARM_ANGLE_FF_UP[1], Constants.ARM_ANGLE_FF_UP[2], Constants.ARM_ANGLE_FF_UP[3]);
-    armFFDown = new ArmFeedforward(Constants.ARM_ANGLE_FF_DOWN[0], Constants.ARM_ANGLE_FF_DOWN[1], Constants.ARM_ANGLE_FF_DOWN[2], Constants.ARM_ANGLE_FF_DOWN[3]);
+    armFFUp = new ArmFeedforward(Constants.ARM_ANGLE_FF_UP[0], Constants.ARM_ANGLE_FF_UP[1], Constants.ARM_ANGLE_FF_UP[2]);
+    armFFDown = new ArmFeedforward(Constants.ARM_ANGLE_FF_DOWN[0], Constants.ARM_ANGLE_FF_DOWN[1], Constants.ARM_ANGLE_FF_DOWN[2]);
 
     extendAtPos = false;
     shoulderAtPos = false;
+    brake = false;
   }
 
   private double applyDeadzone(double input, double deadzone) {
@@ -116,8 +119,8 @@ public class Arm extends SubsystemBase {
     }
     if (armSpeed != 0.0) armBrake.set(DoubleSolenoid.Value.kForward);
     else armBrake.set(DoubleSolenoid.Value.kReverse);
-    shoulder1.set(armSpeed * 0.4);
-    shoulder2.set(armSpeed * 0.4);
+    shoulder1.set(armSpeed * 0.5);
+    shoulder2.set(armSpeed * 0.5);
     extend.set(-extendSpeed);
   }
 
@@ -131,16 +134,16 @@ public class Arm extends SubsystemBase {
     //*
     double trueAngle = GetArmAngle();
     if((trueAngle >= 0.2) && (trueAngle <= 0.75)){
-      feedforward = angle > 0.53 ? armFFUp.calculate((2 * angle - (599.0 / 450.0)) * Math.PI, 0.0) : 0.0;
       correction = -angleController.calculate(trueAngle, angle) + (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3];
-      //correction += feedforward;
-      SmartDashboard.putNumber("FF", feedforward);
+      SmartDashboard.putNumber("FF", feedforward / (2 * Math.PI));
       SmartDashboard.putNumber("correction", correction);
       //armBrake.set(DoubleSolenoid.Value.kForward);
     }
     //*/
     shoulderAtPos = angleController.atSetpoint();
-    if (shoulderAtPos){
+    if(!brake) brake = Math.abs(angle - trueAngle) <= 0.01;
+    //if (Math.abs(angle - trueAngle) <= 0.01){
+    if(brake){
       armBrake.set(DoubleSolenoid.Value.kReverse);
       DriverStation.reportError("Brake on", false);
     } else {

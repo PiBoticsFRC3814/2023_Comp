@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_robotContainer.m_robotStates.autonomous = true;
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -84,6 +85,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.m_gyrp.reset();
+    m_robotContainer.m_robotStates.autonomous = false;
   }
 
   /** This function is called periodically during operator control. */
@@ -94,6 +96,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Arm Distance (rev)", m_robotContainer.m_arm.extendEncoder.getPosition() - m_robotContainer.m_arm.extendOffset);
     m_robotContainer.m_gyroSwerveDrive.outputEncoderPos();
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
+    SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
   }
 
   @Override
