@@ -137,4 +137,11 @@ public class GyroSwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Module 3 encoder", swerveMod[2].getSteerAngle());
     SmartDashboard.putNumber("Module 4 encoder", swerveMod[3].getSteerAngle());
   }
+
+  public void motorZero(){
+    for (int i = 0; i < 4; i++) {
+      swerveMod[i].driveMotor.set(0.0);
+      swerveMod[i].steerMotor.set(0.0);
+    }
+  }
 }

@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.GyroSwerveDrive;
@@ -24,6 +25,7 @@ public class AutoBalance extends CommandBase {
     balanceController = new PIDController(Constants.AUTO_BALANCE_PID[0], Constants.AUTO_BALANCE_PID[1], Constants.AUTO_BALANCE_PID[2]);
     balanceController.setTolerance(1.0, 0.1);
     balanceController.setSetpoint(0.0);
+    balanceController.enableContinuousInput(0, 360.0);
     addRequirements(drivetrain);
   }
 
@@ -34,7 +36,9 @@ public class AutoBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(0.0, MathUtil.clamp(balanceController.calculate(gyro.getYComplementaryAngle()), -0.3, 0.3), 0.0);
+    double output = MathUtil.clamp(balanceController.calculate(gyro.getXFilteredAccelAngle()), -0.4, 0.4);
+    drivetrain.drive(0.0, -output, 0.0);
+    SmartDashboard.putNumber("Balance output", output);
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +50,6 @@ public class AutoBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return balanceController.atSetpoint();
+    return false;
   }
 }

@@ -72,9 +72,9 @@ public class PositionGrid extends CommandBase {
     double[] result = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     turnController.enableContinuousInput(0.0, 360.0);
-    turnController.setTolerance(0.01);
-    distanceController.setTolerance(0.01);
-    strafeController.setTolerance(0.01);
+    turnController.setTolerance(0.03);
+    distanceController.setTolerance(0.03);
+    strafeController.setTolerance(0.03);
 
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     robotPose = limelight.getDoubleArrayTopic("targetpose_robotspace").subscribe(result);
@@ -127,7 +127,7 @@ public class PositionGrid extends CommandBase {
   public void end(boolean interrupted) {
     m_robotStates.inFrontOfCubeStation = true;
     m_robotStates.moveFromLastAlign = 0;
-    m_drivetrain.drive(0.0, 0.0, 0.0);
+    m_drivetrain.motorZero();
   }
 
   // Returns true when the command should end.
