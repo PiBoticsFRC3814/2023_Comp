@@ -4,28 +4,43 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.RobotStates;
 
 public class GrabberToggle extends CommandBase {
   /** Creates a new GrabberCommand. */
   Grabber m_grabber;
+  RobotStates robotStates;
+  Timer autonWait;
+  boolean finished;
 
-  public GrabberToggle(Grabber grabber) {
+  public GrabberToggle(Grabber grabber, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_grabber = grabber;
-    addRequirements(grabber);
+    this.robotStates = robotStates;
+    autonWait = new Timer();
+    addRequirements(grabber, robotStates);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    autonWait.reset();
+    autonWait.stop();
+    finished = false;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_grabber.clawOpen) m_grabber.GrabberClose();
-    else m_grabber.GrabberOpen();
+    if(!finished){
+      if (m_grabber.clawOpen) m_grabber.GrabberClose();
+      else m_grabber.GrabberOpen();
+      autonWait.start();
+      finished = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -35,6 +50,6 @@ public class GrabberToggle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return !robotStates.autonomous || autonWait.get() >= 1.0;
   }
 }

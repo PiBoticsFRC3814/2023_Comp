@@ -92,9 +92,9 @@ public class RobotContainer {
     new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive, m_robotStates));
     new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive, m_robotStates));
     new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp, m_grabber));
-    new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
+    new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
 
-    new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
+    new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
     new JoystickButton(testController, XboxController.Button.kB.value).whileTrue(new ArmLevel(m_arm));
     new JoystickButton(testController, 6).whileTrue(new TestExtend(m_arm, m_grabber));
   }
