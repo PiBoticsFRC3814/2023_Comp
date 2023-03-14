@@ -7,12 +7,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.RobotStates;
 
-public class PositionGrid extends CommandBase {
+public class PositionSubstationLeft extends CommandBase {
 
   GyroSwerveDrive m_drivetrain;
   RobotStates m_robotStates;
@@ -21,11 +20,8 @@ public class PositionGrid extends CommandBase {
 
   boolean finished;
 
-  ADIS16470_IMU m_gyro;
-  Grabber grabber;
-
   /** Creates a new AutoPosition. */
-  public PositionGrid(GyroSwerveDrive drivetrain, RobotStates robotStates, Limelight limelight, ADIS16470_IMU gyro) {
+  public PositionSubstationLeft(GyroSwerveDrive drivetrain, RobotStates robotStates, Limelight limelight, ADIS16470_IMU gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     m_robotStates = robotStates;
@@ -37,7 +33,7 @@ public class PositionGrid extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    limelight.setPositionSetPoint(Constants.GRID_X_SETPOINT, Constants.GRID_Y_SETPOINT);
+    limelight.setPositionSetPoint(Constants.LEFT_SUBSTATION_X, Constants.SUBSTATION_Y);
     finished = false;
   }
 
@@ -48,7 +44,7 @@ public class PositionGrid extends CommandBase {
       m_drivetrain.drive(limelight.outputs);
       finished = limelight.inPosition;
     }
-    else m_drivetrain.driveAtHeading(180.0, 0.0, 0.0, gyro.getAngle());
+    else m_drivetrain.driveAtHeading(0.0, 0.0, 0.0, gyro.getAngle());
   }
 
   // Called once the command ends or is interrupted.

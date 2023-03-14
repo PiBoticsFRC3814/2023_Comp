@@ -81,6 +81,14 @@ public class GyroSwerveDrive extends SubsystemBase {
     setSetpoints();
   }
 
+  public void drive(double[] inputs) {
+    drive(inputs[0], inputs[1], inputs[2]);
+  }
+
+  public void driveAtHeading(double heading, double fwd, double str, double gyroAngle){
+    drive(str, fwd, MathUtil.clamp(steerController.calculate(gyroAngle % 360.0, heading), -0.3, 0.3));
+  }
+
   /*
    * Brake system
    */
