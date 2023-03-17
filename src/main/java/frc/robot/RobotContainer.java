@@ -41,7 +41,7 @@ public class RobotContainer {
 
   Joystick driveStick = new Joystick(2);
   XboxController armController = new XboxController(1);
-  XboxController testController = new XboxController(0);
+  //XboxController testController = new XboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -50,7 +50,6 @@ public class RobotContainer {
             () -> driveStick.getX(),
             () -> driveStick.getY(),
             () -> driveStick.getZ(),
-            () -> driveStick.getRawButtonPressed(2),
             m_gyrp,
             m_gyroSwerveDrive));
 
@@ -80,7 +79,9 @@ public class RobotContainer {
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
     new JoystickButton(driveStick, 4).whileTrue(new PositionSubstation(m_gyroSwerveDrive, m_gyrp));
     new JoystickButton(driveStick, 1).whileTrue(new LightsCube());
-    new JoystickButton(driveStick, 3).whileTrue(new AutoBalance(m_gyroSwerveDrive, m_gyrp));
+    new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_robotStates));
+    new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_robotStates));
+
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
@@ -95,9 +96,11 @@ public class RobotContainer {
     new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_gyrp, m_grabber));
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
 
+    /*
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
     new JoystickButton(testController, XboxController.Button.kB.value).whileTrue(new ArmLevel(m_arm));
     new JoystickButton(testController, 6).whileTrue(new TestExtend(m_arm, m_grabber));
+    */
   }
 
   /**

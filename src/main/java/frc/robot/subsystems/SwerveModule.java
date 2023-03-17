@@ -21,7 +21,6 @@ public class SwerveModule {
 
 	public double                 position;
 	private int index;
-	public RelativeEncoder velocityEncoder;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -29,10 +28,8 @@ public class SwerveModule {
 		driveMotor.setIdleMode(IdleMode.kBrake);
 		driveMotor.setInverted( Constants.DRIVE_MOTOR_INVERTED[swerveModIndex] );
 		driveMotor.setOpenLoopRampRate( 0.2 );
-		driveMotor.setSmartCurrentLimit(70, 50);
+		driveMotor.setSmartCurrentLimit(50, 40);
 
-
-    //*
 		driveVelocityPIDController = driveMotor.getPIDController();
 		driveVelocityPIDController.setP(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][0]);
 		driveVelocityPIDController.setI(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][1]);
@@ -40,11 +37,8 @@ public class SwerveModule {
 		driveVelocityPIDController.setIZone(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][3]);
 		driveVelocityPIDController.setFF(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][4]);
 
-		if(swerveModIndex == 0){
-			velocityEncoder = driveMotor.getEncoder();
-		}
-    //*/
 
+		
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
 		steerMotor.setIdleMode(IdleMode.kBrake);
 		steerMotor.setInverted( Constants.STEER_MOTOR_INVERTED[swerveModIndex] );
