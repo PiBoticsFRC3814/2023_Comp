@@ -4,52 +4,51 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Grabber;
-import frc.robot.subsystems.RobotStates;
+import frc.robot.subsystems.GyroSwerveDrive;
 
-public class GrabberToggle extends CommandBase {
-  /** Creates a new GrabberCommand. */
-  Grabber m_grabber;
-  RobotStates robotStates;
-  Timer autonWait;
+public class DriveTillAngleChange extends CommandBase {
+  /** Creates a new DriveTillAngleChange. */
+  GyroSwerveDrive drivetrain;
+  ADIS16470_IMU gyro;
   boolean finished;
+  Timer driveTimer;
 
-  public GrabberToggle(Grabber grabber, RobotStates robotStates) {
+  public DriveTillAngleChange(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro) {
+    this.drivetrain = drivetrain;
+    this.gyro = gyro;
+    driveTimer = new Timer();
+    addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
-    m_grabber = grabber;
-    this.robotStates = robotStates;
-    autonWait = new Timer();
-    addRequirements(grabber, robotStates);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    autonWait.reset();
-    autonWait.stop();
     finished = false;
+    drivetrain.drive(0.0, -0.3, 0.0);
+    driveTimer.reset();
+    driveTimer.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(!finished){
-      if (m_grabber.clawOpen) m_grabber.GrabberClose();
-      else m_grabber.GrabberOpen();
-      autonWait.start();
-      finished = true;
-    }
+    if(Math.abs(gyro.getXFilteredAccelAngle()) >= 12.0) finished = true;
+    if(finished) driveTimer.start();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrain.drive(0.0, 0.0, 0.0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !robotStates.autonomous || autonWait.get() >= 1.0;
+    return driveTimer.get() >= 1.0;
   }
 }

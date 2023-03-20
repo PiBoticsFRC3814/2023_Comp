@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
@@ -16,7 +17,7 @@ public class ScoreTop extends CommandBase {
   Grabber m_Grabber;
   RobotStates m_robotStates;
   boolean finished;
-  boolean finished2;
+  boolean finished2, startMove;
   public ScoreTop(Arm arm, Grabber grabber, RobotStates robotStates) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
@@ -29,19 +30,26 @@ public class ScoreTop extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
+    startMove = !m_robotStates.autonomous;
     m_Arm.brake = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CUBE);
-    else m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CONE);
-    
-    if(finished){
-      m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
-      finished2 = m_Arm.extendAtPos;
-    } else finished = m_Arm.shoulderAtPos;
+    if(!startMove){
+      m_Arm.ArmDistance(-5);
+      startMove = m_Arm.extendAtPos;
+    }
+    if(startMove){
+      if(m_robotStates.inFrontOfCubeStation) m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CUBE);
+      else m_Arm.ArmAngle(Constants.SCORE_ANGLE_TOP_CONE);
+      
+      if(finished){
+        m_Arm.ArmDistance(Constants.EXTEND_REVS_3);
+        finished2 = m_Arm.extendAtPos;
+      } else finished = m_Arm.shoulderAtPos;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -51,6 +59,6 @@ public class ScoreTop extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Arm.extendAtPos && m_Arm.shoulderAtPos && m_robotStates.autonomous;
+    return finished2 && m_robotStates.autonomous && startMove ;
   }
 }

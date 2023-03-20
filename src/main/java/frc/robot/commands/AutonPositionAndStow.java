@@ -18,10 +18,10 @@ import frc.robot.subsystems.GyroSwerveDrive;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutonPositionAndStow extends ParallelDeadlineGroup {
   /** Creates a new AutonPositionAndStow. */
-  public AutonPositionAndStow(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro, Arm arm, Grabber grabber, DoubleSupplier distance, DoubleSupplier heading, DoubleSupplier direction) {
+  public AutonPositionAndStow(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro, Arm arm, Grabber grabber, DoubleSupplier distance, DoubleSupplier direction) {
     // Add the deadline command in the super() call. Add other commands using
     // addCommands().
-    super(new AutoDriveDistance(drivetrain, gyro, distance, heading, direction));
+    super(new AutoDriveDistance(drivetrain, gyro, distance, direction));
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new StowAngle(arm, grabber));
   }

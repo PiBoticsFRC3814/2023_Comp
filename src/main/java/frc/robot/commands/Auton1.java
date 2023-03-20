@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.drive.GyroSwerveDriveCommand;
 import frc.robot.subsystems.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,11 +22,11 @@ public class Auton1 extends SequentialCommandGroup {
     addCommands(
       new GyroReset(gyro),
       new ScoreTop(arm, grabber, robotStates),
-      new PositionGrid(drivetrain, robotStates, limelight, gyro),
-      new ScoreTop(arm, grabber, robotStates),
-      new GrabberToggle(grabber),
-      new WaitCommand(1.0),
-      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_1_DISTANCE, () -> 0.0, () -> 10.0),
+      new PositionGrid(drivetrain, robotStates, gyro, grabber),
+      //new ScoreTop(arm, grabber, robotStates),
+      new GrabberToggle(grabber, robotStates),
+      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_1_DISTANCE, () -> Math.toRadians(-10.0)),
+      new TurnToHeading(drivetrain, gyro, () -> 180.0),
       new GyroReset(gyro)
     );
   }

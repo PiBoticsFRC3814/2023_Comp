@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,12 +19,6 @@ public class GyroSwerveDrive extends SubsystemBase {
   private double[] angle = {0.0, 0.0, 0.0, 0.0};
   private RobotStates m_RobotStates;
 
-  PIDController steerController = new PIDController(
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[0],
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[1],
-          Constants.SWERVE_ROTATION_PID_CONSTANTS[2]
-  );
-
   private SlewRateLimiter joystickSlewLimiterX;
   private SlewRateLimiter joystickSlewLimiterY;
   private SlewRateLimiter joystickSlewLimiterZ;
@@ -40,7 +32,6 @@ public class GyroSwerveDrive extends SubsystemBase {
   };
 
   public GyroSwerveDrive(RobotStates robotStates, ADIS16470_IMU gyro) {
-    steerController.enableContinuousInput(0, 360);
     m_RobotStates = robotStates;
     joystickSlewLimiterX = new SlewRateLimiter(Constants.JOYSTICK_X_SLEW_RATE);
     joystickSlewLimiterY = new SlewRateLimiter(Constants.JOYSTICK_Y_SLEW_RATE);
@@ -94,16 +85,16 @@ public class GyroSwerveDrive extends SubsystemBase {
     return (input < 0.0 ? -result : result);
   }
 
-  public void alteredGyroDrive(double dX, double dY, double dZ, double driveMultiplier, double gyroAngle){
+  public void alteredGyroDrive(double dX, double dY, double dZ, double gyroAngle){
     dX = -applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
     dY = -applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
     dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE) * 0.5;
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
       gyroDrive(
-        joystickSlewLimiterX.calculate(dX * driveMultiplier),
-         joystickSlewLimiterY.calculate(dY * driveMultiplier),
-         joystickSlewLimiterZ.calculate(dZ * driveMultiplier),
-          gyroAngle
+        joystickSlewLimiterX.calculate(dX * m_RobotStates.driveMultiplier),
+         joystickSlewLimiterY.calculate(dY * m_RobotStates.driveMultiplier),
+          joystickSlewLimiterZ.calculate(dZ * m_RobotStates.driveMultiplier),
+           gyroAngle
       );
       m_RobotStates.inFrontOfCubeStation = false;
     } else{
@@ -135,10 +126,6 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void drive(double[] inputs) {
     drive(inputs[0], inputs[1], inputs[2]);
-  }
-
-  public void driveAtHeading(double heading, double fwd, double str, double gyroAngle){
-    drive(str, fwd, MathUtil.clamp(steerController.calculate(gyroAngle % 360.0, heading), -0.3, 0.3));
   }
 
   /*
@@ -205,5 +192,12 @@ public class GyroSwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Module 2 encoder", swerveMod[1].getSteerAngle());
     SmartDashboard.putNumber("Module 3 encoder", swerveMod[2].getSteerAngle());
     SmartDashboard.putNumber("Module 4 encoder", swerveMod[3].getSteerAngle());
+  }
+
+  public void motorZero(){
+    for (int i = 0; i < 4; i++) {
+      swerveMod[i].driveMotor.set(0.0);
+      swerveMod[i].steerMotor.set(0.0);
+    }
   }
 }

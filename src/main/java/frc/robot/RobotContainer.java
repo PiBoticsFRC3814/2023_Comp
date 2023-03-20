@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,12 +36,13 @@ public class RobotContainer {
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
   private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);
   private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);
+  private final CommandBase m_balanceAuton = new AutonWithBalance(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp);
 
   SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
   Joystick driveStick = new Joystick(2);
   XboxController armController = new XboxController(1);
-  XboxController testController = new XboxController(0);
+  //XboxController testController = new XboxController(0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -51,7 +51,6 @@ public class RobotContainer {
             () -> driveStick.getX(),
             () -> driveStick.getY(),
             () -> driveStick.getZ(),
-            () -> driveStick.getRawButtonPressed(2),
             m_gyrp,
             m_gyroSwerveDrive));
 
@@ -79,22 +78,25 @@ public class RobotContainer {
     new JoystickButton(driveStick, 6).whileTrue(new GyroReset(m_gyrp));
     new JoystickButton(driveStick, 5).whileTrue(new HardBrake(m_gyroSwerveDrive));
     new JoystickButton(driveStick, 1).whileTrue(new LightsCube());
+    new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_robotStates));
+    new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_robotStates));
+
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
 
-
-    //TODO: Add substation, stow, and deploy
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     new JoystickButton(armController, 9).whileTrue(new DeployAngle(m_arm, m_grabber));
 
-    new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
+    new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
 
-    new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));
+    /*
+    new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
     new JoystickButton(testController, XboxController.Button.kB.value).whileTrue(new ArmLevel(m_arm));
     new JoystickButton(testController, 6).whileTrue(new TestExtend(m_arm, m_grabber));
+    */
   }
 
   /**
