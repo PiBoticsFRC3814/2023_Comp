@@ -31,10 +31,9 @@ public class RobotContainer {
   public final Arm m_arm = new Arm();
   public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
-  public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates);
-  public final Limelight m_Limelight = new Limelight();
+  public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates, m_gyrp);
+  public final Limelight m_Limelight = new Limelight(m_robotStates);
 
-  private final CommandBase m_scorePosition = new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_Limelight, m_gyrp);
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
   private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);
   private final CommandBase m_auton2 = new Auton2(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);
@@ -65,7 +64,6 @@ public class RobotContainer {
     m_autoChooser.setDefaultOption("Do Nothing", m_brakeAndWait);
     m_autoChooser.addOption("Far left", m_auton1);
     m_autoChooser.addOption("Far Right", m_auton2);
-    m_autoChooser.addOption("MoveToScore", m_scorePosition);
     SmartDashboard.putData("Auton Chooser", m_autoChooser);
 
     configureButtonBindings();
@@ -92,9 +90,6 @@ public class RobotContainer {
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     new JoystickButton(armController, 9).whileTrue(new DeployAngle(m_arm, m_grabber));
 
-    new JoystickButton(armController, 5).whileTrue(new MoveLeft(m_gyroSwerveDrive, m_robotStates));
-    new JoystickButton(armController, 6).whileTrue(new MoveRight(m_gyroSwerveDrive, m_robotStates));
-    new JoystickButton(armController, 7).whileTrue(new PositionGrid(m_gyroSwerveDrive, m_robotStates, m_Limelight, m_gyrp));
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber));
 
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber));

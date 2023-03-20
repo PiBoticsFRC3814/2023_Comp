@@ -7,23 +7,27 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 
 public class Limelight extends SubsystemBase {
   /** Creates a new Limelight. */
   public boolean targetInView;
   public Pose2d targetPose2d;
   public double closestTagID;
+  private RobotStates robotStates;
 
-  public Limelight() {
+  public Limelight(RobotStates robotStates) {
+    this.robotStates = robotStates;
   }
 
   @Override
   public void periodic() {
     targetInView = LimelightHelpers.getTV("");
     if(targetInView){
-      targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getTargetPose_RobotSpace(""));
+      targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace(""));
       closestTagID = LimelightHelpers.getFiducialID("");
     }
+    if((closestTagID != 5.0 || closestTagID != 4.0) && targetInView && (Math.abs(targetPose2d.getX()) <= 2.0)){
+      robotStates.inFrontOfCubeStation = true;
+    } else robotStates.inFrontOfCubeStation = false;
   }
 }

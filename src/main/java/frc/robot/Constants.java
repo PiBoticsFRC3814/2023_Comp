@@ -73,6 +73,10 @@ public final class Constants {
 
   public static final double MAX_DRIVETRAIN_SPEED = 5000;
 
+  public static final double[] TAG_ALIGN_STR_PID = {0.4, 0.0, 0.005};
+  public static final double[] TAG_ALIGN_ROT_PID = {0.005, 0.0, 0.0};
+  public static final double[] TAG_ALIGN_FWD_PID = {0.4, 0.0, 0.005};
+
   /*
    * Swerve rotation PID Constants
    */

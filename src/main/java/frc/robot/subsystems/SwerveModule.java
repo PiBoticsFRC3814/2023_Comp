@@ -8,6 +8,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -73,12 +76,20 @@ public class SwerveModule {
 		return getOffsetSteerEncoderAngle(steerAngleEncoder.getAbsolutePosition());
 	}
 
+	public void resetModule(){
+		driveEncoder.setPosition(0.0);
+	}
+
+	public SwerveModulePosition getPosition(){
+		return new SwerveModulePosition(driveEncoder.getPosition(), Rotation2d.fromDegrees(steerAngleEncoder.getAbsolutePosition()));
+	}
+
 	// angle and speed should be from -1.0 to 1.0, like a joystick input
 	public void drive( double speed, double angle ) {
 	    // Calculate the turning motor output from the turning PID controller.
 
 		//* Delete slash for tuning offset
-		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
+		double turnOutput = steerAnglePIDController.calculate( steerAngleEncoder.getAbsolutePosition(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
 		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED * speed, CANSparkMax.ControlType.kVelocity);
 		//driveMotor.set(speed);
