@@ -38,7 +38,7 @@ public class ScoreTop extends CommandBase {
   @Override
   public void execute() {
     if(!startMove){
-      m_Arm.ArmDistance(-5);
+      m_Arm.ArmDistance(-1);
       startMove = m_Arm.extendAtPos;
     }
     if(startMove){

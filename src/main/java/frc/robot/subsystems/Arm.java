@@ -95,7 +95,7 @@ public class Arm extends SubsystemBase {
             Constants.ARM_ANGLE_PID_CONSTANTS[2]);
 
     angleController.disableContinuousInput();
-    angleController.setTolerance(0.01);
+    angleController.setTolerance(0.015);
 
     armFFUp = new ArmFeedforward(Constants.ARM_ANGLE_FF_UP[0], Constants.ARM_ANGLE_FF_UP[1], Constants.ARM_ANGLE_FF_UP[2]);
     armFFDown = new ArmFeedforward(Constants.ARM_ANGLE_FF_DOWN[0], Constants.ARM_ANGLE_FF_DOWN[1], Constants.ARM_ANGLE_FF_DOWN[2]);
@@ -130,13 +130,10 @@ public class Arm extends SubsystemBase {
 
   public void ArmAngle(double angle) {
     double correction = 0;
-    double feedforward = 0;
     //*
     double trueAngle = GetArmAngle();
     if((trueAngle >= 0.2) && (trueAngle <= 0.75)){
       correction = -angleController.calculate(trueAngle, angle) + (0.53 - angle) * Constants.ARM_ANGLE_PID_CONSTANTS[3];
-      SmartDashboard.putNumber("FF", feedforward / (2 * Math.PI));
-      SmartDashboard.putNumber("correction", correction);
       //armBrake.set(DoubleSolenoid.Value.kForward);
     }
     //*/
@@ -169,6 +166,7 @@ public class Arm extends SubsystemBase {
     } else{
       extendController.setReference(position + extendOffset, ControlType.kPosition);
     }
-    extendAtPos = Math.abs(extend.getEncoder().getPosition() - extendOffset - position) <= 1;
+    extendAtPos = Math.abs(extend.getEncoder().getPosition() - extendOffset - position) <= 10;
+    System.out.println("position " + extend.getEncoder().getPosition() + " offset " + extendOffset + " desired " + position);
   }
 }

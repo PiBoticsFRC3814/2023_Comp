@@ -24,9 +24,9 @@ public final class Constants {
 
   public static final double AUTON_1_DISTANCE = 0.9; //meters
   public static final double AUTON_2_DISTANCE = 1.3; //meters
-  public static final double AUTON_BALANCE_DISTANCE = 0.5;
+  public static final double AUTON_BALANCE_DISTANCE = 0.4;
 
-  public static final double[] AUTO_BALANCE_PID = {0.0045, 0.0, 2.0e-5};
+  public static final double[] AUTO_BALANCE_PID = {0.003, 4.0e-5, 2.0e-3}; //6.4e-4
 
   public static final int LIGHT_RELAY_PORT = 0; //port for Spike controlling lights
 
@@ -52,10 +52,10 @@ public final class Constants {
 
   public static final double[] SWERVE_SETPOINT_OFFSET = {
     // must be between 0 & 360 degrees
-    360 - 305.1, // Front Right
-    360 - 83.7, // Rear Right
-    360 - 275.8, // Rear Left
-    360 - 59.2 // Front Left
+    360 - 273.51, // Front Right
+    360 - 81.47, // Rear Right
+    360 - 311.75, // Rear Left
+    360 - 238.45 // Front Left
   };
 
   public static final double[][] SWERVE_STEER_PID_CONSTANTS = {
@@ -89,7 +89,7 @@ public final class Constants {
 
 
   public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
-  public static final boolean[] DRIVE_MOTOR_INVERTED = {true, false, false, true};
+  public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, false, false};
 
   /*
    * Swerve constants for swerve module calculations
@@ -116,7 +116,7 @@ public final class Constants {
    */
   public static final double EXTEND_HOME_SPEED = -0.6;
   public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
-  public static final double[] ARM_ANGLE_PID_CONSTANTS = {4.0, 0.2, 0.016, 1.3};
+  public static final double[] ARM_ANGLE_PID_CONSTANTS = {4.0, 0.2, 0.016, 1.8};
   public static final double[] ARM_ANGLE_FF_UP =   {0.5, 1.0, 0.21};
   public static final double[] ARM_ANGLE_FF_DOWN = {0.5, 1.0, 0.21};
   public static final int ARM_ENCODER_PORT = 4;
@@ -125,20 +125,21 @@ public final class Constants {
   public static final double SCORE_FWD_TIME = 0.0;
   public static final double SCORE_SPEED = 0.0;
 
-  public static final double SCORE_ANGLE_TOP_CONE = 0.60;
+  public static final double SCORE_ANGLE_TOP_CONE = 0.605;
   public static final double SCORE_ANGLE_TOP_CUBE = 0.57;
   public static final double SCORE_ANGLE_MIDDLE_CONE = 0.56;
   public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.51;
   public static final double SCORE_ANGLE_BOTTOM = 0.41;
+  public static final double ANGLE_DEPLOY = 0.42;
   //todo: add logic for lower cube top:0.547; middle:0.500
-  public static final double DEPLOY_ANGLE = 0.41;
+  public static final double DEPLOY_ANGLE = 0.42;
   public static final double STOW_ANGLE = 0.41;
   public static final double SUBSTATION_ANGLE = 0.58;
   public static final double SUBSTATION_REV = -79.3;
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;
   public static final double EXTEND_REVS_3 = -145.88;
-  public static final double EXTEND_REVS_DEPLOY = -65.88;
+  public static final double EXTEND_REVS_DEPLOY = -74.00;
   public static final double EXTEND_REVS_MID_CUBE = -43.14;
 
   /*

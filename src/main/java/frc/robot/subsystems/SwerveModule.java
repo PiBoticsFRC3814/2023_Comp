@@ -93,7 +93,9 @@ public class SwerveModule {
 		double turnOutput = steerAnglePIDController.calculate( steerAngleEncoder.getAbsolutePosition(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
 		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED * speed, CANSparkMax.ControlType.kVelocity);
-		//driveMotor.set(speed);
+		//SmartDashboard.putNumber("Module drive" + index, speed);
+		//SmartDashboard.putNumber("Module steer" + index, turnOutput);
+		if(Math.abs(speed) <= 0.001) driveMotor.set(0.0);
 		//*/SmartDashboard.putNumber("Angle Module " + index, steerAngleEncoder.getAbsolutePosition());
 	}
 

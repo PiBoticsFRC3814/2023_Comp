@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.m_gyrp.reset();
+    //m_robotContainer.m_gyrp.reset();
     m_robotContainer.m_robotStates.autonomous = false;
   }
 
@@ -92,8 +92,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("Gyro Angle", m_robotContainer.m_gyrp.getAngle());
-    SmartDashboard.putNumber("Gyro X", m_robotContainer.m_gyrp.getXFilteredAccelAngle());
-    SmartDashboard.putNumber("Gyro Y", m_robotContainer.m_gyrp.getYFilteredAccelAngle());
+    SmartDashboard.putNumber("Gyro X", m_robotContainer.m_gyrp.getXFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getXFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getXFilteredAccelAngle());
+    SmartDashboard.putNumber("Gyro Y", m_robotContainer.m_gyrp.getYFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getYFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getYFilteredAccelAngle());
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
     SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
   }
