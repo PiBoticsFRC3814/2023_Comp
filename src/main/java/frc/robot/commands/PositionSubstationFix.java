@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GyroSwerveDrive;
 
-public class PositionSubstation extends CommandBase {
+public class PositionSubstationFix extends CommandBase {
 
   final double LINEAR_P = 0.4;
   final double LINEAR_I = 0.001;
@@ -48,8 +48,10 @@ public class PositionSubstation extends CommandBase {
   MedianFilter zFilter = new MedianFilter(3);
   MedianFilter aFilter = new MedianFilter(3);
 
+  boolean inPosition;
+
   /** Creates a new AutoPosition. */
-  public PositionSubstation(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro) {
+  public PositionSubstationFix(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
     m_gyro = gyro;
@@ -68,9 +70,11 @@ public class PositionSubstation extends CommandBase {
 
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     robotPose = limelight.getDoubleArrayTopic("targetpose_robotspace").subscribe(result);
+    xAngleSub = limelight.getDoubleTopic("tx").subscribe(0.0);
     gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
     DriverStation.reportError("Init", false);
     pastDistance = robotPose.get()[2];
+    inPosition = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -84,6 +88,7 @@ public class PositionSubstation extends CommandBase {
     double distanceX = 0.0;
     double poseResult[] = robotPose.get();
 
+    if(!inPosition){
     if (gotTarget.get() == 1.0) {
       if (poseResult.length > 0) {
         double xPos = xFilter.calculate(poseResult[0]);
@@ -93,18 +98,23 @@ public class PositionSubstation extends CommandBase {
         distanceX = xPos;
         if(distance != 0.0){
           if(Math.abs(distance - 1.05) >= 0.03) forwardSpeed = -distanceController.calculate(distance, 1.05);
-          rotateSpeed = turnController.calculate(m_gyro.getAngle(), 0.0);
-          if(Math.abs(distanceX + 0.5) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, -0.45);
+          rotateSpeed = turnController.calculate(xAngleSub.get(), 0.0);
+          if(Math.abs(distanceX + 0.5) >= 0.03) strafeSpeed = strafeController.calculate(distanceX, -0.49);
         }
       }
       DriverStation.reportError("Got Position", false);
     } else{
       rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 0.0);
     }
+  }
+
+    if(!inPosition) inPosition = distanceController.atSetpoint() && strafeController.atSetpoint();
+
+    if(inPosition) rotateSpeed = turnController.calculate(m_gyro.getAngle() % 360.0, 0.0);
     forwardSpeed = MathUtil.clamp(forwardSpeed, -0.2, 0.2);
     rotateSpeed = MathUtil.clamp(rotateSpeed, -0.2, 0.2);
     strafeSpeed = MathUtil.clamp(strafeSpeed, -0.2, 0.2);
-    m_drivetrain.drive(strafeSpeed, forwardSpeed, rotateSpeed);
+    m_drivetrain.gyroDrive(strafeSpeed, forwardSpeed, rotateSpeed, Math.toRadians(m_gyro.getAngle()));
   }
 
   // Called once the command ends or is interrupted.

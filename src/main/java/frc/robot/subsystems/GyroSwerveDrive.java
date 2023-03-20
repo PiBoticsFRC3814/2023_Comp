@@ -33,15 +33,15 @@ public class GyroSwerveDrive extends SubsystemBase {
     return (input < 0.0 ? -result : result);
   }
 
-  public void alteredGyroDrive(double dX, double dY, double dZ, double driveMultiplier, double gyroAngle){
+  public void alteredGyroDrive(double dX, double dY, double dZ, double gyroAngle){
     dX = -applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
     dY = -applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
-    dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE) * 0.5;
+    dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE) * 0.2;
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
       gyroDrive(
-        joystickSlewLimiterX.calculate(dX * driveMultiplier),
-         joystickSlewLimiterY.calculate(dY * driveMultiplier),
-         joystickSlewLimiterZ.calculate(dZ * driveMultiplier),
+         joystickSlewLimiterX.calculate(dX * m_RobotStates.driveMultiplier),
+         joystickSlewLimiterY.calculate(dY * m_RobotStates.driveMultiplier),
+         joystickSlewLimiterZ.calculate(dZ),
           gyroAngle
       );
       m_RobotStates.inFrontOfCubeStation = false;

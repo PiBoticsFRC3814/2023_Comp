@@ -5,17 +5,20 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class RobotStates extends SubsystemBase {
   /** Creates a new RobotStates. */
   public boolean inFrontOfCubeStation;
   public int moveFromLastAlign;
   public boolean autonomous;
+  public double driveMultiplier;
 
   public RobotStates() {
     inFrontOfCubeStation = false;
     moveFromLastAlign = 0;
     autonomous = false;
+    driveMultiplier = Constants.SLOW_SPEED;
   }
 
   @Override

@@ -28,7 +28,7 @@ public class DriveTillAngleChange extends CommandBase {
   @Override
   public void initialize() {
     finished = false;
-    drivetrain.drive(0.0, -0.3, 0.0);
+    drivetrain.drive(0.0, -0.25, 0.0);
     driveTimer.reset();
     driveTimer.stop();
   }
@@ -43,7 +43,6 @@ public class DriveTillAngleChange extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drivetrain.drive(0.0, 0.0, 0.0);
   }
 
   // Returns true when the command should end.

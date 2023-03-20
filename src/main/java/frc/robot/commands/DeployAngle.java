@@ -32,7 +32,7 @@ public class DeployAngle extends CommandBase {
   public void execute() {
     m_Arm.ArmDistance(Constants.EXTEND_REVS_DEPLOY);
     if(!finished) finished = m_Arm.extendAtPos;
-    if(finished) m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
+    if(finished) m_Arm.ArmAngle(Constants.ANGLE_DEPLOY);
   }
 
   // Called once the command ends or is interrupted.

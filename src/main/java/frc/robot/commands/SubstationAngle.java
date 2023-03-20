@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
@@ -30,24 +31,29 @@ public class SubstationAngle extends CommandBase {
     finished2 = false;
     finished3 = false;
     m_Arm.brake = false;
+    DriverStation.reportError("init Sub", false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(!finished1) {
-      m_Arm.ArmDistance(0);
+      m_Arm.ArmDistance(-2);
       finished1 = m_Arm.extendAtPos;
+      DriverStation.reportError("home arm", false);
+      DriverStation.reportError("extend state " + finished1, false);
     }
 
     if(finished1){
       m_Arm.ArmAngle(Constants.SUBSTATION_ANGLE);
       finished2 = m_Arm.shoulderAtPos;
+      DriverStation.reportError("angle arm", false);
     }
 
-    if(finished1 && finished2 && !finished3){
+    if(finished1 && finished2){
       m_Arm.ArmDistance(Constants.SUBSTATION_REV);
       finished3 = m_Arm.shoulderAtPos && m_Arm.extendAtPos;
+      DriverStation.reportError("final extend arm", false);
     }
   }
 
@@ -58,6 +64,6 @@ public class SubstationAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished1 && finished2 && finished3 && false;
+    return false;
   }
 }

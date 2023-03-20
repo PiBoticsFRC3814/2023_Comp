@@ -7,33 +7,24 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Grabber;
 
-public class ScoreLow extends CommandBase {
-  /** Creates a new ScoreTop. */
-  Arm m_Arm;
-  Grabber m_Grabber;
-  boolean finished;
-  public ScoreLow(Arm arm, Grabber grabber) {
+public class SubstationOverride extends CommandBase {
+  /** Creates a new SubstationOverride. */
+  Arm arm;
+  public SubstationOverride(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_Arm = arm;
-    m_Grabber = grabber;
-    addRequirements(arm, grabber);
+    this.arm = arm;
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    finished = false;
-    m_Arm.brake = false;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.ArmDistance(Constants.EXTEND_REVS_2);
-    if(!finished) finished = m_Arm.extendAtPos;
-    if(finished) m_Arm.ArmAngle(Constants.SCORE_ANGLE_BOTTOM);
+    arm.ArmDistance(Constants.SUBSTATION_REV);
   }
 
   // Called once the command ends or is interrupted.

@@ -79,7 +79,7 @@ public class PositionGrid extends CommandBase {
     NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
     robotPose = limelight.getDoubleArrayTopic("targetpose_robotspace").subscribe(result);
     gotTarget = limelight.getDoubleTopic("tv").subscribe(0.0);
-    DriverStation.reportError("Init", false);
+    DriverStation.reportError("Init positioning", false);
 
     inPositionA = false;
     inPositionX = false;
