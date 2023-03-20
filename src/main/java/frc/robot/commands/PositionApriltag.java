@@ -4,11 +4,11 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.Limelight;
 
@@ -39,6 +39,8 @@ public class PositionApriltag extends CommandBase {
     fwdController.setTolerance(0.03, 0.05);
     rotController.setTolerance(0.03, 0.05);
 
+    rotController.enableContinuousInput(0.0, 360.0);
+
     strController.setSetpoint(goalX);
     fwdController.setSetpoint(goalY);
     rotController.setSetpoint(goalZ);
@@ -64,9 +66,9 @@ public class PositionApriltag extends CommandBase {
     }
 
     if(start){
-      double correctionX = -strController.calculate(drivetrain.getPose().getX());
-      double correctionY = -strController.calculate(drivetrain.getPose().getY());
-      double correctionZ =  strController.calculate(drivetrain.getPose().getRotation().getDegrees());
+      double correctionX = -MathUtil.clamp(strController.calculate(drivetrain.getPose().getX()), -0.2, 0.2);
+      double correctionY = -MathUtil.clamp(fwdController.calculate(drivetrain.getPose().getY()), -0.2, 0.2);
+      double correctionZ =  MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.2, 0.2);
       drivetrain.drive(correctionX, correctionY, correctionZ);
     }
   }
@@ -74,11 +76,12 @@ public class PositionApriltag extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    drivetrain.motorZero();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return strController.atSetpoint() && fwdController.atSetpoint() && rotController.atSetpoint() && start;
   }
 }

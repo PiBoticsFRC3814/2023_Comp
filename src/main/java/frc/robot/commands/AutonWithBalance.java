@@ -21,7 +21,7 @@ public class AutonWithBalance extends SequentialCommandGroup {
     addCommands(
       new GyroReset(gyro),
       new ScoreTop(arm, grabber, robotStates),
-      new PositionGrid(drivetrain, robotStates, gyro, grabber),
+      //new PositionGrid(drivetrain, robotStates, gyro, grabber),
       //new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber, robotStates),
       //new WaitCommand(1.0),

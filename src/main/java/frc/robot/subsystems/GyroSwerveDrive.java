@@ -73,7 +73,7 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose){
     odometry.resetPosition(
-      Rotation2d.fromDegrees(gyro.getAngle()),
+      Rotation2d.fromDegrees(gyro.getAngle() % 360.0),
        getModulePositions(),
         pose
     );
