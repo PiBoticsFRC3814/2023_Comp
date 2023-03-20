@@ -20,8 +20,8 @@ public class SwerveModule {
 	private PIDController         steerAnglePIDController;
 
 	public double                 position;
-	private int index;
-	public RelativeEncoder velocityEncoder;
+	private int 				  index;
+	public RelativeEncoder 		  driveEncoder;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -31,8 +31,6 @@ public class SwerveModule {
 		driveMotor.setOpenLoopRampRate( 0.2 );
 		driveMotor.setSmartCurrentLimit(70, 50);
 
-
-    //*
 		driveVelocityPIDController = driveMotor.getPIDController();
 		driveVelocityPIDController.setP(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][0]);
 		driveVelocityPIDController.setI(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][1]);
@@ -40,10 +38,8 @@ public class SwerveModule {
 		driveVelocityPIDController.setIZone(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][3]);
 		driveVelocityPIDController.setFF(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][4]);
 
-		if(swerveModIndex == 0){
-			velocityEncoder = driveMotor.getEncoder();
-		}
-    //*/
+		driveEncoder = driveMotor.getEncoder();
+		driveEncoder.setPositionConversionFactor(Constants.DRIVE_POSITION_CONVERSION);
 
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
 		steerMotor.setIdleMode(IdleMode.kBrake);
@@ -51,6 +47,7 @@ public class SwerveModule {
 		steerMotor.setSmartCurrentLimit(50, 40);
 
 		steerAngleEncoder = new CANCoder( Constants.SWERVE_ENCODER_IDS[swerveModIndex] );
+		steerAngleEncoder.configMagnetOffset(Constants.SWERVE_SETPOINT_OFFSET[swerveModIndex]);
 
 		steerAnglePIDController = new PIDController( 
 			Constants.SWERVE_STEER_PID_CONSTANTS[swerveModIndex][0],

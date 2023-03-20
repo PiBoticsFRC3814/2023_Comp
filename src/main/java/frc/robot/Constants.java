@@ -91,6 +91,7 @@ public final class Constants {
   public static final double SWERVE_FRAME_WIDTH = 27.5;
   public static final double SWERVE_RADIUS = Math.sqrt(Math.pow(SWERVE_FRAME_LENGTH, 2) + Math.pow(SWERVE_FRAME_WIDTH, 2));
   public static final double SWERVE_PID_TOLERANCE = 2.8e-4;
+  public static final double DRIVE_POSITION_CONVERSION = 0.0;
 
   ////////////////////////////////////////
   //             Arm & Claw             //
