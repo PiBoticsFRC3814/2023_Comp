@@ -79,7 +79,7 @@ public class SwerveModule {
 	}
 
 	public SwerveModulePosition getPosition(){
-		return new SwerveModulePosition(driveEncoder.getPosition() * Constants.DRIVE_POSITION_CONVERSION, Rotation2d.fromDegrees(getSteerAngle()));
+		return new SwerveModulePosition(driveEncoder.getPosition() * Constants.DRIVE_POSITION_CONVERSION, Rotation2d.fromDegrees(getSteerAngle() * 180.0));
 	}
 
 	// angle and speed should be from -1.0 to 1.0, like a joystick input

@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.RobotStates;
 
 public class PositionApriltag extends CommandBase {
 
   private GyroSwerveDrive drivetrain;
   private Limelight limelight;
   private ADIS16470_IMU gyro;
+  private RobotStates robotStates;
 
   private boolean start;
 
@@ -25,19 +27,24 @@ public class PositionApriltag extends CommandBase {
   private PIDController rotController = new PIDController(Constants.TAG_ALIGN_ROT_PID[0], Constants.TAG_ALIGN_ROT_PID[1], Constants.TAG_ALIGN_ROT_PID[2]);
 
   /** Creates a new AutoPosition. */
-  public PositionApriltag(GyroSwerveDrive drivetrain, Limelight limelight, ADIS16470_IMU gyro, double goalX, double goalY, double goalZ) {
+  public PositionApriltag(GyroSwerveDrive drivetrain, Limelight limelight, RobotStates robotStates, ADIS16470_IMU gyro, double goalX, double goalY, double goalZ) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrain;
     this.limelight = limelight;
+    this.robotStates = robotStates;
     this.gyro = gyro;
+
+    strController.reset();
+    fwdController.reset();
+    rotController.reset();
 
     strController.setIntegratorRange(-0.2, 0.2);
     fwdController.setIntegratorRange(-0.2, 0.2);
     rotController.setIntegratorRange(-0.2, 0.2);
 
-    strController.setTolerance(0.03, 0.05);
-    fwdController.setTolerance(0.03, 0.05);
-    rotController.setTolerance(0.03, 0.05);
+    strController.setTolerance(0.05);
+    fwdController.setTolerance(0.03);
+    rotController.setTolerance(0.05);
 
     rotController.enableContinuousInput(0.0, 360.0);
 
@@ -51,26 +58,25 @@ public class PositionApriltag extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    start = false;
     strController.reset();
     fwdController.reset();
     rotController.reset();
+    start = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(limelight.targetInView && !start){
-      drivetrain.resetOdometry(limelight.targetPose2d);
-      start = true;
-    }
+    double correctionX = 0.0;
+    double correctionY = 0.0;
+    double correctionZ = 0.0;
 
+    if(limelight.targetInView) drivetrain.resetOdometry(limelight.targetPose2d); start = true;
     if(start){
-      double correctionX = -MathUtil.clamp(strController.calculate(drivetrain.getPose().getY()), -0.2, 0.2);
-      double correctionY = MathUtil.clamp(fwdController.calculate(drivetrain.getPose().getX()), -0.2, 0.2);
-      double correctionZ = MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.2, 0.2);
+      if(!strController.atSetpoint()) correctionX = MathUtil.clamp(strController.calculate(drivetrain.getPose().getY()), -0.3, 0.3);
+      if(!fwdController.atSetpoint()) correctionY = MathUtil.clamp(fwdController.calculate(drivetrain.getPose().getX()), -0.3, 0.3);
+      if(!rotController.atSetpoint()) correctionZ = MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.4, 0.4);
       drivetrain.drive(correctionX, correctionY, correctionZ);
-      System.out.println("" + drivetrain.getPose().getY());
     }
   }
 
@@ -78,11 +84,12 @@ public class PositionApriltag extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivetrain.motorZero();
+    start = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return strController.atSetpoint() && fwdController.atSetpoint() && rotController.atSetpoint();
   }
 }

@@ -101,6 +101,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
     SmartDashboard.putNumber("Pose X", m_robotContainer.m_gyroSwerveDrive.getPose().getX());
     SmartDashboard.putNumber("Pose Y", m_robotContainer.m_gyroSwerveDrive.getPose().getY());
+    SmartDashboard.putBoolean("Valid Target", m_robotContainer.m_Limelight.targetInView);
   }
 
   @Override

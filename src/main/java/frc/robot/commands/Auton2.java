@@ -19,14 +19,14 @@ public class Auton2 extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GyroReset(gyro),
+      new GyroReset(gyro, drivetrain),
       new ScoreTop(arm, grabber, robotStates),
       //new PositionGrid(drivetrain, robotStates, gyro, grabber),
       //new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber, robotStates),
       new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_2_DISTANCE, () -> Math.toRadians(10.0)),
       new TurnToHeading(drivetrain, gyro, () -> 180.0),
-      new GyroReset(gyro)
+      new GyroReset(gyro, drivetrain)
     );
   }
 }

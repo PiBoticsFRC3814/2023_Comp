@@ -400,7 +400,7 @@ public class LimelightHelpers {
             System.err.println("Bad LL 2D Pose Data!");
             return new Pose2d();
         }
-        Translation2d tran2d = new Translation2d(inData[2], inData[0]);
+        Translation2d tran2d = new Translation2d(inData[2], -inData[0]);
         Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
         return new Pose2d(tran2d, r2d);
     }

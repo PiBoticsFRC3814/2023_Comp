@@ -19,7 +19,7 @@ public class AutonWithBalance extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new GyroReset(gyro),
+      new GyroReset(gyro, drivetrain),
       new ScoreTop(arm, grabber, robotStates),
       //new PositionGrid(drivetrain, robotStates, gyro, grabber),
       //new ScoreTop(arm, grabber, robotStates),

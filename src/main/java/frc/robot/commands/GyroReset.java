@@ -4,16 +4,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.GyroSwerveDrive;
 
 public class GyroReset extends CommandBase {
   /** Creates a new GyroReset. */
   ADIS16470_IMU m_gyro;
+  GyroSwerveDrive drivetrain;
 
-  public GyroReset(ADIS16470_IMU gyro) {
+  public GyroReset(ADIS16470_IMU gyro, GyroSwerveDrive drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_gyro = gyro;
+    this.drivetrain = drivetrain;
   }
 
   // Called when the command is initially scheduled.
@@ -24,6 +28,7 @@ public class GyroReset extends CommandBase {
   @Override
   public void execute() {
     m_gyro.reset();
+    drivetrain.resetOdometry(new Pose2d());
   }
 
   // Called once the command ends or is interrupted.

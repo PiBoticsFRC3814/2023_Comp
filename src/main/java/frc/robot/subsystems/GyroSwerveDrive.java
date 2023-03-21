@@ -65,15 +65,14 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   private SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    positions[0] = swerveMod[3].getPosition();
-    positions[1] = swerveMod[0].getPosition();
-    positions[2] = swerveMod[2].getPosition();
-    positions[3] = swerveMod[1].getPosition();
+    positions[0] = swerveMod[0].getPosition();
+    positions[1] = swerveMod[3].getPosition();
+    positions[2] = swerveMod[1].getPosition();
+    positions[3] = swerveMod[2].getPosition();
     return positions;
   }
 
   public void resetOdometry(Pose2d pose){
-    gyro.reset();
     for (int i = 0; i < 4; i++) {
       swerveMod[i].resetModule();
     }

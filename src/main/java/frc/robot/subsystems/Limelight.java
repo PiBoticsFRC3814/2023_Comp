@@ -17,6 +17,7 @@ public class Limelight extends SubsystemBase {
 
   public Limelight(RobotStates robotStates) {
     this.robotStates = robotStates;
+    targetInView = false;
   }
 
   @Override
