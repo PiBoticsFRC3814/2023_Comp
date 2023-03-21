@@ -76,9 +76,9 @@ public final class Constants {
 
   public static final double MAX_DRIVETRAIN_SPEED = 5000;
 
-  public static final double[] TAG_ALIGN_STR_PID = {0.4, 0.0, 0.005};
+  public static final double[] TAG_ALIGN_STR_PID = {0.1, 0.0, 0.0};
   public static final double[] TAG_ALIGN_ROT_PID = {0.005, 0.0, 0.0};
-  public static final double[] TAG_ALIGN_FWD_PID = {0.4, 0.0, 0.005};
+  public static final double[] TAG_ALIGN_FWD_PID = {0.1, 0.0, 0.0};
 
   /*
    * Swerve rotation PID Constants
@@ -98,7 +98,7 @@ public final class Constants {
   public static final double SWERVE_FRAME_WIDTH = 27.5;
   public static final double SWERVE_RADIUS = Math.sqrt(Math.pow(SWERVE_FRAME_LENGTH, 2) + Math.pow(SWERVE_FRAME_WIDTH, 2));
   public static final double SWERVE_PID_TOLERANCE = 2.8e-4;
-  public static final double DRIVE_POSITION_CONVERSION = 0.0;
+  public static final double DRIVE_POSITION_CONVERSION = 1 / 32.0 * (4 * Math.PI);
 
   ////////////////////////////////////////
   //             Arm & Claw             //

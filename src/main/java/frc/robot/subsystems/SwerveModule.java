@@ -42,8 +42,6 @@ public class SwerveModule {
 		driveVelocityPIDController.setFF(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][4]);
 
 		driveEncoder = driveMotor.getEncoder();
-		driveEncoder.setPositionConversionFactor(Constants.DRIVE_POSITION_CONVERSION);
-
 		
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
 		steerMotor.setIdleMode(IdleMode.kBrake);
@@ -51,7 +49,6 @@ public class SwerveModule {
 		steerMotor.setSmartCurrentLimit(50, 40);
 
 		steerAngleEncoder = new CANCoder( Constants.SWERVE_ENCODER_IDS[swerveModIndex] );
-		steerAngleEncoder.configMagnetOffset(Constants.SWERVE_SETPOINT_OFFSET[swerveModIndex]);
 
 		steerAnglePIDController = new PIDController( 
 			Constants.SWERVE_STEER_PID_CONSTANTS[swerveModIndex][0],
@@ -82,7 +79,7 @@ public class SwerveModule {
 	}
 
 	public SwerveModulePosition getPosition(){
-		return new SwerveModulePosition(driveEncoder.getPosition(), Rotation2d.fromDegrees(steerAngleEncoder.getAbsolutePosition()));
+		return new SwerveModulePosition(driveEncoder.getPosition() * Constants.DRIVE_POSITION_CONVERSION, Rotation2d.fromDegrees(-getSteerAngle()));
 	}
 
 	// angle and speed should be from -1.0 to 1.0, like a joystick input
@@ -90,7 +87,7 @@ public class SwerveModule {
 	    // Calculate the turning motor output from the turning PID controller.
 
 		//* Delete slash for tuning offset
-		double turnOutput = steerAnglePIDController.calculate( steerAngleEncoder.getAbsolutePosition(), angle );
+		double turnOutput = steerAnglePIDController.calculate( getSteerAngle(), angle );
 		steerMotor.set( MathUtil.clamp( turnOutput, -1.0, 1.0 ) );
 		driveVelocityPIDController.setReference(Constants.MAX_DRIVETRAIN_SPEED * speed, CANSparkMax.ControlType.kVelocity);
 		//SmartDashboard.putNumber("Module drive" + index, speed);

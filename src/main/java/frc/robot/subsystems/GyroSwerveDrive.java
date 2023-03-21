@@ -65,9 +65,10 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   private SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    for (int i = 0; i < 4; i++) {
-      positions[i] = swerveMod[i].getPosition();
-    }
+    positions[0] = swerveMod[0].getPosition();
+    positions[1] = swerveMod[1].getPosition();
+    positions[2] = swerveMod[3].getPosition();
+    positions[3] = swerveMod[2].getPosition();
     return positions;
   }
 

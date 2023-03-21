@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -86,6 +87,8 @@ public class Robot extends TimedRobot {
     }
     //m_robotContainer.m_gyrp.reset();
     m_robotContainer.m_robotStates.autonomous = false;
+    m_robotContainer.m_gyrp.reset();
+    m_robotContainer.m_gyroSwerveDrive.resetOdometry(new Pose2d());
   }
 
   /** This function is called periodically during operator control. */
@@ -96,6 +99,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro Y", m_robotContainer.m_gyrp.getYFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getYFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getYFilteredAccelAngle());
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
     SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
+    SmartDashboard.putNumber("Pose X", m_robotContainer.m_gyroSwerveDrive.getPose().getX());
+    SmartDashboard.putNumber("Pose Y", m_robotContainer.m_gyroSwerveDrive.getPose().getY());
   }
 
   @Override

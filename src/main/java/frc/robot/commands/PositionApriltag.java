@@ -66,10 +66,11 @@ public class PositionApriltag extends CommandBase {
     }
 
     if(start){
-      double correctionX = -MathUtil.clamp(strController.calculate(drivetrain.getPose().getX()), -0.2, 0.2);
-      double correctionY = -MathUtil.clamp(fwdController.calculate(drivetrain.getPose().getY()), -0.2, 0.2);
-      double correctionZ =  MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.2, 0.2);
+      double correctionX = -MathUtil.clamp(strController.calculate(drivetrain.getPose().getY()), -0.2, 0.2);
+      double correctionY = MathUtil.clamp(fwdController.calculate(drivetrain.getPose().getX()), -0.2, 0.2);
+      double correctionZ = MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.2, 0.2);
       drivetrain.drive(correctionX, correctionY, correctionZ);
+      System.out.println("" + drivetrain.getPose().getY());
     }
   }
 
@@ -82,6 +83,6 @@ public class PositionApriltag extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return strController.atSetpoint() && fwdController.atSetpoint() && rotController.atSetpoint() && start;
+    return false;
   }
 }
