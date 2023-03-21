@@ -42,8 +42,8 @@ public class PositionApriltag extends CommandBase {
     fwdController.setIntegratorRange(-0.2, 0.2);
     rotController.setIntegratorRange(-0.2, 0.2);
 
-    strController.setTolerance(0.05);
-    fwdController.setTolerance(0.03);
+    strController.setTolerance(0.02);
+    fwdController.setTolerance(0.02);
     rotController.setTolerance(0.05);
 
     rotController.enableContinuousInput(0.0, 360.0);

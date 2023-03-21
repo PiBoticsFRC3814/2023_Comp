@@ -27,7 +27,7 @@ public class Limelight extends SubsystemBase {
       targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace(""));
       closestTagID = LimelightHelpers.getFiducialID("");
     }
-    if((closestTagID != 5.0 || closestTagID != 4.0) && targetInView && (Math.abs(targetPose2d.getX()) <= 2.0)){
+    if((closestTagID != 5.0 || closestTagID != 4.0) && targetInView && (Math.abs(targetPose2d.getY()) <= 0.06)){
       robotStates.inFrontOfCubeStation = true;
     } else robotStates.inFrontOfCubeStation = false;
   }

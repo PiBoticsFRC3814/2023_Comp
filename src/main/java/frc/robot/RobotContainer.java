@@ -82,16 +82,19 @@ public class RobotContainer {
     new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_robotStates));
     new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_robotStates));
     new JoystickButton(driveStick, 3).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.8, -1.05, 0.0));
-    new JoystickButton(driveStick, 4).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.55, -1.05, 0.0));
+    new JoystickButton(armController, 7).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.0, -0.8, 180.0));
+    new JoystickButton(driveStick, 4).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.60, -1.05, 0.0));
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
+    new JoystickButton(armController, 5).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.325, -0.8, 180.0));
+    new JoystickButton(armController, 6).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.76, -0.8, 180.0));
 
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     new JoystickButton(armController, 10).whileTrue(new SubstationOverride(m_arm));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
-    new JoystickButton(armController, 6).whileTrue(new DeployAngle(m_arm, m_grabber));
+    //new JoystickButton(armController, 6).whileTrue(new DeployAngle(m_arm, m_grabber));
 
     new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
 
