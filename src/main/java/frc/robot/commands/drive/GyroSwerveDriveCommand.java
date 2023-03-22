@@ -19,11 +19,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
   ADIS16470_IMU m_gyro;
   GyroSwerveDrive m_gyroSwerveDrive;
 
-  PIDController turnController = new PIDController(
-    Constants.TAG_ALIGN_ROT_PID[0],
-     Constants.TAG_ALIGN_ROT_PID[1],
-      Constants.TAG_ALIGN_ROT_PID[2]
-  );
+  PIDController turnController = new PIDController(0.04, 0.1, 0.0);
 
   public GyroSwerveDriveCommand(
       DoubleSupplier dX,
@@ -39,8 +35,10 @@ public class GyroSwerveDriveCommand extends CommandBase {
     m_gyro = imu;
     m_gyroSwerveDrive = gyroSwerveDrive;
 
+    turnController.reset();
+    turnController.setIntegratorRange(-0.2, 0.2);
     turnController.enableContinuousInput(0.0, 360.0);
-    turnController.setTolerance(0.5, 1.0);
+    turnController.setTolerance(0.05);
 
     addRequirements(m_gyroSwerveDrive);
   }
@@ -49,18 +47,9 @@ public class GyroSwerveDriveCommand extends CommandBase {
   public void execute() {
     driveHeading = povHat.getAsInt() != -1;
     if(driveHeading){
-      switch(povHat.getAsInt()){
-        case 90:
-          turnController.setSetpoint(90.0);
-        case 180:
-          turnController.setSetpoint(180.0);
-        case 270:
-          turnController.setSetpoint(270.0);
-        default:
-          turnController.setSetpoint(0.0);
-      }
-      headingCorrection = MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0), -0.4, 0.4);
+      headingCorrection = -MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0, povHat.getAsInt()), -2.0, 2.0);
     }
+    System.out.println("povHat " + povHat.getAsInt());
     m_gyroSwerveDrive.alteredGyroDrive(
         dX.getAsDouble(),
           dY.getAsDouble(),

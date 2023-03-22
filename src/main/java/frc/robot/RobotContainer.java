@@ -88,9 +88,9 @@ public class RobotContainer {
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 2).whileTrue(new ScoreLow(m_arm, m_grabber));
-    new JoystickButton(armController, 5).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.325, -0.8, 180.0));
-    new JoystickButton(armController, 6).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.76, -0.8, 180.0));
-    new JoystickButton(armController, 7).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.0, -0.8, 180.0));
+    new JoystickButton(armController, 5).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.325, -0.85, 180.0));
+    new JoystickButton(armController, 6).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.68, -0.85, 180.0));
+    new JoystickButton(armController, 7).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.0, -0.85, 180.0));
 
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     new JoystickButton(armController, 10).whileTrue(new SubstationOverride(m_arm));
