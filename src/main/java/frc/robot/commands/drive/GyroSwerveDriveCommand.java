@@ -51,15 +51,16 @@ public class GyroSwerveDriveCommand extends CommandBase {
     if(driveHeading){
       switch(povHat.getAsInt()){
         case 90:
-          turnController.setSetpoint(90.0);
+          headingCorrection = MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0, 270.0), -0.4, 0.4);
         case 180:
-          turnController.setSetpoint(180.0);
+          headingCorrection = MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0, 180.0), -0.4, 0.4);
         case 270:
-          turnController.setSetpoint(270.0);
+          headingCorrection = MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0, 90.0), -0.4, 0.4);
+        case 0:
+          headingCorrection = MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0, 0.0), -0.4, 0.4);
         default:
-          turnController.setSetpoint(0.0);
+          headingCorrection = dZ.getAsDouble();
       }
-      headingCorrection = MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0), -0.4, 0.4);
     }
     m_gyroSwerveDrive.alteredGyroDrive(
         dX.getAsDouble(),
