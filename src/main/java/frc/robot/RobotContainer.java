@@ -52,6 +52,7 @@ public class RobotContainer {
             () -> driveStick.getX(),
             () -> driveStick.getY(),
             () -> driveStick.getZ(),
+            () -> driveStick.getPOV(0),
             m_gyrp,
             m_gyroSwerveDrive));
 
@@ -83,10 +84,6 @@ public class RobotContainer {
     new JoystickButton(driveStick, 2).whileFalse(new DriveSlow(m_robotStates));
     new JoystickButton(driveStick, 3).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.8, -1.05, 0.0));
     new JoystickButton(driveStick, 4).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, -0.60, -1.05, 0.0));
-    new Trigger(() -> driveStick.getPOV(0) == 0).whileTrue(new TurnToHeading(m_gyroSwerveDrive, m_gyrp, () -> 0.0));
-    new Trigger(() -> driveStick.getPOV(0) == 90).whileTrue(new TurnToHeading(m_gyroSwerveDrive, m_gyrp, () -> 90.0));
-    new Trigger(() -> driveStick.getPOV(0) == 180).whileTrue(new TurnToHeading(m_gyroSwerveDrive, m_gyrp, () -> 180.0));
-    new Trigger(() -> driveStick.getPOV(0) == 270).whileTrue(new TurnToHeading(m_gyroSwerveDrive, m_gyrp, () -> 270.0));
 
     new JoystickButton(armController, 4).whileTrue(new ScoreTop(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 3).whileTrue(new ScoreMiddle(m_arm, m_grabber, m_robotStates));
