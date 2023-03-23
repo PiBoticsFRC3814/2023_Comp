@@ -77,7 +77,7 @@ public final class Constants {
   public static final double MAX_DRIVETRAIN_SPEED = 5000;
 
   public static final double[] TAG_ALIGN_STR_PID = {0.4, 0.0, 0.006};
-  public static final double[] TAG_ALIGN_ROT_PID = {0.01, 0.0, 0.002};
+  public static final double[] TAG_ALIGN_ROT_PID = {0.01, 5.0e-2, 0.002};
   public static final double[] TAG_ALIGN_FWD_PID = {0.4, 0.0, 0.006};
 
   public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
@@ -110,8 +110,8 @@ public final class Constants {
   public static final double EXTEND_HOME_SPEED = -0.6;
   public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {4.0, 0.2, 0.016, 1.8};
-  public static final double[] ARM_ANGLE_FF_UP =   {0.5, 1.0, 0.21};
-  public static final double[] ARM_ANGLE_FF_DOWN = {0.5, 1.0, 0.21};
+  public static final double[] ARM_ANGLE_FF_UP =   {0.5, 1.0, 0.13};
+  public static final double[] ARM_ANGLE_FF_DOWN = {0.5, 1.0, 0.13};
   public static final int ARM_ENCODER_PORT = 4;
 
   public static final double SCORE_STRAFE_DISTANCE = 1.0;

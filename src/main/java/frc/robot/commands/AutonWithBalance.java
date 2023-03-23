@@ -15,13 +15,13 @@ import frc.robot.subsystems.*;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutonWithBalance extends SequentialCommandGroup {
   /** Creates a new AutonWithBalance. */
-  public AutonWithBalance(GyroSwerveDrive drivetrain, RobotStates robotStates, Grabber grabber, Arm arm, ADIS16470_IMU gyro) {
+  public AutonWithBalance(GyroSwerveDrive drivetrain, RobotStates robotStates, Grabber grabber, Arm arm, Limelight limelight, ADIS16470_IMU gyro) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new GyroReset(gyro, drivetrain),
       new ScoreTop(arm, grabber, robotStates),
-      //new PositionGrid(drivetrain, robotStates, gyro, grabber),
+      new PositionApriltag(drivetrain, limelight, robotStates, gyro, 0.2, -0.82, 0.0),
       //new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber, robotStates),
       //new WaitCommand(1.0),
