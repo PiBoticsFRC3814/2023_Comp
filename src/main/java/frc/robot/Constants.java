@@ -30,6 +30,12 @@ public final class Constants {
 
   public static final int LIGHT_RELAY_PORT = 0; //port for Spike controlling lights
 
+  public static final double GRID_X_SETPOINT = 0.5;
+  public static final double GRID_Y_SETPOINT = 0.8;
+  public static final double RIGHT_SUBSTATION_X = 0.5;
+  public static final double LEFT_SUBSTATION_X = -0.5;
+  public static final double SUBSTATION_Y = 1.1;
+
   ////////////////////////////////////////
   //               Swerve               //
   ////////////////////////////////////////
@@ -70,10 +76,9 @@ public final class Constants {
 
   public static final double MAX_DRIVETRAIN_SPEED = 5000;
 
-  /*
-   * Swerve rotation PID Constants
-   */
-  public static final double[] SWERVE_ROTATION_PID_CONSTANTS = {1.0, 0.0, 0.0};
+  public static final double[] TAG_ALIGN_STR_PID = {0.4, 0.0, 0.006};
+  public static final double[] TAG_ALIGN_ROT_PID = {0.01, 5.0e-2, 0.002};
+  public static final double[] TAG_ALIGN_FWD_PID = {0.4, 0.0, 0.006};
 
   public static final boolean[] STEER_MOTOR_INVERTED = {false, false, false, false};
   public static final boolean[] DRIVE_MOTOR_INVERTED = {false, false, false, false};
@@ -85,6 +90,8 @@ public final class Constants {
   public static final double SWERVE_FRAME_WIDTH = 27.5;
   public static final double SWERVE_RADIUS = Math.sqrt(Math.pow(SWERVE_FRAME_LENGTH, 2) + Math.pow(SWERVE_FRAME_WIDTH, 2));
   public static final double SWERVE_PID_TOLERANCE = 2.8e-4;
+  public static final double DRIVE_POSITION_CONVERSION = (4 * 0.0254 * Math.PI) / (6.75);
+  //                                      (wheel circum / (encppr * swerve Ratio)
 
   ////////////////////////////////////////
   //             Arm & Claw             //
@@ -103,8 +110,8 @@ public final class Constants {
   public static final double EXTEND_HOME_SPEED = -0.6;
   public static final double[] EXTEND_PID_CONSTANTS = {1.0e-1, 0.0, 0.0, 0.0, 0.0, -1.0, 1.0};
   public static final double[] ARM_ANGLE_PID_CONSTANTS = {4.0, 0.2, 0.016, 1.8};
-  public static final double[] ARM_ANGLE_FF_UP =   {0.5, 1.0, 0.21};
-  public static final double[] ARM_ANGLE_FF_DOWN = {0.5, 1.0, 0.21};
+  public static final double[] ARM_ANGLE_FF_UP =   {0.5, 1.0, 0.13};
+  public static final double[] ARM_ANGLE_FF_DOWN = {0.5, 1.0, 0.13};
   public static final int ARM_ENCODER_PORT = 4;
 
   public static final double SCORE_STRAFE_DISTANCE = 1.0;

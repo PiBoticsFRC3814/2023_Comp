@@ -8,6 +8,9 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
@@ -20,7 +23,8 @@ public class SwerveModule {
 	private PIDController         steerAnglePIDController;
 
 	public double                 position;
-	private int index;
+	private int 				  index;
+	public RelativeEncoder 		  driveEncoder;
 	
 	/* the SwerveModule subsystem */
 	public SwerveModule( int swerveModIndex ) {
@@ -37,7 +41,7 @@ public class SwerveModule {
 		driveVelocityPIDController.setIZone(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][3]);
 		driveVelocityPIDController.setFF(Constants.SWERVE_DRIVE_PID_CONSTANTS[swerveModIndex][4]);
 
-
+		driveEncoder = driveMotor.getEncoder();
 		
 		steerMotor = new CANSparkMax( Constants.SWERVE_STEER_MOTOR_IDS[swerveModIndex], MotorType.kBrushless );
 		steerMotor.setIdleMode(IdleMode.kBrake);
@@ -68,6 +72,14 @@ public class SwerveModule {
 
 	public double getSteerAngle() {
 		return getOffsetSteerEncoderAngle(steerAngleEncoder.getAbsolutePosition());
+	}
+
+	public void resetModule(){
+		driveEncoder.setPosition(0.0);
+	}
+
+	public SwerveModulePosition getPosition(){
+		return new SwerveModulePosition(driveEncoder.getPosition() * Constants.DRIVE_POSITION_CONVERSION, Rotation2d.fromDegrees(getSteerAngle() * 180.0));
 	}
 
 	// angle and speed should be from -1.0 to 1.0, like a joystick input

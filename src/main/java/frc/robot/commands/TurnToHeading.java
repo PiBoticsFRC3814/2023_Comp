@@ -10,6 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.GyroSwerveDrive;
 
 public class TurnToHeading extends CommandBase {
@@ -17,10 +18,11 @@ public class TurnToHeading extends CommandBase {
   GyroSwerveDrive drivetrain;
   ADIS16470_IMU gyro;
 
-  final double ANGULAR_P = 0.005;
-  final double ANGULAR_I = 0.0;
-  final double ANGULAR_D = 0.0;
-  PIDController turnController = new PIDController(ANGULAR_P, ANGULAR_I, ANGULAR_D);
+  PIDController turnController = new PIDController(
+    Constants.TAG_ALIGN_ROT_PID[0],
+     Constants.TAG_ALIGN_ROT_PID[1],
+      Constants.TAG_ALIGN_ROT_PID[2]
+  );
   
   public TurnToHeading(GyroSwerveDrive drivetrain, ADIS16470_IMU gyro, DoubleSupplier heading) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,7 +43,7 @@ public class TurnToHeading extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.drive(0.0, 0.0, MathUtil.clamp(turnController.calculate(gyro.getAngle() % 360.0), -0.2, 0.2));
+    drivetrain.drive(0.0, 0.0, MathUtil.clamp(turnController.calculate(gyro.getAngle() % 360.0), -0.4, 0.4));
   }
 
   // Called once the command ends or is interrupted.
