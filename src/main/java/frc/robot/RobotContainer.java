@@ -116,7 +116,7 @@ public class RobotContainer {
     /*
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
     new JoystickButton(testController, XboxController.Button.kB.value).whileTrue(new ArmLevel(m_arm));
-    new JoystickButton(testController, 6).whileTrue(new TestExtend(m_arm, m_grabber));*/
+    new JoystickButton(testController, 6).whileTrue(new TestExtend(m_arm, m_grabber)); */
   }
 
   /**
