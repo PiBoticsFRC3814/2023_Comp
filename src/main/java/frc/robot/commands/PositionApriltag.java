@@ -71,7 +71,11 @@ public class PositionApriltag extends CommandBase {
     double correctionY = 0.0;
     double correctionZ = 0.0;
 
-    if(limelight.targetInView) drivetrain.resetOdometry(limelight.targetPose2d); start = true;
+    if(limelight.targetInView){
+      drivetrain.resetOdometry(limelight.targetPose2d);
+      start = true;
+    }
+
     if(start){
       if(!strController.atSetpoint()) correctionX = MathUtil.clamp(strController.calculate(drivetrain.getPose().getY()), -0.3, 0.3);
       if(!fwdController.atSetpoint()) correctionY = MathUtil.clamp(fwdController.calculate(drivetrain.getPose().getX()), -0.3, 0.3);

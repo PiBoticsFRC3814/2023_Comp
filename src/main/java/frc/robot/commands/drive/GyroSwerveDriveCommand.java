@@ -47,7 +47,7 @@ public class GyroSwerveDriveCommand extends CommandBase {
   public void execute() {
     driveHeading = povHat.getAsInt() != -1;
     if(driveHeading){
-      headingCorrection = -MathUtil.clamp(turnController.calculate(m_gyro.getAngle() % 360.0, povHat.getAsInt()), -2.0, 2.0);
+      headingCorrection = -MathUtil.clamp(turnController.calculate(360.0 - (m_gyro.getAngle() % 360.0), povHat.getAsInt()), -1.0, 1.0);
     }
     System.out.println("povHat " + povHat.getAsInt());
     m_gyroSwerveDrive.alteredGyroDrive(

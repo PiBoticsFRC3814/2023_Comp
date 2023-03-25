@@ -108,6 +108,8 @@ public class RobotContainer {
 
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
     new JoystickButton(armController, 10).whileTrue(new SubstationOverride(m_arm));
+    new JoystickButton(armController, 5).whileTrue(new CubeMid(m_arm, m_grabber, m_robotStates));
+    new JoystickButton(armController, 6).whileTrue(new CubeHigh(m_arm, m_grabber, m_robotStates));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     //new JoystickButton(armController, 6).whileTrue(new DeployAngle(m_arm, m_grabber));
 

@@ -92,7 +92,7 @@ public class GyroSwerveDrive extends SubsystemBase {
   public void alteredGyroDrive(double dX, double dY, double dZ, double gyroAngle){
     dX = -applyDeadzone(dX, Constants.JOYSTICK_X_DEADZONE);
     dY = -applyDeadzone(dY, Constants.JOYSTICK_Y_DEADZONE);
-    dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE) * 0.2;
+    dZ = -applyDeadzone(dZ, Constants.JOYSTICK_Z_DEADZONE) * 0.4;
     if ((dX != 0.0) || (dY != 0.0) || (dZ != 0.0)) {
       gyroDrive(
          joystickSlewLimiterX.calculate(dX * m_RobotStates.driveMultiplier),
