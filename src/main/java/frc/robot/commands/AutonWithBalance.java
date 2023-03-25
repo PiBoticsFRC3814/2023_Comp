@@ -23,8 +23,7 @@ public class AutonWithBalance extends SequentialCommandGroup {
       new ScoreTop(arm, grabber, robotStates),
       new PositionApriltag(drivetrain, limelight, robotStates, gyro, 0.2, -0.82, 0.0),
       //new ScoreTop(arm, grabber, robotStates),
-      new GrabberToggle(grabber, robotStates),
-      //new WaitCommand(1.0),
+      new InConeOutCube(grabber, robotStates, 1.0),
       new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_BALANCE_DISTANCE,  () -> 0.0),
       new DriveTillAngleChange(drivetrain, gyro),
       new AutoBalance(drivetrain, gyro)

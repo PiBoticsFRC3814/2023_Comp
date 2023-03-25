@@ -98,7 +98,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Gyro X", m_robotContainer.m_gyrp.getXFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getXFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getXFilteredAccelAngle());
     SmartDashboard.putNumber("Gyro Y", m_robotContainer.m_gyrp.getYFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getYFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getYFilteredAccelAngle());
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
-    SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
     SmartDashboard.putNumber("Pose X", m_robotContainer.m_gyroSwerveDrive.getPose().getX());
     SmartDashboard.putNumber("Pose Y", m_robotContainer.m_gyroSwerveDrive.getPose().getY());
     SmartDashboard.putBoolean("Valid Target", m_robotContainer.m_Limelight.targetInView);

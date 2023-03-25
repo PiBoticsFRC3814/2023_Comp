@@ -54,7 +54,10 @@ public class Arm extends SubsystemBase {
 
   public boolean brake;
 
-  public Arm() {
+  public RobotStates robotStates;
+
+  public Arm(RobotStates robotStates) {
+    this.robotStates = robotStates;
     extend = new CANSparkMax(Constants.EXTEND_ID, MotorType.kBrushless);
     extend.setIdleMode(IdleMode.kBrake);
     extend.setSmartCurrentLimit(70, 50);
@@ -168,5 +171,10 @@ public class Arm extends SubsystemBase {
     }
     extendAtPos = Math.abs(extend.getEncoder().getPosition() - extendOffset - position) <= 10;
     System.out.println("position " + extend.getEncoder().getPosition() + " offset " + extendOffset + " desired " + position);
+  }
+
+  @Override
+  public void periodic(){
+    robotStates.angleArm = extendEncoder.getPosition();
   }
 }

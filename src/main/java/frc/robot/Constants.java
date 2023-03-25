@@ -103,6 +103,7 @@ public final class Constants {
 	public static final int SHOULDER_ID_1 = 40;
 	public static final int SHOULDER_ID_2 = 41;
 	public static final int EXTEND_ID = 42;
+  public static final int INTAKE_ID = 43;
 
   /*
    * Arm control constants

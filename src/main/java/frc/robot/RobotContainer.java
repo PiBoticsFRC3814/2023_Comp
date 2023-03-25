@@ -28,9 +28,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final ADIS16470_IMU m_gyrp = new ADIS16470_IMU();
 
-  public final Arm m_arm = new Arm();
-  public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
+  public final Arm m_arm = new Arm(m_robotStates);
+  public final Grabber m_grabber = new Grabber(m_robotStates);
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates, m_gyrp);
   public final Limelight m_Limelight = new Limelight(m_robotStates);
 
@@ -110,10 +110,12 @@ public class RobotContainer {
     new JoystickButton(armController, 10).whileTrue(new SubstationOverride(m_arm));
     new JoystickButton(armController, 5).whileTrue(new CubeMid(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 6).whileTrue(new CubeHigh(m_arm, m_grabber, m_robotStates));
+
+    new Trigger(() -> armController.getPOV(0) == 0).whileTrue(new InConeOutCube(m_grabber, m_robotStates, 0));
+    new Trigger(() -> armController.getPOV(0) == 180).whileTrue(new InCubeOutCone(m_grabber, m_robotStates, 0));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));
     //new JoystickButton(armController, 6).whileTrue(new DeployAngle(m_arm, m_grabber));
 
-    new JoystickButton(armController, 8).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
 
     /*
     new JoystickButton(testController, XboxController.Button.kX.value).whileTrue(new GrabberToggle(m_grabber, m_robotStates));
