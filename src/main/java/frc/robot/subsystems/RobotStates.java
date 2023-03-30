@@ -13,12 +13,14 @@ public class RobotStates extends SubsystemBase {
   public int moveFromLastAlign;
   public boolean autonomous;
   public double driveMultiplier;
+  public boolean tracking;
 
   public RobotStates() {
     inFrontOfCubeStation = false;
     moveFromLastAlign = 0;
     autonomous = false;
     driveMultiplier = Constants.SLOW_SPEED;
+    tracking = false;
   }
 
   @Override

@@ -102,6 +102,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Pose X", m_robotContainer.m_gyroSwerveDrive.getPose().getX());
     SmartDashboard.putNumber("Pose Y", m_robotContainer.m_gyroSwerveDrive.getPose().getY());
     SmartDashboard.putBoolean("Valid Target", m_robotContainer.m_Limelight.targetInView);
+    SmartDashboard.putNumber("Arm angle", m_robotContainer.m_arm.GetArmAngle());
   }
 
   @Override

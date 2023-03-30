@@ -22,6 +22,7 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(robotStates.tracking){
     targetInView = LimelightHelpers.getTV("");
     if(targetInView){
       targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace(""));
@@ -31,4 +32,5 @@ public class Limelight extends SubsystemBase {
       robotStates.inFrontOfCubeStation = true;
     } else robotStates.inFrontOfCubeStation = false;
   }
+}
 }
