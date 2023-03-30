@@ -23,7 +23,7 @@ public final class Constants {
   public static final double FAST_SPEED = 1.0;
 
   public static final double AUTON_1_DISTANCE = 0.9; //meters
-  public static final double AUTON_2_DISTANCE = 1.3; //meters
+  public static final double AUTON_2_DISTANCE = 1.5; //meters
   public static final double AUTON_BALANCE_DISTANCE = 0.4;
 
   public static final double[] AUTO_BALANCE_PID = {0.003, 4.0e-5, 2.0e-3}; //6.4e-4
@@ -119,16 +119,16 @@ public final class Constants {
   public static final double SCORE_FWD_TIME = 0.0;
   public static final double SCORE_SPEED = 0.0;
 
-  public static final double SCORE_ANGLE_TOP_CONE = 0.605;
-  public static final double SCORE_ANGLE_TOP_CUBE = 0.57;
+  public static final double SCORE_ANGLE_TOP_CONE = 0.625; //Original: 0.615
+  public static final double SCORE_ANGLE_TOP_CUBE = 0.58;
   public static final double SCORE_ANGLE_MIDDLE_CONE = 0.56;
-  public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.51;
-  public static final double SCORE_ANGLE_BOTTOM = 0.41;
-  public static final double ANGLE_DEPLOY = 0.42;
+  public static final double SCORE_ANGLE_MIDDLE_CUBE = 0.52;
+  public static final double SCORE_ANGLE_BOTTOM = 0.42;
+  public static final double ANGLE_DEPLOY = 0.43;
   //todo: add logic for lower cube top:0.547; middle:0.500
-  public static final double DEPLOY_ANGLE = 0.42;
-  public static final double STOW_ANGLE = 0.41;
-  public static final double SUBSTATION_ANGLE = 0.57; //original: 0.58
+  public static final double DEPLOY_ANGLE = 0.43;
+  public static final double STOW_ANGLE = 0.42;
+  public static final double SUBSTATION_ANGLE = 0.58; //original: 0.58
   public static final double SUBSTATION_REV = -79.3;
   public static final double EXTEND_REVS_1 = -13.09;
   public static final double EXTEND_REVS_2 = -71.00;

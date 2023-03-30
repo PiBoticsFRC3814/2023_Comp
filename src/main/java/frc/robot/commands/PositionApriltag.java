@@ -22,6 +22,8 @@ public class PositionApriltag extends CommandBase {
 
   private boolean start;
 
+  private int loopNum;
+
   private PIDController strController = new PIDController(Constants.TAG_ALIGN_STR_PID[0], Constants.TAG_ALIGN_STR_PID[1], Constants.TAG_ALIGN_STR_PID[2]);
   private PIDController fwdController = new PIDController(Constants.TAG_ALIGN_FWD_PID[0], Constants.TAG_ALIGN_FWD_PID[1], Constants.TAG_ALIGN_FWD_PID[2]);
   private PIDController rotController = new PIDController(Constants.TAG_ALIGN_ROT_PID[0], Constants.TAG_ALIGN_ROT_PID[1], Constants.TAG_ALIGN_ROT_PID[2]);
@@ -61,7 +63,9 @@ public class PositionApriltag extends CommandBase {
     strController.reset();
     fwdController.reset();
     rotController.reset();
+    robotStates.tracking = true;
     start = false;
+    loopNum = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -82,6 +86,7 @@ public class PositionApriltag extends CommandBase {
       if(!rotController.atSetpoint()) correctionZ = MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.4, 0.4);
       drivetrain.drive(correctionX, correctionY, correctionZ);
     }
+    System.out.println("PositionApriltag loop run " + loopNum++);
   }
 
   // Called once the command ends or is interrupted.
@@ -89,11 +94,12 @@ public class PositionApriltag extends CommandBase {
   public void end(boolean interrupted) {
     drivetrain.motorZero();
     start = false;
+    robotStates.tracking = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return strController.atSetpoint() && fwdController.atSetpoint() && rotController.atSetpoint();
+    return strController.atSetpoint() && fwdController.atSetpoint() && rotController.atSetpoint() && robotStates.autonomous;
   }
 }

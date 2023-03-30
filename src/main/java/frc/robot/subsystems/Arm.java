@@ -77,6 +77,7 @@ public class Arm extends SubsystemBase {
     shoulderEncoder = new DutyCycleEncoder(Constants.ARM_ENCODER_PORT);
 
     extendEncoder = extend.getEncoder();
+    extend.setSmartCurrentLimit(50, 40);
 
     extendController = extend.getPIDController();
     extendController.setP(Constants.EXTEND_PID_CONSTANTS[0]);

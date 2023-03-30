@@ -13,6 +13,7 @@ public class RobotStates extends SubsystemBase {
   public int moveFromLastAlign;
   public boolean autonomous;
   public double driveMultiplier, angleArm;
+  public boolean tracking;
 
   public RobotStates() {
     inFrontOfCubeStation = false;
@@ -20,10 +21,6 @@ public class RobotStates extends SubsystemBase {
     autonomous = false;
     driveMultiplier = Constants.SLOW_SPEED;
     angleArm = 0.3;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+    tracking = false;
   }
 }
