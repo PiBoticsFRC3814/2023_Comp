@@ -95,14 +95,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("Gyro Angle", m_robotContainer.m_gyrp.getAngle());
-    SmartDashboard.putNumber("Gyro X", m_robotContainer.m_gyrp.getXFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getXFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getXFilteredAccelAngle());
-    SmartDashboard.putNumber("Gyro Y", m_robotContainer.m_gyrp.getYFilteredAccelAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getYFilteredAccelAngle() - 360) : m_robotContainer.m_gyrp.getYFilteredAccelAngle());
+    SmartDashboard.putNumber("Gyro X", m_robotContainer.m_gyrp.getXComplementaryAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getXComplementaryAngle() - 360) : m_robotContainer.m_gyrp.getXComplementaryAngle());
+    SmartDashboard.putNumber("Gyro Y", m_robotContainer.m_gyrp.getYComplementaryAngle() > 180.0 ? -(m_robotContainer.m_gyrp.getYComplementaryAngle() - 360) : m_robotContainer.m_gyrp.getYComplementaryAngle());
     SmartDashboard.putBoolean("Home Switch", m_robotContainer.m_arm.extendHomeSwitch.get());
     SmartDashboard.putBoolean("Grabber", m_robotContainer.m_grabber.clawOpen);
-    SmartDashboard.putNumber("Pose X", m_robotContainer.m_gyroSwerveDrive.getPose().getX());
-    SmartDashboard.putNumber("Pose Y", m_robotContainer.m_gyroSwerveDrive.getPose().getY());
     SmartDashboard.putBoolean("Valid Target", m_robotContainer.m_Limelight.targetInView);
-    SmartDashboard.putNumber("Arm angle", m_robotContainer.m_arm.GetArmAngle());
   }
 
   @Override

@@ -7,18 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Grabber;
 
 public class DeployAngle extends CommandBase {
   /** Creates a new ScoreTop. */
   Arm m_Arm;
-  Grabber m_Grabber;
   boolean finished;
-  public DeployAngle(Arm arm, Grabber grabber) {
+  public DeployAngle(Arm arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_Arm = arm;
-    m_Grabber = grabber;
-    addRequirements(arm, grabber);
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.

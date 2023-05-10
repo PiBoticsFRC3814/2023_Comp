@@ -143,10 +143,8 @@ public class Arm extends SubsystemBase {
     //if (Math.abs(angle - trueAngle) <= 0.01){
     if(brake){
       armBrake.set(DoubleSolenoid.Value.kReverse);
-      DriverStation.reportError("Brake on", false);
     } else {
       armBrake.set(DoubleSolenoid.Value.kForward);
-      DriverStation.reportError("Brake off", false);
     }
 
     correction = MathUtil.clamp(correction, -0.5, 0.5);
@@ -162,12 +160,10 @@ public class Arm extends SubsystemBase {
         extend.set(0.0);
         extendOffset = extendEncoder.getPosition();
         extendIsHomed = true;
-        DriverStation.reportError("Is homed", false);
       }
     } else{
       extendController.setReference(position + extendOffset, ControlType.kPosition);
     }
     extendAtPos = Math.abs(extend.getEncoder().getPosition() - extendOffset - position) <= 10;
-    System.out.println("position " + extend.getEncoder().getPosition() + " offset " + extendOffset + " desired " + position);
   }
 }

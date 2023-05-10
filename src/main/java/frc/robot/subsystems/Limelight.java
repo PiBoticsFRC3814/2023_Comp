@@ -22,8 +22,8 @@ public class Limelight extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(robotStates.tracking){
     targetInView = LimelightHelpers.getTV("");
+    if(robotStates.tracking){
     if(targetInView){
       targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace(""));
       closestTagID = LimelightHelpers.getFiducialID("");

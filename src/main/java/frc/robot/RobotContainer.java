@@ -80,7 +80,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //*
-    new JoystickButton(driveStick, 7).whileTrue(new GyroReset(m_gyrp, m_gyroSwerveDrive));
+    new JoystickButton(driveStick, 11).whileTrue(new GyroReset(m_gyrp, m_gyroSwerveDrive));
     new JoystickButton(driveStick, 8).whileTrue(new HardBrake(m_gyroSwerveDrive));
     new JoystickButton(driveStick, 1).whileTrue(new LightsCube());
     new JoystickButton(driveStick, 2).whileTrue(new DriveFast(m_robotStates));
@@ -107,7 +107,7 @@ public class RobotContainer {
     new JoystickButton(armController, 7).whileTrue(new PositionApriltag(m_gyroSwerveDrive, m_Limelight, m_robotStates, m_gyrp, 0.2, -0.82, 180.0));
 
     new JoystickButton(armController, 1).whileTrue(new SubstationAngle(m_arm, m_grabber));
-    new JoystickButton(armController, 10).whileTrue(new SubstationOverride(m_arm));
+    new JoystickButton(armController, 10).whileTrue(new DeployAngle(m_arm));
     new JoystickButton(armController, 5).whileTrue(new CubeMid(m_arm, m_grabber, m_robotStates));
     new JoystickButton(armController, 6).whileTrue(new CubeHigh(m_arm, m_grabber, m_robotStates));
     //new JoystickButton(armController, 10).whileTrue(new ArmStow(m_arm, m_grabber));

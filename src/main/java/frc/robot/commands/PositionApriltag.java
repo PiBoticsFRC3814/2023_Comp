@@ -86,7 +86,6 @@ public class PositionApriltag extends CommandBase {
       if(!rotController.atSetpoint()) correctionZ = MathUtil.clamp(rotController.calculate(gyro.getAngle() % 360.0), -0.4, 0.4);
       drivetrain.drive(correctionX, correctionY, correctionZ);
     }
-    System.out.println("PositionApriltag loop run " + loopNum++);
   }
 
   // Called once the command ends or is interrupted.

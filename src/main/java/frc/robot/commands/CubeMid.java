@@ -45,7 +45,7 @@ public class CubeMid extends CommandBase {
       m_Arm.ArmAngle(Constants.SCORE_ANGLE_MIDDLE_CUBE);
       
       if(finished){
-        m_Arm.ArmDistance(Constants.EXTEND_REVS_1);
+        m_Arm.ArmDistance(Constants.EXTEND_REVS_MID_CUBE);
         finished2 = m_Arm.extendAtPos;
       } else finished = m_Arm.shoulderAtPos;
     }

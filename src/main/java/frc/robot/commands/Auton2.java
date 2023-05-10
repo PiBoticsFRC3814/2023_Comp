@@ -24,7 +24,7 @@ public class Auton2 extends SequentialCommandGroup {
       new PositionApriltag(drivetrain, limelight, robotStates, gyro, 0.2, -0.82, 0.0),
       //new ScoreTop(arm, grabber, robotStates),
       new GrabberToggle(grabber, robotStates),
-      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_2_DISTANCE, () -> Math.toRadians(10.0)),
+      new AutonPositionAndStow(drivetrain, gyro, arm, grabber, () -> -Constants.AUTON_2_DISTANCE, () -> 10.0),
       new TurnToHeading(drivetrain, gyro, () -> 180.0),
       new GyroReset(gyro, drivetrain)
     );
