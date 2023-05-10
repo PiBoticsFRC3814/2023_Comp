@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,6 +27,7 @@ public class GyroSwerveDrive extends SubsystemBase {
   private SwerveDriveKinematics kinematics;
   private SwerveDriveOdometry   odometry;
   private ADIS16470_IMU gyro;
+  private PIDController omegaController = new PIDController(0, 0, 0);
 
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
@@ -119,6 +121,19 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void drive(double str, double fwd, double rot) {
     if(str != 0.0 || fwd != 0.0 || rot != 0.0) computeSwerveInputs(str, fwd, rot);
+    else{
+      speed[0] = 0.0;
+      speed[1] = 0.0;
+      speed[2] = 0.0;
+      speed[3] = 0.0;
+    }
+    setSetpoints();
+  }
+
+  public void driveUnits(double str, double fwd, double rot, double omega) {
+    double meterSecToRPM = (1 / Constants.DRIVE_POSITION_CONVERSION * 60.0);
+    double correctOmega = omegaController.calculate(omega, rot);
+    if(str != 0.0 || fwd != 0.0 || rot != 0.0) computeSwerveInputs(str * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, fwd * meterSecToRPM/ Constants.MAX_DRIVETRAIN_SPEED, rot);
     else{
       speed[0] = 0.0;
       speed[1] = 0.0;

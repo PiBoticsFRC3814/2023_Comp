@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     comp = new Compressor(0, PneumaticsModuleType.CTREPCM);
     comp.enableDigital();
+    PathPlannerServer.startServer(5811);
   }
 
   /**
