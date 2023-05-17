@@ -27,7 +27,6 @@ public class GyroSwerveDrive extends SubsystemBase {
   private SwerveDriveKinematics kinematics;
   private SwerveDriveOdometry   odometry;
   private ADIS16470_IMU gyro;
-  private PIDController omegaController = new PIDController(0, 0, 0);
 
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
@@ -130,17 +129,9 @@ public class GyroSwerveDrive extends SubsystemBase {
     setSetpoints();
   }
 
-  public void driveUnits(double str, double fwd, double rot, double omega) {
+  public void driveUnits(double str, double fwd, double rot, double angle) {
     double meterSecToRPM = (1 / Constants.DRIVE_POSITION_CONVERSION * 60.0);
-    double correctOmega = omegaController.calculate(omega, rot);
-    if(str != 0.0 || fwd != 0.0 || rot != 0.0) computeSwerveInputs(str * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, fwd * meterSecToRPM/ Constants.MAX_DRIVETRAIN_SPEED, rot);
-    else{
-      speed[0] = 0.0;
-      speed[1] = 0.0;
-      speed[2] = 0.0;
-      speed[3] = 0.0;
-    }
-    setSetpoints();
+    gyroDrive(str * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, fwd * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, 0.0/*rot / 4.5*/, angle);
   }
 
   public void drive(double[] inputs) {

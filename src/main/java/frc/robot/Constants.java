@@ -74,7 +74,7 @@ public final class Constants {
 		{ 1.0e-4, 1.0e-6, 2.0e-4, 0.0, 1.0e-5, -1.0, 1.0 }  //Front Left
 	};
 
-  public static final double MAX_DRIVETRAIN_SPEED = 5000;
+  public static final double MAX_DRIVETRAIN_SPEED = 2500;
 
   public static final double[] TAG_ALIGN_STR_PID = {0.4, 0.0, 0.006};
   public static final double[] TAG_ALIGN_ROT_PID = {0.01, 5.0e-2, 0.002};

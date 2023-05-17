@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
@@ -22,11 +23,11 @@ import frc.robot.subsystems.GyroSwerveDrive;
 
 public class PathFollowingPleaseDontBreakRobot extends CommandBase {
   /** Creates a new PathFollowingPleaseDontBreakRobot. */
-  PIDController fwdController = new PIDController(0, 0, 0);
-  PIDController strController = new PIDController(0, 0, 0);
-  ProfiledPIDController rotController = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(6.28, 3.14));
+  PIDController fwdController = new PIDController(0.1, 0, 0);
+  PIDController strController = new PIDController(0.1, 0, 0);
+  ProfiledPIDController rotController = new ProfiledPIDController(1.0, 0, 0, new TrapezoidProfile.Constraints(6.28, 3.14));
   HolonomicDriveController followerController = new HolonomicDriveController(strController, fwdController, rotController);
-  PathPlannerTrajectory testingPath = PathPlanner.loadPath("Testing1", new PathConstraints(1, 1));
+  PathPlannerTrajectory testingPath = PathPlanner.loadPath("Testing1", new PathConstraints(3, 4));
   Timer pathTimer = new Timer();
   ADIS16470_IMU gyro;
   GyroSwerveDrive drivetrain;
@@ -48,8 +49,9 @@ public class PathFollowingPleaseDontBreakRobot extends CommandBase {
   @Override
   public void execute() {
     Trajectory.State goal = testingPath.sample(pathTimer.get());
-    ChassisSpeeds adjustedSpeeds = followerController.calculate(drivetrain.getPose(), goal, Rotation2d.fromDegrees(gyro.getAngle()));
-    drivetrain.driveUnits(0, 0, 0, 0);
+    ChassisSpeeds adjustedSpeeds = followerController.calculate(drivetrain.getPose(), goal, goal.poseMeters.getRotation());
+    drivetrain.driveUnits(adjustedSpeeds.vyMetersPerSecond, adjustedSpeeds.vxMetersPerSecond, adjustedSpeeds.omegaRadiansPerSecond, Math.toRadians(gyro.getAngle()));
+    System.out.println(adjustedSpeeds.omegaRadiansPerSecond);
   }
 
   // Called once the command ends or is interrupted.
