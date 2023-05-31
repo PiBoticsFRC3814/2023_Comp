@@ -17,17 +17,18 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GyroSwerveDrive;
 
 public class PathFollowingPleaseDontBreakRobot extends CommandBase {
   /** Creates a new PathFollowingPleaseDontBreakRobot. */
-  PIDController fwdController = new PIDController(0.1, 0, 0);
-  PIDController strController = new PIDController(0.1, 0, 0);
-  ProfiledPIDController rotController = new ProfiledPIDController(1.0, 0, 0, new TrapezoidProfile.Constraints(6.28, 3.14));
+  PIDController fwdController = new PIDController(2.0, 0, 0.1);
+  PIDController strController = new PIDController(2.0, 0, 0.1);
+  ProfiledPIDController rotController = new ProfiledPIDController(3.0, 1.6, 0, new TrapezoidProfile.Constraints(2, 1));
   HolonomicDriveController followerController = new HolonomicDriveController(strController, fwdController, rotController);
-  PathPlannerTrajectory testingPath = PathPlanner.loadPath("Testing1", new PathConstraints(3, 4));
+  PathPlannerTrajectory testingPath = PathPlanner.loadPath("Testing1", new PathConstraints(2.5, 3));
   Timer pathTimer = new Timer();
   ADIS16470_IMU gyro;
   GyroSwerveDrive drivetrain;
@@ -43,6 +44,7 @@ public class PathFollowingPleaseDontBreakRobot extends CommandBase {
   public void initialize() {
     pathTimer.reset();
     pathTimer.restart();
+    rotController.enableContinuousInput(0, 2*Math.PI);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

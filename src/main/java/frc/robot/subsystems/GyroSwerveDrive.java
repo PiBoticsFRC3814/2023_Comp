@@ -131,7 +131,7 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void driveUnits(double str, double fwd, double rot, double angle) {
     double meterSecToRPM = (1 / Constants.DRIVE_POSITION_CONVERSION * 60.0);
-    gyroDrive(str * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, fwd * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, 0.0/*rot / 4.5*/, angle);
+    gyroDrive(str * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, fwd * meterSecToRPM / Constants.MAX_DRIVETRAIN_SPEED, rot / 4.5, angle);
   }
 
   public void drive(double[] inputs) {
