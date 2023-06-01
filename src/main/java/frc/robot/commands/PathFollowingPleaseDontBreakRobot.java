@@ -26,7 +26,7 @@ public class PathFollowingPleaseDontBreakRobot extends CommandBase {
   /** Creates a new PathFollowingPleaseDontBreakRobot. */
   PIDController fwdController = new PIDController(2.0, 0, 0.1);
   PIDController strController = new PIDController(2.0, 0, 0.1);
-  ProfiledPIDController rotController = new ProfiledPIDController(3.0, 1.6, 0, new TrapezoidProfile.Constraints(2, 1));
+  ProfiledPIDController rotController = new ProfiledPIDController(3.0, 1.2, 1.4125, new TrapezoidProfile.Constraints(2, 1));
   HolonomicDriveController followerController = new HolonomicDriveController(strController, fwdController, rotController);
   PathPlannerTrajectory testingPath = PathPlanner.loadPath("Testing1", new PathConstraints(2.5, 3));
   Timer pathTimer = new Timer();
