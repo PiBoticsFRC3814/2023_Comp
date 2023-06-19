@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.Timer;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,7 +29,9 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   private SwerveDriveKinematics kinematics;
   private SwerveDriveOdometry   odometry;
+  private SwerveDrivePoseEstimator poseEstimator;
   private ADIS16470_IMU gyro;
+  private Timer robotTimer;
 
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
@@ -50,18 +55,27 @@ public class GyroSwerveDrive extends SubsystemBase {
        Rotation2d.fromDegrees(gyro.getAngle()),
         getModulePositions()
     );
+
+    poseEstimator = new SwerveDrivePoseEstimator(
+      kinematics, 
+      Rotation2d.fromDegrees(gyro.getAngle()),
+       getModulePositions(),
+        new Pose2d()
+        );
+
+    robotTimer = new Timer();
   }
 
   @Override
   public void periodic() {
-    odometry.update(
+    poseEstimator.update(
       Rotation2d.fromDegrees(gyro.getAngle()),
       getModulePositions()
     );
   }
 
   public Pose2d getPose(){
-    return odometry.getPoseMeters();
+    return poseEstimator.getEstimatedPosition();
   }
 
   private SwerveModulePosition[] getModulePositions(){
@@ -77,11 +91,15 @@ public class GyroSwerveDrive extends SubsystemBase {
     for (int i = 0; i < 4; i++) {
       swerveMod[i].resetModule();
     }
-    odometry.resetPosition(
+    poseEstimator.resetPosition(
       Rotation2d.fromDegrees(gyro.getAngle() % 360.0),
        getModulePositions(),
         pose
     );
+  }
+
+  public void updateVisionPoseEstimator(Pose2d visionEstimate, double timestamp){
+    poseEstimator.addVisionMeasurement(visionEstimate, timestamp);
   }
 
   private double applyDeadzone(double input, double deadzone) {
@@ -112,8 +130,9 @@ public class GyroSwerveDrive extends SubsystemBase {
   }
 
   public void gyroDrive(double str, double fwd, double rot, double gyroAngle) {
-    double intermediary = fwd * Math.cos(gyroAngle) + str * Math.sin(gyroAngle);
-    str = -fwd * Math.sin(gyroAngle) + str * Math.cos(gyroAngle);
+    double angle = poseEstimator.getEstimatedPosition().getRotation().getRadians();
+    double intermediary = fwd * Math.cos(angle) + str * Math.sin(angle);
+    str = -fwd * Math.sin(angle) + str * Math.cos(angle);
     drive(str, intermediary, rot);
     setSetpoints();
   }

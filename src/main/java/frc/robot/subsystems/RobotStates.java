@@ -20,7 +20,7 @@ public class RobotStates extends SubsystemBase {
     moveFromLastAlign = 0;
     autonomous = false;
     driveMultiplier = Constants.SLOW_SPEED;
-    tracking = false;
+    tracking = true;
   }
 
   @Override

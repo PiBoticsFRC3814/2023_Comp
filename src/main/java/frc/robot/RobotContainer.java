@@ -32,7 +32,7 @@ public class RobotContainer {
   public final Grabber m_grabber = new Grabber();
   public final RobotStates m_robotStates = new RobotStates();
   public final GyroSwerveDrive m_gyroSwerveDrive = new GyroSwerveDrive(m_robotStates, m_gyrp);
-  public final Limelight m_Limelight = new Limelight(m_robotStates);
+  public final Limelight m_Limelight = new Limelight(m_robotStates, m_gyroSwerveDrive);
 
   private final CommandBase m_brakeAndWait = new HardBrake(m_gyroSwerveDrive);
   private final CommandBase m_auton1 = new Auton1(m_gyroSwerveDrive, m_robotStates, m_grabber, m_arm, m_gyrp, m_Limelight);

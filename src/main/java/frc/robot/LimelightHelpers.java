@@ -330,6 +330,10 @@ public class LimelightHelpers {
             return toPose2D(botpose_wpiblue);
         }
 
+        public double getLimelightTimestamp(){
+            return timestamp_LIMELIGHT_publish;
+        }
+
         @JsonProperty("Retro")
         public LimelightTarget_Retro[] targets_Retro;
 
@@ -386,7 +390,9 @@ public class LimelightHelpers {
         if(inData.length < 6)
         {
             System.err.println("Bad LL 3D Pose Data!");
-            return new Pose3d();
+            return new Pose3d(
+                new Translation3d(-1000.0, 0.0, 0.0),
+                new Rotation3d(0.0, 0.0, 0.0));
         }
         return new Pose3d(
             new Translation3d(inData[0], inData[1], inData[2]),
@@ -398,9 +404,10 @@ public class LimelightHelpers {
         if(inData.length < 6)
         {
             System.err.println("Bad LL 2D Pose Data!");
-            return new Pose2d();
+            return new Pose2d(new Translation2d(-1000.0, 0.0),
+            new Rotation2d());
         }
-        Translation2d tran2d = new Translation2d(inData[2], -inData[0]);
+        Translation2d tran2d = new Translation2d(inData[0], inData[1]);
         Rotation2d r2d = new Rotation2d(Units.degreesToRadians(inData[5]));
         return new Pose2d(tran2d, r2d);
     }

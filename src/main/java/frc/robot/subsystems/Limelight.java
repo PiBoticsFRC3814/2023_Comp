@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 
@@ -14,23 +16,27 @@ public class Limelight extends SubsystemBase {
   public Pose2d targetPose2d;
   public double closestTagID;
   private RobotStates robotStates;
+  private GyroSwerveDrive m_drivetrain;
 
-  public Limelight(RobotStates robotStates) {
+  public Limelight(RobotStates robotStates, GyroSwerveDrive m_drivetrain) {
     this.robotStates = robotStates;
+    this.m_drivetrain = m_drivetrain;
     targetInView = false;
   }
 
   @Override
   public void periodic() {
-    targetInView = LimelightHelpers.getTV("");
+    targetInView = LimelightHelpers.getTV("limelight");
     if(robotStates.tracking){
-    if(targetInView){
-      targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace(""));
-      closestTagID = LimelightHelpers.getFiducialID("");
+      if(targetInView){
+        targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace("limelight"));
+        closestTagID = LimelightHelpers.getFiducialID("limelight");
+
+        Pose2d tempPose = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_wpiBlue("limelight"));
+        if(tempPose.getX() != -1000.0){ // Checks if pose is valid
+          m_drivetrain.updateVisionPoseEstimator(tempPose, Timer.getFPGATimestamp());
+        }
+      }
     }
-    if((closestTagID != 5.0 || closestTagID != 4.0) && targetInView && (Math.abs(targetPose2d.getY()) <= 0.06)){
-      robotStates.inFrontOfCubeStation = true;
-    } else robotStates.inFrontOfCubeStation = false;
   }
-}
 }
