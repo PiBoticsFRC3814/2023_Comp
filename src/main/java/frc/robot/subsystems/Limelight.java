@@ -27,6 +27,7 @@ public class Limelight extends SubsystemBase {
   @Override
   public void periodic() {
     targetInView = LimelightHelpers.getTV("limelight");
+    m_drivetrain.trustVision = targetInView;
     if(robotStates.tracking){
       if(targetInView){
         targetPose2d = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_TargetSpace("limelight"));
@@ -34,7 +35,8 @@ public class Limelight extends SubsystemBase {
 
         Pose2d tempPose = LimelightHelpers.toPose2D(LimelightHelpers.getBotPose_wpiBlue("limelight"));
         if(tempPose.getX() != -1000.0){ // Checks if pose is valid
-          m_drivetrain.updateVisionPoseEstimator(tempPose, Timer.getFPGATimestamp());
+          double distance = Math.sqrt(Math.pow(targetPose2d.getX(), 2.0) + Math.pow(targetPose2d.getY(), 2.0));
+          m_drivetrain.updateVisionPoseEstimator(tempPose, Timer.getFPGATimestamp(), distance);
         }
       }
     }

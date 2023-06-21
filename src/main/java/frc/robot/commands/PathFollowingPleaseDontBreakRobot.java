@@ -53,7 +53,6 @@ public class PathFollowingPleaseDontBreakRobot extends CommandBase {
     Trajectory.State goal = testingPath.sample(pathTimer.get());
     ChassisSpeeds adjustedSpeeds = followerController.calculate(drivetrain.getPose(), goal, goal.poseMeters.getRotation());
     drivetrain.driveUnits(adjustedSpeeds.vyMetersPerSecond, adjustedSpeeds.vxMetersPerSecond, adjustedSpeeds.omegaRadiansPerSecond, Math.toRadians(gyro.getAngle()));
-    System.out.println(adjustedSpeeds.omegaRadiansPerSecond);
   }
 
   // Called once the command ends or is interrupted.

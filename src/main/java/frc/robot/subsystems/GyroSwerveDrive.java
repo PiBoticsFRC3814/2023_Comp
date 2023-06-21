@@ -1,9 +1,10 @@
 package frc.robot.subsystems;
 
-import java.util.Timer;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -13,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +33,8 @@ public class GyroSwerveDrive extends SubsystemBase {
   private SwerveDriveOdometry   odometry;
   private SwerveDrivePoseEstimator poseEstimator;
   private ADIS16470_IMU gyro;
-  private Timer robotTimer;
+
+  public boolean trustVision;
 
   private SwerveModule[] swerveMod = {
     new SwerveModule(0), new SwerveModule(1), new SwerveModule(2), new SwerveModule(3)
@@ -63,14 +66,16 @@ public class GyroSwerveDrive extends SubsystemBase {
         new Pose2d()
         );
 
-    robotTimer = new Timer();
+    trustVision = false;
   }
 
   @Override
   public void periodic() {
-    poseEstimator.update(
-      Rotation2d.fromDegrees(gyro.getAngle()),
-      getModulePositions()
+    if(!trustVision) poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1000, 1000, 1000));
+    poseEstimator.updateWithTime(
+      Timer.getFPGATimestamp(),
+       Rotation2d.fromDegrees(gyro.getAngle()),
+        getModulePositions()
     );
   }
 
@@ -98,8 +103,17 @@ public class GyroSwerveDrive extends SubsystemBase {
     );
   }
 
-  public void updateVisionPoseEstimator(Pose2d visionEstimate, double timestamp){
+  public void resetGyro(){
+    gyro.reset();
+    poseEstimator.resetPosition(Rotation2d.fromDegrees(0), getModulePositions(), getPose());
+  }
+
+  public void updateVisionPoseEstimator(Pose2d visionEstimate, double timestamp, double distance){
+    //ramp measurement trust based on robot distance
+    poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.2 * Math.pow(10, distance), 0.2 * Math.pow(10, distance), Units.degreesToRadians(20)));
     poseEstimator.addVisionMeasurement(visionEstimate, timestamp);
+    SmartDashboard.putNumber("Tag Distance ", distance);
+    SmartDashboard.putNumber("Tag correlation ", 0.2 * Math.pow(10, distance));
   }
 
   private double applyDeadzone(double input, double deadzone) {
