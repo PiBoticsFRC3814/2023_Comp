@@ -71,7 +71,7 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(!trustVision) poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1000, 1000, 1000));
+    if(!trustVision) poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(1000, 1000, Units.degreesToRadians(20)));
     poseEstimator.updateWithTime(
       Timer.getFPGATimestamp(),
        Rotation2d.fromDegrees(gyro.getAngle()),
