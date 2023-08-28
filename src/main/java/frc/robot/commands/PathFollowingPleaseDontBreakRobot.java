@@ -47,12 +47,14 @@ public class PathFollowingPleaseDontBreakRobot extends CommandBase {
     rotController.enableContinuousInput(0, 2*Math.PI);
   }
 
+  //plasma cutter tips in drawer
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     Trajectory.State goal = testingPath.sample(pathTimer.get());
     ChassisSpeeds adjustedSpeeds = followerController.calculate(drivetrain.getPose(), goal, goal.poseMeters.getRotation());
-    drivetrain.driveUnits(adjustedSpeeds.vyMetersPerSecond, adjustedSpeeds.vxMetersPerSecond, adjustedSpeeds.omegaRadiansPerSecond, Math.toRadians(gyro.getAngle()));
+    drivetrain.driveUnits(adjustedSpeeds.vyMetersPerSecond, adjustedSpeeds.vxMetersPerSecond, adjustedSpeeds.omegaRadiansPerSecond, Math.toRadians(drivetrain.getPose().getRotation().getDegrees()));
   }
 
   // Called once the command ends or is interrupted.

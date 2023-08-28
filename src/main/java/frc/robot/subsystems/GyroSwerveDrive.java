@@ -110,10 +110,10 @@ public class GyroSwerveDrive extends SubsystemBase {
 
   public void updateVisionPoseEstimator(Pose2d visionEstimate, double timestamp, double distance){
     //ramp measurement trust based on robot distance
-    poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.2 * Math.pow(10, distance), 0.2 * Math.pow(10, distance), Units.degreesToRadians(20)));
+    poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.1 * Math.pow(15, distance), 0.1 * Math.pow(15, distance), Units.degreesToRadians(20)));
     poseEstimator.addVisionMeasurement(visionEstimate, timestamp);
     SmartDashboard.putNumber("Tag Distance ", distance);
-    SmartDashboard.putNumber("Tag correlation ", 0.2 * Math.pow(10, distance));
+    SmartDashboard.putNumber("Tag correlation ", 0.1 * Math.pow(15, distance));
   }
 
   private double applyDeadzone(double input, double deadzone) {
